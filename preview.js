@@ -24,3 +24,17 @@ if ('IntersectionObserver' in window) {
 } else {
   items.forEach((item) => item.classList.add('is-visible'));
 }
+
+const flowTabs = document.querySelectorAll('[data-screen]');
+const phoneScreens = document.querySelectorAll('[data-phone-screen]');
+
+flowTabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    const target = tab.getAttribute('data-screen');
+
+    flowTabs.forEach((item) => item.classList.toggle('is-active', item === tab));
+    phoneScreens.forEach((screen) => {
+      screen.classList.toggle('is-active', screen.getAttribute('data-phone-screen') === target);
+    });
+  });
+});
