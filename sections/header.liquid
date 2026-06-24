@@ -1,0 +1,71 @@
+<header class="aa-header" data-aa-header data-solid="{{ section.settings.solid_header }}">
+  <div class="aa-header__bar">
+    <nav class="aa-header__desktop" aria-label="Primary">
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}">{{ link.title | escape }}</a>
+      {%- endfor -%}
+    </nav>
+
+    <button class="aa-header__toggle" type="button" aria-label="{{ 'accessibility.menu' | t }}" aria-expanded="false" data-aa-drawer-open>
+      <span></span>
+    </button>
+
+    <a class="aa-header__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {%- if settings.logo != blank -%}
+        {{ settings.logo | image_url: width: 380 | image_tag: loading: 'eager', widths: '160, 240, 320, 380', alt: shop.name }}
+      {%- else -%}
+        {{ shop.name | default: 'Arrive Aruba' | escape }}
+      {%- endif -%}
+    </a>
+
+    <div class="aa-header__actions">
+      <a class="aa-header__icon" href="{{ routes.search_url }}" aria-label="{{ 'accessibility.search' | t }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="1.6"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
+      </a>
+      <a class="aa-header__icon" href="{{ routes.account_url }}" aria-label="{{ 'accessibility.account' | t }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="1.6"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
+      </a>
+      <a class="aa-header__icon" href="{{ routes.cart_url }}" aria-label="{{ 'accessibility.cart' | t }}">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="1.6"><path d="M6 7h12l-1 14H7L6 7Z"></path><path d="M9 7a3 3 0 0 1 6 0"></path></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<aside class="aa-drawer" aria-hidden="true" data-aa-drawer>
+  <div class="aa-drawer__top">
+    <a class="aa-header__brand" href="{{ routes.root_url }}">{{ shop.name | default: 'Arrive Aruba' | escape }}</a>
+    <button class="aa-drawer__close" type="button" aria-label="{{ 'accessibility.close' | t }}" data-aa-drawer-close>X</button>
+  </div>
+  <nav class="aa-drawer__nav" aria-label="Mobile">
+    {%- for link in section.settings.menu.links -%}
+      <a href="{{ link.url }}">{{ link.title | escape }}</a>
+    {%- endfor -%}
+  </nav>
+</aside>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "shopify-section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "solid_header",
+      "label": "Use solid header",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header"
+    }
+  ]
+}
+{% endschema %}
