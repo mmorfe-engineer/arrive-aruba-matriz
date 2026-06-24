@@ -17,9 +17,10 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="desktop-nav" aria-label="Primary">
-        <a href="#home-flow">Home</a>
-        <a href="#merch">Merch</a>
-        <a href="#app-structure">App Flow</a>
+        <a href="#flow-map">Flow</a>
+        <a href="#home-system">Home</a>
+        <a href="#commerce-system">Shop</a>
+        <a href="#account-system">Account</a>
       </nav>
       <a class="brand-lockup" href="#top" aria-label="Arrive Aruba">
         <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
@@ -53,13 +54,22 @@
           <img class="hero-logo" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
           <p class="kicker">The island stays with</p>
           <h1>you</h1>
-          <p class="hero-copy">A premium storefront built from the Arrive Aruba app flow: discovery, search, favorites, cart, profile, and delivery in 24 hours.</p>
+          <p class="hero-copy">A mobile-first commerce structure based on the Arrive Aruba app flow: discovery, search, favorites, cart, profile, cards, reviews, configuration, and 24-hour delivery.</p>
           <div class="actions">
-            <a class="button button-brand" href="#home-flow">Start</a>
-            <a class="button button-ghost" href="#app-structure">View structure</a>
+            <a class="button button-brand" href="#flow-map">Start</a>
+            <a class="button button-ghost" href="#commerce-system">View shop flow</a>
           </div>
         </div>
       </section>
+
+      <nav class="structure-nav" aria-label="Prototype sections">
+        <a href="#flow-map">Flow</a>
+        <a href="#home-system">Home</a>
+        <a href="#commerce-system">Search</a>
+        <a href="#detail-system">Product</a>
+        <a href="#cart-system">Cart</a>
+        <a href="#account-system">Profile</a>
+      </nav>
 
       <section class="section identity-band">
         <div class="shell identity-grid">
@@ -75,6 +85,269 @@
             <span style="--swatch:#F5A169">Mock Orange</span>
             <span style="--swatch:#F0F0E5">Cannoli Cream</span>
           </div>
+        </div>
+      </section>
+
+      <section class="section flow-map" id="flow-map">
+        <div class="shell section-head reveal">
+          <div>
+            <p class="kicker blue">PDF app flow</p>
+            <h2>La estructura base antes de disenar.</h2>
+          </div>
+          <p>Esta capa traduce los PDFs a una arquitectura web/Shopify clara. Cada bloque puede convertirse despues en seccion editable, template o app integration.</p>
+        </div>
+
+        <div class="shell journey reveal" aria-label="Arrive Aruba app flow">
+          <article>
+            <span>01</span>
+            <h3>Inicio</h3>
+            <p>Logo centrado, video o frame de marca, verificacion de sesion.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Login / Sign Up</h3>
+            <p>Email, password, recover password y creacion de cuenta.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Home</h3>
+            <p>Perfil, menu, video destacado, delivery 24h, beneficios y productos.</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>Search</h3>
+            <p>Busqueda con filtros de color, categoria, marca, prenda, talla, condicion y ubicacion.</p>
+          </article>
+          <article>
+            <span>05</span>
+            <h3>Results</h3>
+            <p>Grid con imagen, nombre, precio y favorito.</p>
+          </article>
+          <article>
+            <span>06</span>
+            <h3>Product Detail</h3>
+            <p>Galeria, descripcion, talla, cantidad, favorito, add to cart y buy.</p>
+          </article>
+          <article>
+            <span>07</span>
+            <h3>Favorites</h3>
+            <p>Grid guardado con acceso rapido y eliminacion.</p>
+          </article>
+          <article>
+            <span>08</span>
+            <h3>Cart / Checkout</h3>
+            <p>Cantidad, subtotal, total, eliminar, continuar comprando y checkout.</p>
+          </article>
+          <article>
+            <span>09</span>
+            <h3>Profile</h3>
+            <p>Personal information, friends, cards, reviews y logout.</p>
+          </article>
+          <article>
+            <span>10</span>
+            <h3>Configuration</h3>
+            <p>Language, security, help, theme y privacidad.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section home-system" id="home-system">
+        <div class="shell section-head reveal">
+          <div>
+            <p class="kicker blue">Home structure</p>
+            <h2>Discovery primero, compra despues.</h2>
+          </div>
+          <p>La home deja de ser solo hero. Debe guiar al usuario desde el mood de Aruba hasta categorias, productos y delivery.</p>
+        </div>
+
+        <div class="shell home-grid reveal">
+          <article class="home-video module">
+            <div class="module-top">
+              <span class="avatar"></span>
+              <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+            </div>
+            <div class="video-card">
+              <img src="preview-assets/media/aruba-landscape.webp" alt="Arrive Aruba home video structure">
+              <span class="play">Play</span>
+            </div>
+          </article>
+
+          <article class="module">
+            <p class="module-label">Service promise</p>
+            <h3>24-hour delivery</h3>
+            <p>Visible en Home antes del grid. Debe explicar el valor operativo de Arrive Aruba sin convertirlo en banner promocional.</p>
+          </article>
+
+          <article class="module">
+            <p class="module-label">Benefits</p>
+            <ul class="check-list">
+              <li>Entrega local en Aruba.</li>
+              <li>Checkout seguro.</li>
+              <li>Productos seleccionados por temporada.</li>
+            </ul>
+          </article>
+
+          <article class="module categories-module">
+            <p class="module-label">Categories</p>
+            <div class="category-row">
+              <span>Shirt</span>
+              <span>Cap</span>
+              <span>Sweater</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section commerce-system" id="commerce-system">
+        <div class="shell section-head reveal">
+          <div>
+            <p class="kicker blue">Commerce structure</p>
+            <h2>Search, filters, results, detail.</h2>
+          </div>
+          <p>Esta es la ruta principal de compra. Primero se ordena la informacion; luego trabajamos la capa visual de lujo.</p>
+        </div>
+
+        <div class="shell commerce-grid reveal">
+          <article class="module search-module">
+            <p class="module-label">Search</p>
+            <label class="search-field">
+              <span>Find your perfect fit</span>
+              <input value="Sweater" aria-label="Search preview">
+            </label>
+            <div class="filter-grid">
+              <button>Color</button>
+              <button>Category</button>
+              <button>Brand</button>
+              <button>Garment type</button>
+              <button>Size</button>
+              <button>Condition</button>
+              <button>Location</button>
+            </div>
+          </article>
+
+          <article class="module results-module">
+            <p class="module-label">Results</p>
+            <div class="result-card">
+              <span></span>
+              <div><b>Cashmere Crewneck</b><small>$120.00</small></div>
+              <button aria-label="Favorite">Heart</button>
+            </div>
+            <div class="result-card">
+              <span></span>
+              <div><b>Chunky Cable-knit</b><small>$98.00</small></div>
+              <button aria-label="Favorite">Heart</button>
+            </div>
+            <div class="result-card">
+              <span></span>
+              <div><b>Essential Turtleneck</b><small>$86.00</small></div>
+              <button aria-label="Favorite">Heart</button>
+            </div>
+          </article>
+
+          <article class="module detail-module" id="detail-system">
+            <p class="module-label">Product detail</p>
+            <div class="detail-layout">
+              <div class="detail-gallery">
+                <img src="preview-assets/brand/logo-blue.webp" alt="Product placeholder">
+              </div>
+              <div>
+                <h3>Cashmere Crewneck</h3>
+                <strong>$120.00</strong>
+                <p>Talla, cantidad disponible, descripcion, favorito y acciones principales.</p>
+                <div class="detail-actions">
+                  <button>Add to cart</button>
+                  <button>Buy</button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section cart-system" id="cart-system">
+        <div class="shell section-head reveal">
+          <div>
+            <p class="kicker blue">Decision structure</p>
+            <h2>Favorites y cart sin friccion.</h2>
+          </div>
+          <p>El usuario puede guardar, comparar y comprar sin perder el contexto de producto.</p>
+        </div>
+
+        <div class="shell decision-grid reveal">
+          <article class="module">
+            <p class="module-label">Favorites</p>
+            <div class="favorites-grid">
+              <span>Cashmere Crewneck</span>
+              <span>Performance Golf Polo</span>
+              <span>Classic Cotton Shirt</span>
+              <span>Island Cap</span>
+            </div>
+          </article>
+
+          <article class="module">
+            <p class="module-label">Cart</p>
+            <div class="cart-row"><span>Soft Touch Turtleneck</span><b>$120.00</b></div>
+            <div class="cart-row"><span>Cashmere Crewneck</span><b>$120.00</b></div>
+            <div class="cart-total"><span>Total</span><b>$240.00</b></div>
+            <button class="checkout-button">Checkout</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="section account-system" id="account-system">
+        <div class="shell section-head reveal">
+          <div>
+            <p class="kicker blue">Account structure</p>
+            <h2>Profile, friends, cards, reviews, settings.</h2>
+          </div>
+          <p>El perfil no debe quedar escondido: es parte del ecosistema social y de confianza del flujo.</p>
+        </div>
+
+        <div class="shell account-grid reveal">
+          <article class="module profile-module">
+            <div class="profile-mark"></div>
+            <h3>Patrick Hennessy</h3>
+            <p>@patrickhennessy</p>
+          </article>
+          <article class="module">
+            <p class="module-label">Personal information</p>
+            <ul class="profile-list compact">
+              <li>Name</li>
+              <li>Email</li>
+              <li>Phone</li>
+              <li>Address</li>
+            </ul>
+          </article>
+          <article class="module">
+            <p class="module-label">Friends</p>
+            <div class="friend-list">
+              <span>Josh Homme</span>
+              <span>Jenny Rrose</span>
+              <span>Tim Graver</span>
+            </div>
+          </article>
+          <article class="module">
+            <p class="module-label">Cards</p>
+            <ul class="profile-list compact">
+              <li>Update profile</li>
+              <li>Change account details</li>
+              <li>Add new bank account</li>
+              <li>Add new card</li>
+            </ul>
+          </article>
+          <article class="module">
+            <p class="module-label">Reviews</p>
+            <p>Calificaciones, comentarios e historial de reputacion.</p>
+          </article>
+          <article class="module">
+            <p class="module-label">Configuration</p>
+            <ul class="profile-list compact">
+              <li>Language</li>
+              <li>Security & Privacy</li>
+              <li>Help & Support</li>
+              <li>Theme</li>
+            </ul>
+          </article>
         </div>
       </section>
 
