@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARRIVE ARUBA — Take Home What You Felt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    @font-face { font-family:'ITC Legacy Serif'; src:url('assets/fonts/ITCLegacySerifStd-Medium.otf') format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
+    @font-face { font-family:'ITC Legacy Serif'; src:url('assets/fonts/ITCLegacySerifStd-MediumItalic.otf') format('opentype'); font-weight:500; font-style:italic; font-display:swap; }
+    @font-face { font-family:'Port Blair Alternate'; src:url('assets/fonts/PortBlairAlternate.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Geologica', sans-serif; background: #F0F0E5; color: #1a1a1a; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    input::placeholder { color: rgba(240,240,229,0.35); font-family: 'Geologica', sans-serif; font-size: 13px; font-weight: 300; letter-spacing: 0.06em; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: #F0F0E5; }
+    ::-webkit-scrollbar-thumb { background: #5F8BB8; }
+
+    @keyframes aa-rise {
+      from { transform: translateY(16px); }
+      to   { transform: translateY(0); }
+    }
+    @keyframes aa-drift {
+      0%,100% { transform: scale(1.18) translate(0,0); }
+      33%     { transform: scale(1.14) translate(-2.5%, 2%); }
+      66%     { transform: scale(1.2)  translate(2%, -1.5%); }
+    }
+    @keyframes aa-glow {
+      0%,100% { opacity: 0.45; }
+      50%     { opacity: 0.85; }
+    }
+    @keyframes aa-scroll-line {
+      0%,100% { transform: translateY(-100%); opacity: 0.9; }
+      50%     { transform: translateY(100%);  opacity: 0.2; }
+    }
+    @keyframes aa-ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
+</helmet>
+
+<!-- ─── FIXED NAV ─────────────────────────────────────── -->
+<nav id="aa-nav" data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:100;height:74px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;transition:background 0.5s ease,border-bottom 0.5s ease;">
+
+  <button id="aa-ham" aria-label="Open menu" onClick="{{ toggleNav }}" style="background:none;border:none;padding:6px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;cursor:pointer;">
+    <span class="aa-bar" style="display:block;width:26px;height:1px;background:#F0F0E5;transition:background 0.5s ease;"></span>
+    <span class="aa-bar" style="display:block;width:17px;height:1px;background:#F0F0E5;transition:background 0.5s ease;"></span>
+  </button>
+
+  <a id="aa-wm" href="#" aria-label="Arrive Aruba — home" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:176px;height:51px;line-height:0;">
+    <img id="aa-wm-white" src="assets/logo-white.png" alt="Arrive Aruba" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:1;transition:opacity 0.5s ease;" />
+    <img id="aa-wm-sapphire" src="assets/logo-sapphire.png" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 0.5s ease;" />
+  </a>
+
+  <div style="display:flex;gap:20px;align-items:center;">
+    <button aria-label="Search" id="aa-search-btn" style="background:none;border:none;color:#F0F0E5;padding:4px;cursor:pointer;transition:color 0.5s ease;">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button aria-label="Cart" id="aa-cart-btn" style="background:none;border:none;color:#F0F0E5;padding:4px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:color 0.5s ease;" onClick="{{ toggleCart }}">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      <sc-if value="{{ showCartBadge }}" hint-placeholder-val="{{ false }}">
+        <span style="background:#F5A169;color:#2c4f78;border-radius:9999px;min-width:16px;height:16px;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 3px;">{{ cartCount }}</span>
+      </sc-if>
+    </button>
+  </div>
+</nav>
+
+<!-- ─── NAV DRAWER ────────────────────────────────────── -->
+<div style="{{ drawerStyle }}" aria-hidden="{{ !navOpen }}" data-screen-label="Nav Drawer">
+  <button aria-label="Close menu" onClick="{{ closeNav }}" style="position:absolute;top:22px;right:22px;background:none;border:none;color:#F0F0E5;cursor:pointer;padding:8px;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+
+  <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.35em;color:rgba(240,240,229,0.35);text-transform:uppercase;margin-bottom:44px;">Navigation</p>
+
+  <div style="display:flex;flex-direction:column;gap:0;flex:1;">
+    <a href="#shop" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">Shop</a>
+    <a href="#collections" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">Collections</a>
+    <a href="#story" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">Island Story</a>
+    <a href="#about" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">About</a>
+  </div>
+
+  <div style="padding-top:36px;">
+    <p style="font-family:'Geologica',sans-serif;font-size:10px;color:rgba(240,240,229,0.4);letter-spacing:0.08em;margin-bottom:6px;">hello@arrivearuba.com</p>
+    <p style="font-family:'Geologica',sans-serif;font-size:10px;color:rgba(240,240,229,0.25);font-weight:300;">24h · Island Delivery · Free Returns</p>
+  </div>
+</div>
+
+<!-- ─── HERO ──────────────────────────────────────────── -->
+<section data-screen-label="01 Hero" style="position:relative;min-height:100svh;min-height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+  <div style="position:absolute;inset:0;background:#2c4f78;z-index:0;"></div>
+  <div style="position:absolute;inset:-20%;background:radial-gradient(ellipse 80% 60% at 32% 72%,rgba(56,99,149,0.85) 0%,transparent 58%),radial-gradient(ellipse 55% 45% at 78% 28%,rgba(95,139,184,0.45) 0%,transparent 52%);animation:aa-drift 24s ease-in-out infinite;z-index:1;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 55% 40% at 50% 95%,rgba(146,175,136,0.12) 0%,transparent 55%);animation:aa-glow 11s ease-in-out infinite;z-index:2;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 90% 80% at 50% 50%,transparent 25%,rgba(44,79,120,0.62) 100%);z-index:3;"></div>
+
+  <div style="position:relative;z-index:10;text-align:center;padding:0 28px;max-width:500px;width:100%;">
+    <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
+
+    <h1 data-hero="title" style="margin:0 auto 30px;width:100%;max-width:340px;line-height:0;">
+      <img src="assets/logo-white.png" alt="Arrive Aruba" style="display:block;width:100%;height:auto;opacity:1;" />
+    </h1>
+
+    <p data-hero="tag" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-weight:300;font-size:clamp(18px,4.5vw,25px);color:rgba(240,240,229,0.7);letter-spacing:0.02em;line-height:1.5;margin-bottom:52px;">Take home what you felt. ✦</p>
+
+    <div data-hero="ctas" style="display:flex;flex-direction:column;gap:12px;align-items:center;">
+      <a href="#shop" style="display:inline-block;background:#F0F0E5;color:#2c4f78;font-family:'Geologica',sans-serif;font-weight:500;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 48px;min-width:238px;text-align:center;border:1px solid #F0F0E5;transition:background 0.25s ease,color 0.25s ease;" style-hover="background:transparent;color:#F0F0E5;">Shop the Collection</a>
+      <a href="#story" style="display:inline-block;color:#F0F0E5;font-family:'Geologica',sans-serif;font-weight:300;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 48px;min-width:238px;text-align:center;border:1px solid rgba(240,240,229,0.28);transition:border-color 0.3s ease;" style-hover="border-color:rgba(240,240,229,0.7);">Discover the Island</a>
+    </div>
+  </div>
+
+  <div data-hero="scroll" style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:0;">
+    <div style="width:1px;height:52px;background:rgba(240,240,229,0.15);position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:55%;background:rgba(240,240,229,0.75);animation:aa-scroll-line 2.1s ease-in-out infinite;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SHOP BY CATEGORY ──────────────────────────────── -->
+<section id="shop" data-screen-label="02 Categories" style="padding:76px 20px 68px;background:#F0F0E5;">
+  <div data-reveal data-delay="0" style="margin-bottom:48px;">
+    <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.38em;color:#5F8BB8;text-transform:uppercase;margin-bottom:10px;">Browse</p>
+    <h2 style="font-family:'ITC Legacy Serif',Georgia,serif;font-weight:400;font-size:clamp(30px,7vw,44px);color:#23405e;letter-spacing:-0.01em;line-height:1.1;">Shop the Island</h2>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;margin:0 auto;">
+
+    <a href="#" data-reveal data-delay="0.05" style="display:block;color:#23405e;">
+      <div style="aspect-ratio:3/4;background:#b8cede;position:relative;overflow:hidden;margin-bottom:11px;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.5) 100%);"></div>
+        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Shirts</p>
+      </div>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Resort Shirts</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">12 pieces</p>
+    </a>
+
+    <a href="#" data-reveal data-delay="0.1" style="display:block;color:#23405e;margin-top:36px;">
+      <div style="aspect-ratio:3/4;background:#c5dbbe;position:relative;overflow:hidden;margin-bottom:11px;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
+        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Swim</p>
+      </div>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Swimwear</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">8 pieces</p>
+    </a>
+
+    <a href="#" data-reveal data-delay="0.05" style="display:block;color:#23405e;">
+      <div style="aspect-ratio:3/4;background:#e1cdb8;position:relative;overflow:hidden;margin-bottom:11px;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
+        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Accessories</p>
+      </div>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Accessories</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">20 pieces</p>
+    </a>
+
+    <a href="#" data-reveal data-delay="0.1" style="display:block;color:#23405e;margin-top:36px;">
+      <div style="aspect-ratio:3/4;background:#d2cce0;position:relative;overflow:hidden;margin-bottom:11px;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
+        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Essentials</p>
+      </div>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Essentials</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">16 pieces</p>
+    </a>
+
+  </div>
+</section>
+
+<!-- ─── TICKER BAR ────────────────────────────────────── -->
+<div style="background:#386395;height:52px;overflow:hidden;display:flex;align-items:center;">
+  <div style="display:flex;white-space:nowrap;align-items:center;animation:aa-ticker 20s linear infinite;">
+    <span style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;color:rgba(240,240,229,0.65);text-transform:uppercase;padding:0 40px;">24h Island Delivery</span>
+    <span style="color:rgba(240,240,229,0.25);padding:0 4px;">·</span>
+    <span style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;color:rgba(240,240,229,0.65);text-transform:uppercase;padding:0 40px;">Free Returns</span>
+    <span style="color:rgba(240,240,229,0.25);padding:0 4px;">·</span>
+    <span style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;color:rgba(240,240,229,0.65);text-transform:uppercase;padding:0 40px;">Made in Aruba</span>
+    <span style="color:rgba(240,240,229,0.25);padding:0 4px;">·</span>
+    <span style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;color:rgba(240,240,229,0.65);text-transform:uppercase;padding:0 40px;">Delivered with Island Ease</span>
+    <span style="color:rgba(240,240,229,0.25);padding:0 4px;">·</span>
+    <span style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;color:rgba(240,240,229,0.65);text-transform:uppercase;padding:0 40px;">24h Island Delivery</span>
+    <span style="color:rgba(240,240,229,0.25);padding:0 4px;">·</span>
+    <span style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;color:rgba(240,240,229,0.65);text-transform:uppercase;padding:0 40px;">Free Returns</span>
+    <span style="color:rgba(240,240,229,0.25);padding:0 4px;">·</span>
+    <span style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;color:rgba(240,240,229,0.65);text-transform:uppercase;padding:0 40px;">Made in Aruba</span>
+    <span style="color:rgba(240,240,229,0.25);padding:0 4px;">·</span>
+    <span style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;color:rgba(240,240,229,0.65);text-transform:uppercase;padding:0 40px;">Delivered with Island Ease</span>
+    <span style="color:rgba(240,240,229,0.25);padding:0 4px;">·</span>
+  </div>
+</div>
+
+<!-- ─── NEW ARRIVALS ───────────────────────────────────── -->
+<section id="collections" data-screen-label="03 New Arrivals" style="padding:76px 20px 68px;background:#F0F0E5;">
+  <div data-reveal data-delay="0" style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:38px;">
+    <div>
+      <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.38em;color:#5F8BB8;text-transform:uppercase;margin-bottom:8px;">New In · 2025</p>
+      <h2 style="font-family:'ITC Legacy Serif',Georgia,serif;font-weight:400;font-size:clamp(24px,5.5vw,38px);color:#23405e;letter-spacing:-0.01em;line-height:1.1;">New Arrivals</h2>
+    </div>
+    <a href="#" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;white-space:nowrap;" style-hover="opacity:0.65;">View all</a>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 12px;max-width:640px;margin:0 auto;">
+
+    <div data-reveal data-delay="0">
+      <a href="#" style="display:block;aspect-ratio:3/4;background:#cfe0eb;position:relative;overflow:hidden;margin-bottom:12px;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.22;">
+          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.14em;color:#386395;text-transform:uppercase;">Product</p>
+        </div>
+      </a>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:5px;">Linen Resort Shirt</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$185</p>
+    </div>
+
+    <div data-reveal data-delay="0.08">
+      <a href="#" style="display:block;aspect-ratio:3/4;background:#c8dfc2;position:relative;overflow:hidden;margin-bottom:12px;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.22;">
+          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.14em;color:#386395;text-transform:uppercase;">Product</p>
+        </div>
+      </a>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:5px;">Shoreline Trunks</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$145</p>
+    </div>
+
+    <div data-reveal data-delay="0.04">
+      <a href="#" style="display:block;aspect-ratio:3/4;background:#e3d3c0;position:relative;overflow:hidden;margin-bottom:12px;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.22;">
+          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.14em;color:#386395;text-transform:uppercase;">Product</p>
+        </div>
+      </a>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:5px;">Sun-bleached Tee</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$95</p>
+    </div>
+
+    <div data-reveal data-delay="0.12">
+      <a href="#" style="display:block;aspect-ratio:3/4;background:#d7d2e5;position:relative;overflow:hidden;margin-bottom:12px;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.22;">
+          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.14em;color:#386395;text-transform:uppercase;">Product</p>
+        </div>
+      </a>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:5px;">Island Cap</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$75</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── EDITORIAL STORY ───────────────────────────────── -->
+<section id="story" data-screen-label="04 Island Story" style="background:#386395;padding:80px 24px;position:relative;overflow:hidden;">
+  <div style="position:absolute;top:-100px;right:-80px;width:300px;height:300px;border-radius:50%;background:rgba(56,99,149,0.18);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-60px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(146,175,136,0.1);pointer-events:none;"></div>
+
+  <div data-reveal data-delay="0" style="position:relative;z-index:1;max-width:440px;">
+    <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.38em;color:rgba(240,240,229,0.38);text-transform:uppercase;margin-bottom:18px;">The Island</p>
+    <h2 style="font-family:'ITC Legacy Serif',Georgia,serif;font-weight:300;font-style:italic;font-size:clamp(28px,7vw,48px);color:#F0F0E5;line-height:1.18;margin-bottom:32px;">"A quieter way<br />to remember Aruba."</h2>
+
+    <div style="width:100%;aspect-ratio:3/2;background:#2c4f78;margin-bottom:28px;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 40% 65%,rgba(56,99,149,0.32) 0%,transparent 65%);"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.18;">
+        <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:#F0F0E5;text-transform:uppercase;">Editorial Image</p>
+      </div>
+    </div>
+
+    <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:13px;line-height:1.88;color:rgba(240,240,229,0.62);margin-bottom:36px;">Every piece in the collection is shaped by the island — the light, the water, the warmth you carry home long after you've left. Resortwear made for sunlit arrivals.</p>
+
+    <a href="#" style="display:inline-block;border:1px solid rgba(240,240,229,0.38);color:#F0F0E5;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;padding:14px 34px;transition:background 0.3s ease,border-color 0.3s ease;" style-hover="background:rgba(240,240,229,0.08);border-color:rgba(240,240,229,0.65);">Read the Story</a>
+  </div>
+</section>
+
+<!-- ─── FEATURED EDITORIAL ────────────────────────────── -->
+<section style="padding:0;background:#F0F0E5;overflow:hidden;" data-screen-label="05 Featured">
+  <div style="display:grid;grid-template-columns:1fr;max-width:640px;margin:0 auto;">
+    <div data-reveal data-delay="0" style="aspect-ratio:5/3;background:#afc8d8;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(44,79,120,0.55) 100%);"></div>
+      <div style="position:absolute;bottom:28px;left:28px;right:28px;">
+        <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(240,240,229,0.6);text-transform:uppercase;margin-bottom:8px;">Ss · 2025</p>
+        <p style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:22px;color:#F0F0E5;line-height:1.2;">"Made for sunlit arrivals."</p>
+      </div>
+    </div>
+    <div data-reveal data-delay="0.1" style="padding:32px 24px 40px;border-bottom:1px solid rgba(56,99,149,0.12);">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <p style="font-family:'Geologica',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#23405e;margin-bottom:4px;">Spring Collection 2025</p>
+          <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#aaa;font-weight:300;">14 pieces — from $75</p>
+        </div>
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;" style-hover="opacity:0.65;">Explore ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HERITAGE ──────────────────────────────────────── -->
+<section id="about" data-screen-label="06 Heritage" style="padding:76px 24px 72px;background:#F0F0E5;">
+  <div style="max-width:480px;margin:0 auto;">
+    <div data-reveal data-delay="0">
+      <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.38em;color:#5F8BB8;text-transform:uppercase;margin-bottom:14px;">Heritage</p>
+      <h2 style="font-family:'ITC Legacy Serif',Georgia,serif;font-weight:400;font-size:clamp(26px,6.5vw,42px);color:#23405e;line-height:1.15;margin-bottom:20px;">Born on the island.<br />Made for the return.</h2>
+      <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:13px;line-height:1.88;color:#6a6a6a;margin-bottom:28px;">ARRIVE ARUBA was founded on a simple idea: the island stays with you. Each garment is a memory, a quiet invitation to return.</p>
+      <a href="#" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;" style-hover="opacity:0.65;">Our Story ↗</a>
+    </div>
+    <div data-reveal data-delay="0.12" style="width:100%;aspect-ratio:4/3;background:#b8cede;position:relative;overflow:hidden;margin-top:36px;">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 70%,rgba(56,99,149,0.18) 0%,transparent 60%);"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.18;">
+        <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:#386395;text-transform:uppercase;">Brand Image</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── NEWSLETTER ────────────────────────────────────── -->
+<section data-screen-label="07 Newsletter" style="background:#2c4f78;padding:80px 24px;text-align:center;">
+  <div data-reveal data-delay="0" style="max-width:400px;margin:0 auto;">
+    <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.38em;color:rgba(240,240,229,0.35);text-transform:uppercase;margin-bottom:14px;">Stay Close</p>
+    <h2 style="font-family:'ITC Legacy Serif',Georgia,serif;font-weight:300;font-style:italic;font-size:clamp(24px,5.5vw,36px);color:#F0F0E5;line-height:1.25;margin-bottom:10px;">The island, in your inbox.</h2>
+    <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:12px;color:rgba(240,240,229,0.45);line-height:1.8;margin-bottom:40px;">New arrivals, island stories, and quiet moments — delivered with care.</p>
+
+    <sc-if value="{{ emailSubmitted }}" hint-placeholder-val="{{ false }}">
+      <p style="font-family:'Geologica',sans-serif;font-size:13px;color:#92AF88;letter-spacing:0.06em;">Welcome to the island.</p>
+    </sc-if>
+
+    <sc-if value="{{ showEmailForm }}" hint-placeholder-val="{{ true }}">
+      <form onSubmit="{{ submitEmail }}" style="display:flex;flex-direction:column;gap:14px;">
+        <input type="email" placeholder="your email address" value="{{ email }}" onInput="{{ setEmail }}" onFocus="{{ focusEmail }}" onBlur="{{ blurEmail }}" style="{{ inputStyle }}" required="required" />
+        <button type="submit" style="background:#386395;color:#F0F0E5;border:none;padding:16px 32px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.32em;text-transform:uppercase;cursor:pointer;transition:background 0.25s ease;" style-hover="background:#2d5280;">Join the Island</button>
+      </form>
+    </sc-if>
+  </div>
+</section>
+
+<!-- ─── FOOTER ────────────────────────────────────────── -->
+<footer data-screen-label="08 Footer" style="background:#2c4f78;padding:56px 24px 32px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px 28px;max-width:640px;margin:0 auto 44px;">
+    <div style="grid-column:1/-1;">
+      <p style="font-family:'Geologica',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.26em;color:#F0F0E5;text-transform:uppercase;margin-bottom:10px;">ARRIVE ARUBA</p>
+      <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:11px;line-height:1.75;color:rgba(240,240,229,0.35);">Resortwear shaped by the island.</p>
+    </div>
+    <div>
+      <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,240,229,0.35);margin-bottom:14px;">Shop</p>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Resort Shirts</a>
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Swimwear</a>
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Accessories</a>
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Essentials</a>
+      </div>
+    </div>
+    <div>
+      <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,240,229,0.35);margin-bottom:14px;">Help</p>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Shipping</a>
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Returns</a>
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Contact</a>
+        <a href="#" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Privacy</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid rgba(240,240,229,0.07);padding-top:24px;max-width:640px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    <p style="font-family:'Geologica',sans-serif;font-size:9px;color:rgba(240,240,229,0.22);font-weight:300;letter-spacing:0.04em;">© 2025 Arrive Aruba. All rights reserved.</p>
+    <div style="display:flex;gap:18px;">
+      <a href="#" style="font-family:'Geologica',sans-serif;font-size:9px;color:rgba(240,240,229,0.32);letter-spacing:0.18em;text-transform:uppercase;" style-hover="color:rgba(240,240,229,0.7);">Instagram</a>
+      <a href="#" style="font-family:'Geologica',sans-serif;font-size:9px;color:rgba(240,240,229,0.32);letter-spacing:0.18em;text-transform:uppercase;" style-hover="color:rgba(240,240,229,0.7);">TikTok</a>
+    </div>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 390 }
+}">
+class Component extends DCLogic {
+  state = {
+    navOpen: false,
+    cartCount: 0,
+    email: '',
+    emailFocused: false,
+    emailSubmitted: false,
+  };
+
+  componentDidMount() {
+    // ── Hero entrance — transform + CSS animation ONLY. Content is
+    //    visible by default; we never gate visibility on JS. If reduced
+    //    motion is on, skip the staged drift entirely. ──
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+      const HERO = [
+        ['[data-hero="label"]',  80],
+        ['[data-hero="title"]',  240],
+        ['[data-hero="tag"]',    420],
+        ['[data-hero="ctas"]',   620],
+        ['[data-hero="scroll"]', 860],
+      ];
+      HERO.forEach(([sel]) => {
+        const el = document.querySelector(sel);
+        if (!el) return;
+        el.style.transform  = 'translateY(18px)';
+        el.style.transition = 'transform 0.9s cubic-bezier(0.22,0.61,0.36,1)';
+      });
+      requestAnimationFrame(() => {
+        HERO.forEach(([sel, delay]) => {
+          const el = document.querySelector(sel);
+          if (!el) return;
+          setTimeout(() => { el.style.transform = 'translateY(0)'; }, delay);
+        });
+      });
+    }
+
+    // ── Scroll reveals — transform-only lift. Resting state is fully
+    //    visible; the observer only nudges the element up from a slight
+    //    offset. Nothing is ever left at opacity:0. ──
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const d = e.target.dataset.delay || '0';
+        e.target.style.transition = `transform 0.85s cubic-bezier(0.22,0.61,0.36,1) ${d}s`;
+        e.target.style.transform  = 'translateY(0)';
+        obs.unobserve(e.target);
+      });
+    }, { threshold: 0.06 });
+
+    if (!reduce) {
+      document.querySelectorAll('[data-reveal]').forEach(el => {
+        const inView = el.getBoundingClientRect().top < window.innerHeight - 20;
+        if (!inView) {
+          el.style.transform = 'translateY(20px)';
+          obs.observe(el);
+        }
+      });
+    }
+    this._obs = obs;
+
+    // ── Nav scroll color shift ──────────────────────────────────
+    const $nav   = document.getElementById('aa-nav');
+    const $bars  = document.querySelectorAll('.aa-bar');
+    const $wmW   = document.getElementById('aa-wm-white');
+    const $wmS   = document.getElementById('aa-wm-sapphire');
+    const $srch  = document.getElementById('aa-search-btn');
+    const $cart  = document.getElementById('aa-cart-btn');
+
+    const onScroll = () => {
+      const past = window.scrollY > 70;
+      if ($nav) {
+        $nav.style.background   = past ? 'rgba(240,240,229,0.97)' : 'transparent';
+        $nav.style.borderBottom = past ? '1px solid rgba(56,99,149,0.1)' : 'none';
+      }
+      const c = past ? '#23405e' : '#F0F0E5';
+      $bars.forEach(b => { b.style.background = c; });
+      if ($wmW) $wmW.style.opacity = past ? '0' : '1';
+      if ($wmS) $wmS.style.opacity = past ? '1' : '0';
+      if ($srch) $srch.style.color = c;
+      if ($cart) $cart.style.color = c;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    this._onScroll = onScroll;
+  }
+
+  componentWillUnmount() {
+    if (this._obs)      this._obs.disconnect();
+    if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+  }
+
+  renderVals() {
+    const { navOpen, cartCount, email, emailFocused, emailSubmitted } = this.state;
+
+    return {
+      navOpen,
+      cartCount,
+      showCartBadge: cartCount > 0,
+      emailSubmitted,
+      showEmailForm: !emailSubmitted,
+      email,
+
+      // Nav drawer full-screen overlay
+      drawerStyle: {
+        position: 'fixed', inset: 0, zIndex: 200,
+        background: '#386395',
+        opacity: navOpen ? 1 : 0,
+        pointerEvents: navOpen ? 'all' : 'none',
+        transition: 'opacity 0.4s cubic-bezier(0.22,0.61,0.36,1)',
+        display: 'flex', flexDirection: 'column',
+        padding: '80px 36px 44px',
+      },
+
+      // Newsletter input border reacts to focus
+      inputStyle: {
+        background: 'transparent', border: 'none',
+        borderBottom: `1px solid ${emailFocused ? '#5F8BB8' : 'rgba(240,240,229,0.28)'}`,
+        padding: '12px 0',
+        fontFamily: "'Geologica', sans-serif",
+        fontSize: '14px', fontWeight: 300,
+        color: '#F0F0E5', outline: 'none',
+        width: '100%', letterSpacing: '0.05em',
+        transition: 'border-color 0.3s ease',
+      },
+
+      toggleNav:  () => this.setState(s => ({ navOpen: !s.navOpen })),
+      closeNav:   () => this.setState({ navOpen: false }),
+      toggleCart: () => this.setState(s => ({ cartCount: s.cartCount + 1 })),
+
+      setEmail:   e  => this.setState({ email: e.target.value }),
+      focusEmail: () => this.setState({ emailFocused: true }),
+      blurEmail:  () => this.setState({ emailFocused: false }),
+
+      submitEmail: e => {
+        e.preventDefault();
+        if (email.includes('@')) this.setState({ emailSubmitted: true });
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>
