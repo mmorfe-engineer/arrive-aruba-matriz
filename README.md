@@ -18,21 +18,22 @@ All pages open directly in a browser — no build step.
 
 ## Publish on GitHub Pages
 
-1. **Create a repo** at https://github.com/new (e.g. `arrive-aruba`), public.
-2. **Upload these files** — drag the whole folder into the repo's "uploading an existing file" page, or push with git:
-   ```bash
-   git init
-   git add .
-   git commit -m "Arrive Aruba — web & app"
-   git branch -M main
-   git remote add origin https://github.com/<your-user>/arrive-aruba.git
-   git push -u origin main
-   ```
-3. **Enable Pages:** repo **Settings → Pages → Build and deployment → Source: "Deploy from a branch" → Branch: `main` / `(root)` → Save.**
-4. After ~1 minute your site is live at:
-   `https://<your-user>.github.io/arrive-aruba/`
+The preview is published through GitHub Pages at:
+
+`https://morfemartin.github.io/Web_Arrive-Aruba/`
 
 That URL loads `index.html`, which links to the website and the app.
+
+## Branches
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Stable, approved source |
+| `preview/static` | Static HTML preview before Shopify conversion |
+| `gh-pages` | Published GitHub Pages branch |
+| `shopify/theme` | Shopify/Liquid theme development branch |
+
+See `BRANCHING.md` for the full workflow.
 
 ## Notes
 - Geologica loads from Google Fonts; ITC Legacy Serif and the logos are bundled in `assets/`.
