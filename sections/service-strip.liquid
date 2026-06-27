@@ -1,0 +1,46 @@
+<section class="aa-service aa-section">
+  <div class="aa-shell aa-service__grid">
+    <div class="aa-reveal">
+      <p class="aa-kicker">{{ section.settings.kicker | escape }}</p>
+      <h2 class="aa-title">{{ section.settings.heading | escape }}</h2>
+      <p class="aa-copy">{{ section.settings.text | escape }}</p>
+    </div>
+    {%- for block in section.blocks -%}
+      <div class="aa-service__item aa-reveal" {{ block.shopify_attributes }}>
+        <h3>{{ block.settings.title | escape }}</h3>
+        <p>{{ block.settings.text | escape }}</p>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Service strip",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Island service" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "24-hour delivery" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "A quieter way to receive resortwear while the island is still fresh in your hands." }
+  ],
+  "blocks": [
+    {
+      "type": "benefit",
+      "name": "Benefit",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Delivered with ease" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Local fulfillment designed around the rhythm of your stay." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Service strip",
+      "blocks": [
+        { "type": "benefit" },
+        { "type": "benefit", "settings": { "title": "Secure checkout" } },
+        { "type": "benefit", "settings": { "title": "Island-ready pieces" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

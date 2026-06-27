@@ -1,0 +1,23 @@
+<section class="aa-template aa-section">
+  <div class="aa-shell" style="max-width: 520px;">
+    <div class="aa-reveal">
+      <p class="aa-kicker">Arrive Aruba</p>
+      <h1 class="aa-title">{{ 'customer.login.title' | t }}</h1>
+      {%- form 'customer_login', class: 'aa-form' -%}
+        {{ form.errors | default_errors }}
+        <input class="aa-input" type="email" name="customer[email]" autocomplete="email" placeholder="{{ 'customer.login.email' | t }}" required>
+        <input class="aa-input" type="password" name="customer[password]" autocomplete="current-password" placeholder="{{ 'customer.login.password' | t }}" required>
+        <button class="aa-button" type="submit">{{ 'customer.login.submit' | t }}</button>
+      {%- endform -%}
+      <p class="aa-copy">
+        <a href="{{ routes.account_register_url }}">{{ 'customer.login.create_account' | t }}</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main login"
+}
+{% endschema %}
