@@ -1,34 +1,39 @@
-# Arrive Aruba Shopify Theme
+# Arrive Aruba — Premium Web & App
 
-Premium mobile-first Shopify Online Store 2.0 theme foundation for Arrive Aruba.
+Resortwear shaped by the island. *Take home what you felt. ✦*
 
-## What is included
+This repository contains the Arrive Aruba digital flagship, built on the official brand system (Star Sapphire palette, Cannoli Cream surfaces, ITC Legacy Serif + Geologica, the ✦ star).
 
-- Cinematic homepage with editable Shopify sections.
-- Brand-aligned design tokens using the Arrive Aruba palette.
-- Mobile-first fixed header, luxury drawer navigation, footer, newsletter, editorial storytelling, category grid, service strip, media/text blocks, and featured collection.
-- Product card snippet connected to Shopify products.
-- Templates for home, collection, product, cart, search, page, customer login, and customer register.
-- Responsive images with `image_url` and `image_tag`.
-- Subtle reveal motion with `prefers-reduced-motion` support.
-- Theme settings for logo, favicon, colors, typography, tagline, and motion.
+## Contents
 
-## Shopify editing model
+| File | What it is |
+|------|------------|
+| `index.html` | Landing launcher (entry point for GitHub Pages) |
+| `Arrive Aruba - Homepage.dc.html` | Editorial marketing homepage (mobile-first) |
+| `Arrive Aruba - App.dc.html` | Full mobile-app prototype — the complete App Flow (login → home → search → product → cart → checkout → profile → settings) |
+| `assets/` | Brand logos + fonts (ITC Legacy Serif, Port Blair) |
+| `support.js` | Runtime that powers the interactive pages |
 
-The merchant can edit the site without code through the Theme Editor:
+All pages open directly in a browser — no build step.
 
-- Upload logo, favicon, hero images, and video.
-- Change global brand colors and fonts.
-- Reorder homepage sections.
-- Select featured collections.
-- Edit category tiles, service benefits, editorial story moments, CTAs, and newsletter copy.
-- Add products and collections natively in Shopify.
+## Publish on GitHub Pages
 
-## Next implementation steps
+1. **Create a repo** at https://github.com/new (e.g. `arrive-aruba`), public.
+2. **Upload these files** — drag the whole folder into the repo's "uploading an existing file" page, or push with git:
+   ```bash
+   git init
+   git add .
+   git commit -m "Arrive Aruba — web & app"
+   git branch -M main
+   git remote add origin https://github.com/<your-user>/arrive-aruba.git
+   git push -u origin main
+   ```
+3. **Enable Pages:** repo **Settings → Pages → Build and deployment → Source: "Deploy from a branch" → Branch: `main` / `(root)` → Save.**
+4. After ~1 minute your site is live at:
+   `https://<your-user>.github.io/arrive-aruba/`
 
-1. Upload the official Arrive Aruba logo files and approved lifestyle/product photography.
-2. Connect homepage category blocks to real Shopify collections.
-3. Connect the featured collection section to the launch collection.
-4. Configure Shopify Payments, shipping, tax, policies, customer accounts, and domain.
-5. Add wishlist/reviews through vetted Shopify apps if those features are required at launch.
-6. Run `shopify theme dev` and test the theme inside a development store.
+That URL loads `index.html`, which links to the website and the app.
+
+## Notes
+- Geologica loads from Google Fonts; ITC Legacy Serif and the logos are bundled in `assets/`.
+- Fully responsive and mobile-first. Respects `prefers-reduced-motion`.

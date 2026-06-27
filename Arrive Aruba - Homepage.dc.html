@@ -14,9 +14,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    @font-face { font-family:'ITC Legacy Serif'; src:url('assets/fonts/ITCLegacySerifStd-Medium.otf') format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
-    @font-face { font-family:'ITC Legacy Serif'; src:url('assets/fonts/ITCLegacySerifStd-MediumItalic.otf') format('opentype'); font-weight:500; font-style:italic; font-display:swap; }
-    @font-face { font-family:'Port Blair Alternate'; src:url('assets/fonts/PortBlairAlternate.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+    @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Medium.otf') format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
+    @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Book-Italic.otf') format('opentype'); font-weight:400; font-style:italic; font-display:swap; }
+    @font-face { font-family:'Port Blair Alternate'; src:url('preview-assets/fonts/Port-Blair-Alternate.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Geologica', sans-serif; background: #F0F0E5; color: #1a1a1a; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
@@ -62,8 +62,8 @@
   </button>
 
   <a id="aa-wm" href="#" aria-label="Arrive Aruba — home" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:176px;height:51px;line-height:0;">
-    <img id="aa-wm-white" src="assets/logo-white.png" alt="Arrive Aruba" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:1;transition:opacity 0.5s ease;" />
-    <img id="aa-wm-sapphire" src="assets/logo-sapphire.png" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 0.5s ease;" />
+    <img id="aa-wm-white" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:1;transition:opacity 0.5s ease;" />
+    <img id="aa-wm-sapphire" src="preview-assets/brand/logo-blue.webp" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 0.5s ease;" />
   </a>
 
   <div style="display:flex;gap:20px;align-items:center;">
@@ -102,19 +102,17 @@
 
 <!-- ─── HERO ──────────────────────────────────────────── -->
 <section data-screen-label="01 Hero" style="position:relative;min-height:100svh;min-height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center;">
-  <div style="position:absolute;inset:0;background:#2c4f78;z-index:0;"></div>
-  <div style="position:absolute;inset:-20%;background:radial-gradient(ellipse 80% 60% at 32% 72%,rgba(56,99,149,0.85) 0%,transparent 58%),radial-gradient(ellipse 55% 45% at 78% 28%,rgba(95,139,184,0.45) 0%,transparent 52%);animation:aa-drift 24s ease-in-out infinite;z-index:1;"></div>
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 55% 40% at 50% 95%,rgba(146,175,136,0.12) 0%,transparent 55%);animation:aa-glow 11s ease-in-out infinite;z-index:2;"></div>
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 90% 80% at 50% 50%,transparent 25%,rgba(44,79,120,0.62) 100%);z-index:3;"></div>
+  <img src="preview-assets/media/aruba-landscape.webp" alt="Aruba" fetchpriority="high" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;z-index:0;" />
+  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,18,30,0.35) 0%,rgba(7,18,30,0.12) 40%,rgba(7,18,30,0.75) 100%);z-index:1;"></div>
 
   <div style="position:relative;z-index:10;text-align:center;padding:0 28px;max-width:500px;width:100%;">
     <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
 
     <h1 data-hero="title" style="margin:0 auto 30px;width:100%;max-width:340px;line-height:0;">
-      <img src="assets/logo-white.png" alt="Arrive Aruba" style="display:block;width:100%;height:auto;opacity:1;" />
+      <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba" style="display:block;width:100%;height:auto;" />
     </h1>
 
-    <p data-hero="tag" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-weight:300;font-size:clamp(18px,4.5vw,25px);color:rgba(240,240,229,0.7);letter-spacing:0.02em;line-height:1.5;margin-bottom:52px;">Take home what you felt. ✦</p>
+    <p data-hero="tag" style="font-family:'Port Blair Alternate',serif;font-size:clamp(20px,5vw,28px);color:rgba(240,240,229,0.88);letter-spacing:0.03em;line-height:1.4;margin-bottom:52px;">Take home what you felt. ✦</p>
 
     <div data-hero="ctas" style="display:flex;flex-direction:column;gap:12px;align-items:center;">
       <a href="#shop" style="display:inline-block;background:#F0F0E5;color:#2c4f78;font-family:'Geologica',sans-serif;font-weight:500;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 48px;min-width:238px;text-align:center;border:1px solid #F0F0E5;transition:background 0.25s ease,color 0.25s ease;" style-hover="background:transparent;color:#F0F0E5;">Shop the Collection</a>
@@ -139,39 +137,43 @@
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;margin:0 auto;">
 
     <a href="#" data-reveal data-delay="0.05" style="display:block;color:#23405e;">
-      <div style="aspect-ratio:3/4;background:#b8cede;position:relative;overflow:hidden;margin-bottom:11px;">
+      <div style="aspect-ratio:3/4;background:#5F8BB8;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.5) 100%);"></div>
-        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Shirts</p>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
+        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Polo</p>
       </div>
-      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Resort Shirts</p>
-      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">12 pieces</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Performance Polo</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">From $85</p>
     </a>
 
     <a href="#" data-reveal data-delay="0.1" style="display:block;color:#23405e;margin-top:36px;">
-      <div style="aspect-ratio:3/4;background:#c5dbbe;position:relative;overflow:hidden;margin-bottom:11px;">
+      <div style="aspect-ratio:3/4;background:#92AF88;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
-        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Swim</p>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
+        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Tee</p>
       </div>
-      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Swimwear</p>
-      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">8 pieces</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Performance Tee</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">From $58</p>
     </a>
 
     <a href="#" data-reveal data-delay="0.05" style="display:block;color:#23405e;">
-      <div style="aspect-ratio:3/4;background:#e1cdb8;position:relative;overflow:hidden;margin-bottom:11px;">
+      <div style="aspect-ratio:3/4;background:#386395;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
-        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Accessories</p>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
+        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Hoodie</p>
       </div>
-      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Accessories</p>
-      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">20 pieces</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Star Sapphire Hoodie</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">From $145</p>
     </a>
 
     <a href="#" data-reveal data-delay="0.1" style="display:block;color:#23405e;margin-top:36px;">
-      <div style="aspect-ratio:3/4;background:#d2cce0;position:relative;overflow:hidden;margin-bottom:11px;">
+      <div style="aspect-ratio:3/4;background:#F5A169;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
-        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Essentials</p>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.16;" /></div>
+        <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">All</p>
       </div>
-      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Essentials</p>
-      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">16 pieces</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">New Arrivals</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">Full collection</p>
     </a>
 
   </div>
@@ -211,44 +213,47 @@
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 12px;max-width:640px;margin:0 auto;">
 
+    <!-- Polo: Fair Green -->
     <div data-reveal data-delay="0">
-      <a href="#" style="display:block;aspect-ratio:3/4;background:#cfe0eb;position:relative;overflow:hidden;margin-bottom:12px;">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.22;">
-          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.14em;color:#386395;text-transform:uppercase;">Product</p>
-        </div>
+      <a href="#" style="display:block;aspect-ratio:3/4;background:#5F8BB8;position:relative;overflow:hidden;margin-bottom:12px;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
+        <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
       </a>
-      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:5px;">Linen Resort Shirt</p>
-      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$185</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Performance Piqué Polo</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Silver Lake Blue</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$85</p>
     </div>
 
+    <!-- Tee: Mock Orange -->
     <div data-reveal data-delay="0.08">
-      <a href="#" style="display:block;aspect-ratio:3/4;background:#c8dfc2;position:relative;overflow:hidden;margin-bottom:12px;">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.22;">
-          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.14em;color:#386395;text-transform:uppercase;">Product</p>
-        </div>
+      <a href="#" style="display:block;aspect-ratio:3/4;background:#F5A169;position:relative;overflow:hidden;margin-bottom:12px;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
+        <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
       </a>
-      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:5px;">Shoreline Trunks</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Smooth Performance Tee</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Mock Orange</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$58</p>
+    </div>
+
+    <!-- Hoodie: Star Sapphire -->
+    <div data-reveal data-delay="0.04">
+      <a href="#" style="display:block;aspect-ratio:3/4;background:#386395;position:relative;overflow:hidden;margin-bottom:12px;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
+        <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
+      </a>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Star Sapphire Hoodie</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Star Sapphire</p>
       <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$145</p>
     </div>
 
-    <div data-reveal data-delay="0.04">
-      <a href="#" style="display:block;aspect-ratio:3/4;background:#e3d3c0;position:relative;overflow:hidden;margin-bottom:12px;">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.22;">
-          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.14em;color:#386395;text-transform:uppercase;">Product</p>
-        </div>
-      </a>
-      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:5px;">Sun-bleached Tee</p>
-      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$95</p>
-    </div>
-
+    <!-- Polo: Fair Green variant -->
     <div data-reveal data-delay="0.12">
-      <a href="#" style="display:block;aspect-ratio:3/4;background:#d7d2e5;position:relative;overflow:hidden;margin-bottom:12px;">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.22;">
-          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.14em;color:#386395;text-transform:uppercase;">Product</p>
-        </div>
+      <a href="#" style="display:block;aspect-ratio:3/4;background:#92AF88;position:relative;overflow:hidden;margin-bottom:12px;">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
       </a>
-      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:5px;">Island Cap</p>
-      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$75</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Performance Piqué Polo</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Fair Green</p>
+      <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$85</p>
     </div>
 
   </div>
@@ -263,11 +268,8 @@
     <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.38em;color:rgba(240,240,229,0.38);text-transform:uppercase;margin-bottom:18px;">The Island</p>
     <h2 style="font-family:'ITC Legacy Serif',Georgia,serif;font-weight:300;font-style:italic;font-size:clamp(28px,7vw,48px);color:#F0F0E5;line-height:1.18;margin-bottom:32px;">"A quieter way<br />to remember Aruba."</h2>
 
-    <div style="width:100%;aspect-ratio:3/2;background:#2c4f78;margin-bottom:28px;position:relative;overflow:hidden;">
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 40% 65%,rgba(56,99,149,0.32) 0%,transparent 65%);"></div>
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.18;">
-        <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:#F0F0E5;text-transform:uppercase;">Editorial Image</p>
-      </div>
+    <div style="width:100%;aspect-ratio:3/2;margin-bottom:28px;overflow:hidden;">
+      <img src="preview-assets/media/brand-web.webp" alt="Arrive Aruba island direction" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center;" />
     </div>
 
     <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:13px;line-height:1.88;color:rgba(240,240,229,0.62);margin-bottom:36px;">Every piece in the collection is shaped by the island — the light, the water, the warmth you carry home long after you've left. Resortwear made for sunlit arrivals.</p>
@@ -279,8 +281,9 @@
 <!-- ─── FEATURED EDITORIAL ────────────────────────────── -->
 <section style="padding:0;background:#F0F0E5;overflow:hidden;" data-screen-label="05 Featured">
   <div style="display:grid;grid-template-columns:1fr;max-width:640px;margin:0 auto;">
-    <div data-reveal data-delay="0" style="aspect-ratio:5/3;background:#afc8d8;position:relative;overflow:hidden;">
-      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(44,79,120,0.55) 100%);"></div>
+    <div data-reveal data-delay="0" style="aspect-ratio:5/3;position:relative;overflow:hidden;">
+      <img src="preview-assets/media/aruba-landscape.webp" alt="Aruba" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center 30%;" />
+      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(44,79,120,0.65) 100%);"></div>
       <div style="position:absolute;bottom:28px;left:28px;right:28px;">
         <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(240,240,229,0.6);text-transform:uppercase;margin-bottom:8px;">Ss · 2025</p>
         <p style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:22px;color:#F0F0E5;line-height:1.2;">"Made for sunlit arrivals."</p>
@@ -290,7 +293,7 @@
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div>
           <p style="font-family:'Geologica',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#23405e;margin-bottom:4px;">Spring Collection 2025</p>
-          <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#aaa;font-weight:300;">14 pieces — from $75</p>
+          <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#aaa;font-weight:300;">Polo · Tee · Hoodie — from $58</p>
         </div>
         <a href="#" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;" style-hover="opacity:0.65;">Explore ↗</a>
       </div>
@@ -307,11 +310,8 @@
       <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:13px;line-height:1.88;color:#6a6a6a;margin-bottom:28px;">ARRIVE ARUBA was founded on a simple idea: the island stays with you. Each garment is a memory, a quiet invitation to return.</p>
       <a href="#" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;" style-hover="opacity:0.65;">Our Story ↗</a>
     </div>
-    <div data-reveal data-delay="0.12" style="width:100%;aspect-ratio:4/3;background:#b8cede;position:relative;overflow:hidden;margin-top:36px;">
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 70%,rgba(56,99,149,0.18) 0%,transparent 60%);"></div>
-      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.18;">
-        <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:#386395;text-transform:uppercase;">Brand Image</p>
-      </div>
+    <div data-reveal data-delay="0.12" style="width:100%;aspect-ratio:4/3;overflow:hidden;margin-top:36px;">
+      <img src="preview-assets/media/brand-web.webp" alt="Arrive Aruba brand" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center;" />
     </div>
   </div>
 </section>
@@ -340,7 +340,7 @@
 <footer data-screen-label="08 Footer" style="background:#2c4f78;padding:56px 24px 32px;">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px 28px;max-width:640px;margin:0 auto 44px;">
     <div style="grid-column:1/-1;">
-      <p style="font-family:'Geologica',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.26em;color:#F0F0E5;text-transform:uppercase;margin-bottom:10px;">ARRIVE ARUBA</p>
+      <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba" style="height:26px;width:auto;display:block;margin-bottom:12px;" />
       <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:11px;line-height:1.75;color:rgba(240,240,229,0.35);">Resortwear shaped by the island.</p>
     </div>
     <div>
@@ -371,7 +371,15 @@
     </div>
   </div>
 </footer>
-</x-dc>
+
+<template id="__bundler_thumbnail" data-bg-color="#386395">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#386395"/>
+    <text x="600" y="400" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="120" fill="#F0F0E5">Arrive</text>
+    <text x="600" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="46" letter-spacing="14" fill="#F0F0E5">ARUBA</text>
+    <text x="600" y="560" text-anchor="middle" font-family="Georgia, serif" font-size="34" fill="#F5A169">✦</text>
+  </svg>
+</template></x-dc>
 <script type="text/x-dc" data-dc-script data-props="{
   &quot;$preview&quot;: { &quot;width&quot;: 390 }
 }">
