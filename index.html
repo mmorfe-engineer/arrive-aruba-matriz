@@ -3,10 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Arrive Aruba — Project Launcher</title>
+  <title>Arrive Aruba</title>
+  <meta name="description" content="Arrive Aruba automatically opens the mobile app experience on phones and the web homepage on desktop.">
   <link rel="icon" href="preview-assets/brand/logo-mark.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      var routes = {
+        app: 'Arrive%20Aruba%20-%20App.dc.html',
+        web: 'Arrive%20Aruba%20-%20Homepage.dc.html'
+      };
+      var params = new URLSearchParams(window.location.search);
+      var forcedView = params.get('view');
+      var isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
+      var isNarrowViewport = window.matchMedia('(max-width: 767px)').matches;
+      var isTouchTablet = window.matchMedia('(pointer: coarse)').matches && window.matchMedia('(max-width: 1024px)').matches;
+      var shouldOpenApp = forcedView === 'app' || (!forcedView && (isMobileUserAgent || isNarrowViewport || isTouchTablet));
+      var target = forcedView === 'web' ? routes.web : shouldOpenApp ? routes.app : routes.web;
+      var destination = new URL(target + window.location.search + window.location.hash, window.location.href);
+      window.location.replace(destination.href);
+    })();
+  </script>
   <style>
     @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Medium.otf') format('opentype'); font-weight:500; font-display:swap; }
     *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
@@ -16,9 +34,10 @@
     header img { height:36px; width:auto; display:block; }
     header p { font-family:'ITC Legacy Serif',serif; font-style:italic; font-size:16px; color:rgba(240,240,229,0.75); }
     main { flex:1; padding:40px 24px 60px; max-width:680px; margin:0 auto; width:100%; }
-    h2 { font-size:9px; letter-spacing:0.32em; text-transform:uppercase; color:#5F8BB8; margin-bottom:20px; }
+    h1 { font-family:'ITC Legacy Serif',serif; font-size:clamp(34px,7vw,52px); font-weight:500; line-height:1; margin-bottom:12px; }
+    .intro { color:#6c7b8e; font-size:14px; font-weight:300; line-height:1.7; margin-bottom:28px; max-width:520px; }
     .cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:40px; }
-    @media(max-width:480px){ .cards { grid-template-columns:1fr; } }
+    @media(max-width:560px){ .cards { grid-template-columns:1fr; } }
     .card { display:flex; flex-direction:column; background:#fff; border:1px solid #e4e3d8; border-radius:14px; overflow:hidden; transition:box-shadow 0.2s ease, transform 0.2s ease; }
     .card:hover { box-shadow:0 8px 28px rgba(56,99,149,0.13); transform:translateY(-3px); }
     .card-thumb { aspect-ratio:16/9; background:#386395; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
@@ -28,14 +47,7 @@
     .card-label { font-size:8px; letter-spacing:0.22em; text-transform:uppercase; color:#5F8BB8; margin-bottom:6px; }
     .card-title { font-family:'ITC Legacy Serif',serif; font-size:18px; color:#23405e; margin-bottom:6px; }
     .card-desc { font-size:12px; font-weight:300; color:#7a8aa0; line-height:1.7; flex:1; margin-bottom:16px; }
-    .card-cta { align-self:flex-start; background:#386395; color:#F0F0E5; border:none; border-radius:9999px; padding:11px 22px; font-family:'Geologica',sans-serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:500; cursor:pointer; transition:background 0.2s ease; }
-    .card-cta:hover { background:#2c4f78; }
-    .meta { border-top:1px solid #e4e3d8; padding-top:28px; }
-    .meta-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
-    @media(max-width:480px){ .meta-grid { grid-template-columns:1fr 1fr; } }
-    .meta-item { background:#fff; border:1px solid #e4e3d8; border-radius:12px; padding:14px; }
-    .meta-item .val { font-family:'ITC Legacy Serif',serif; font-size:22px; color:#386395; }
-    .meta-item .lbl { font-size:11px; font-weight:300; color:#7a8aa0; margin-top:3px; line-height:1.4; }
+    .card-cta { align-self:flex-start; background:#386395; color:#F0F0E5; border:none; border-radius:9999px; padding:11px 22px; font-family:'Geologica',sans-serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:500; }
     footer { background:#2c4f78; padding:24px; text-align:center; }
     footer p { font-size:10px; font-weight:300; color:rgba(240,240,229,0.4); }
   </style>
@@ -47,50 +59,38 @@
   </header>
 
   <main>
-    <h2>Project Files</h2>
-    <div class="cards">
+    <h1>Arrive Aruba</h1>
+    <p class="intro">This page opens the right experience automatically. Phones and touch tablets open the app prototype; desktop and laptop screens open the web homepage.</p>
 
-      <a class="card" href="Arrive Aruba - Homepage.dc.html">
+    <div class="cards">
+      <a class="card" href="Arrive%20Aruba%20-%20Homepage.dc.html?view=web">
         <div class="card-thumb">
           <img class="photo" src="preview-assets/media/aruba-landscape.webp" alt="Aruba">
         </div>
         <div class="card-body">
-          <p class="card-label">Web · Desktop &amp; Mobile</p>
+          <p class="card-label">Desktop</p>
           <p class="card-title">Homepage</p>
-          <p class="card-desc">Hero full-bleed, shop by category, new arrivals, island story, heritage, newsletter. Shopify-ready structure.</p>
-          <span class="card-cta">Open homepage</span>
+          <p class="card-desc">Full web experience for desktop and laptop review.</p>
+          <span class="card-cta">Open website</span>
         </div>
       </a>
 
-      <a class="card" href="Arrive Aruba - App.dc.html">
-        <div class="card-thumb" style="background:#386395;">
+      <a class="card" href="Arrive%20Aruba%20-%20App.dc.html?view=app">
+        <div class="card-thumb">
           <img class="logo" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba App">
         </div>
         <div class="card-body">
-          <p class="card-label">Mobile App · iOS-first</p>
+          <p class="card-label">Mobile</p>
           <p class="card-title">App Prototype</p>
-          <p class="card-desc">Full 15-screen interactive flow: splash, login, home, search, product detail, favorites, cart, checkout, profile.</p>
+          <p class="card-desc">Mobile-first app flow for phone-sized review.</p>
           <span class="card-cta">Open app</span>
         </div>
       </a>
-
-    </div>
-
-    <div class="meta">
-      <h2 style="margin-bottom:16px;">Brand System</h2>
-      <div class="meta-grid">
-        <div class="meta-item"><div class="val" style="color:#386395;">●</div><div class="lbl">Star Sapphire<br>#386395</div></div>
-        <div class="meta-item"><div class="val" style="color:#5F8BB8;">●</div><div class="lbl">Silver Lake Blue<br>#5F8BB8</div></div>
-        <div class="meta-item"><div class="val" style="color:#92AF88;">●</div><div class="lbl">Fair Green<br>#92AF88</div></div>
-        <div class="meta-item"><div class="val" style="color:#F5A169;">●</div><div class="lbl">Mock Orange<br>#F5A169</div></div>
-        <div class="meta-item"><div class="val" style="color:#b0a898;">●</div><div class="lbl">Cannoli Cream<br>#F0F0E5</div></div>
-        <div class="meta-item"><div class="val">✦</div><div class="lbl">Port Blair Alternate<br>ITC Legacy Serif</div></div>
-      </div>
     </div>
   </main>
 
   <footer>
-    <p>Arrive Aruba Premium Web &nbsp;·&nbsp; morfemartin/Web_Arrive-Aruba &nbsp;·&nbsp; Branch: codex/current-upload</p>
+    <p>Arrive Aruba Premium Web</p>
   </footer>
 </body>
 </html>
