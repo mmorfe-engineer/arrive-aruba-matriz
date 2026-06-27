@@ -27,6 +27,8 @@
     @keyframes aa-fade { from{opacity:0;transform:translateY(12px);} to{opacity:1;transform:translateY(0);} }
     @keyframes aa-splash-logo { 0%{opacity:0;transform:scale(0.92);} 100%{opacity:1;transform:scale(1);} }
     @keyframes aa-pulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+    @keyframes aa-scrollcue { 0%,100%{transform:translateY(-100%);opacity:0.9;} 50%{transform:translateY(100%);opacity:0.2;} }
+    @keyframes aa-ticker { from{transform:translateX(0);} to{transform:translateX(-50%);} }
     .aa-screen { animation: aa-fade 0.45s cubic-bezier(0.22,0.61,0.36,1) both; }
     @media (prefers-reduced-motion: reduce){ *{animation-duration:0.01ms !important;} }
   </style>
@@ -36,10 +38,13 @@
 
   <!-- ══════════ SPLASH ══════════ -->
   <sc-if value="{{ isSplash }}" hint-placeholder-val="{{ true }}">
-    <div class="aa-screen" onClick="{{ goLogin }}" style="position:absolute;inset:0;z-index:50;background:#386395;display:flex;flex-direction:column;align-items:center;justify-content:center;background-image:radial-gradient(ellipse 70% 50% at 50% 35%, rgba(95,139,184,0.55) 0%, transparent 60%);">
-      <img src="assets/logo-white.png" alt="Arrive Aruba" style="width:210px;height:auto;animation:aa-splash-logo 1.1s ease both;" />
+    <div class="aa-screen" onClick="{{ goHome }}" style="position:absolute;inset:0;z-index:50;background:#386395;display:flex;flex-direction:column;align-items:center;justify-content:center;background-image:radial-gradient(ellipse 70% 50% at 50% 35%, rgba(95,139,184,0.55) 0%, transparent 60%);">
+      <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba" style="width:200px;height:auto;display:block;" />
       <p style="margin-top:26px;font-family:'ITC Legacy Serif',serif;font-style:italic;font-size:16px;color:rgba(240,240,229,0.78);animation:aa-splash-logo 1.1s 0.3s both;">Take home what you felt. ✦</p>
-      <p style="position:absolute;bottom:46px;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,240,229,0.45);animation:aa-pulse 2s ease-in-out infinite;">Tap to enter</p>
+      <div style="position:absolute;bottom:40px;left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:16px;">
+        <p style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,240,229,0.45);animation:aa-pulse 2s ease-in-out infinite;">Tap to enter</p>
+        <button onClick="{{ goLoginStop }}" style="background:none;border:none;border-bottom:1px solid rgba(240,240,229,0.35);color:rgba(240,240,229,0.7);font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.06em;padding:2px 0 3px;cursor:pointer;">Log in / Sign up</button>
+      </div>
     </div>
   </sc-if>
 
@@ -47,7 +52,7 @@
   <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
     <div class="aa-screen aa-scr" style="min-height:100svh;display:flex;flex-direction:column;padding:64px 32px 40px;background:#F0F0E5;">
       <div style="display:flex;flex-direction:column;align-items:center;margin-bottom:48px;">
-        <img src="assets/logo-sapphire.png" alt="Arrive Aruba" style="width:150px;height:auto;" />
+        <img src="preview-assets/brand/logo-blue.webp" alt="Arrive Aruba" style="width:150px;height:auto;" />
       </div>
       <h1 style="font-family:'ITC Legacy Serif',serif;font-size:30px;color:#23405e;margin-bottom:6px;">Welcome back.</h1>
       <p style="font-size:13px;font-weight:300;color:#5F8BB8;margin-bottom:34px;">Sign in to continue your island story.</p>
@@ -85,38 +90,102 @@
 
   <!-- ══════════ HOME ══════════ -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
-    <div class="aa-screen aa-scr" style="padding:0 0 96px;background:#F0F0E5;min-height:100svh;">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 22px 16px;">
-        <button onClick="{{ goProfile }}" aria-label="Profile" style="width:42px;height:42px;border-radius:50%;border:none;background:#386395;color:#F0F0E5;font-family:'ITC Legacy Serif',serif;font-size:17px;display:flex;align-items:center;justify-content:center;">M</button>
-        <img src="assets/logo-sapphire.png" alt="Arrive Aruba" style="height:30px;width:auto;" />
-        <button onClick="{{ goSettings }}" aria-label="Settings" style="background:none;border:none;padding:8px;display:flex;flex-direction:column;gap:4px;">
-          <span style="display:block;width:22px;height:1.5px;background:#23405e;"></span>
-          <span style="display:block;width:15px;height:1.5px;background:#23405e;"></span>
-        </button>
+    <div class="aa-screen aa-scr" style="padding:0;background:#F0F0E5;min-height:100svh;">
+      <!-- Full-bleed cinematic hero (Homepage-style opening) -->
+      <section style="position:relative;height:82svh;min-height:560px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+        <img src="preview-assets/media/aruba-landscape.webp" alt="Aruba" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;" />
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,18,30,0.4) 0%,rgba(7,18,30,0.1) 38%,rgba(7,18,30,0.8) 100%);"></div>
+
+        <div style="position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;">
+          <button onClick="{{ goProfile }}" aria-label="Profile" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(240,240,229,0.4);background:rgba(240,240,229,0.12);backdrop-filter:blur(3px);color:#F0F0E5;font-family:'ITC Legacy Serif',serif;font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;">M</button>
+          <button onClick="{{ goSettings }}" aria-label="Menu" style="background:none;border:none;padding:8px;display:flex;flex-direction:column;gap:5px;align-items:flex-end;cursor:pointer;">
+            <span style="display:block;width:24px;height:1.5px;background:#F0F0E5;"></span>
+            <span style="display:block;width:16px;height:1.5px;background:#F0F0E5;"></span>
+          </button>
+        </div>
+
+        <div style="position:relative;z-index:5;text-align:center;padding:0 30px;width:100%;">
+          <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.4em;text-transform:uppercase;color:rgba(240,240,229,0.55);margin-bottom:22px;">Aruba · Resortwear</p>
+          <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba" style="width:74%;max-width:258px;height:auto;display:block;margin:0 auto 24px;" />
+          <p style="font-family:'Port Blair Alternate',serif;font-size:22px;color:rgba(240,240,229,0.9);letter-spacing:0.03em;margin-bottom:40px;">Take home what you felt. ✦</p>
+          <div style="display:flex;flex-direction:column;gap:0;align-items:center;width:100%;">
+            <button onClick="{{ goSearch }}" style="width:100%;max-width:290px;background:#F0F0E5;color:#23405e;border:none;padding:18px;font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.32em;text-transform:uppercase;font-weight:600;cursor:pointer;">Shop the Collection</button>
+          </div>
+        </div>
+
+        <div style="position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:5;width:1px;height:42px;background:rgba(240,240,229,0.18);overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:55%;background:rgba(240,240,229,0.7);animation:aa-scrollcue 2.1s ease-in-out infinite;"></div>
+        </div>
+      </section>
+
+      <div id="aa-home-shop" style="background:#386395;overflow:hidden;display:flex;align-items:center;padding:20px 0;">
+        <div style="display:flex;white-space:nowrap;align-items:center;animation:aa-ticker 28s linear infinite;">
+          <span style="display:inline-flex;align-items:center;gap:24px;padding:0 40px;">
+            <span style="font-family:'ITC Legacy Serif',serif;font-size:26px;color:#F0F0E5;letter-spacing:0.01em;white-space:nowrap;">24-Hour Island Delivery</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+            <span style="font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,240,229,0.55);white-space:nowrap;">Free Returns</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+            <span style="font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,240,229,0.55);white-space:nowrap;">Made in Aruba</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+          </span>
+          <span style="display:inline-flex;align-items:center;gap:24px;padding:0 40px;">
+            <span style="font-family:'ITC Legacy Serif',serif;font-size:26px;color:#F0F0E5;letter-spacing:0.01em;white-space:nowrap;">24-Hour Island Delivery</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+            <span style="font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,240,229,0.55);white-space:nowrap;">Free Returns</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+            <span style="font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,240,229,0.55);white-space:nowrap;">Made in Aruba</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+          </span>
+          <span style="display:inline-flex;align-items:center;gap:24px;padding:0 40px;">
+            <span style="font-family:'ITC Legacy Serif',serif;font-size:26px;color:#F0F0E5;letter-spacing:0.01em;white-space:nowrap;">24-Hour Island Delivery</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+            <span style="font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,240,229,0.55);white-space:nowrap;">Free Returns</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+            <span style="font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(240,240,229,0.55);white-space:nowrap;">Made in Aruba</span>
+            <span style="color:rgba(240,240,229,0.35);font-size:13px;">✦</span>
+          </span></div>
       </div>
 
-      <div style="margin:6px 16px 22px;border-radius:22px;overflow:hidden;position:relative;aspect-ratio:4/5;background:#386395;background-image:radial-gradient(ellipse 80% 70% at 40% 30%, rgba(95,139,184,0.7) 0%, transparent 60%);">
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 45%,rgba(44,79,120,0.85) 100%);"></div>
-        <div style="position:absolute;top:18px;left:18px;background:rgba(240,240,229,0.16);backdrop-filter:blur(2px);border:1px solid rgba(240,240,229,0.28);border-radius:9999px;padding:6px 13px;">
-          <span style="font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:#F0F0E5;">✦ 24-hour island delivery</span>
+      <!-- Shop by Category -->
+      <div style="padding:14px 18px 14px;">
+        <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.34em;color:#5F8BB8;text-transform:uppercase;margin-bottom:8px;">Browse</p>
+        <h3 style="font-family:'ITC Legacy Serif',serif;font-size:24px;color:#23405e;">Shop the island</h3>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 6px;">
+        <div onClick="{{ goSearch }}" style="cursor:pointer;">
+          <div style="aspect-ratio:3/4;background:#5F8BB8;position:relative;overflow:hidden;margin-bottom:9px;border-radius:14px;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.55) 100%);"></div>
+            <p style="position:absolute;bottom:12px;left:13px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.18em;color:rgba(240,240,229,0.9);text-transform:uppercase;">Polo</p>
+          </div>
+          <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#23405e;margin-bottom:2px;">Performance Polo</p>
+          <p style="font-size:10px;color:#9fb0c4;font-weight:300;">From $85</p>
         </div>
-        <div style="position:absolute;bottom:24px;left:22px;right:22px;">
-          <p style="font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:rgba(240,240,229,0.65);margin-bottom:8px;">Spring 2025</p>
-          <h2 style="font-family:'ITC Legacy Serif',serif;font-size:30px;color:#F0F0E5;line-height:1.1;margin-bottom:16px;">Made for sunlit arrivals.</h2>
-          <button onClick="{{ goSearch }}" style="background:#F0F0E5;color:#23405e;border:none;border-radius:9999px;padding:12px 26px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;font-weight:600;">Shop the collection</button>
+        <div onClick="{{ goSearch }}" style="cursor:pointer;margin-top:30px;">
+          <div style="aspect-ratio:3/4;background:#92AF88;position:relative;overflow:hidden;margin-bottom:9px;border-radius:14px;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
+            <p style="position:absolute;bottom:12px;left:13px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.18em;color:rgba(240,240,229,0.9);text-transform:uppercase;">Tee</p>
+          </div>
+          <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#23405e;margin-bottom:2px;">Performance Tee</p>
+          <p style="font-size:10px;color:#9fb0c4;font-weight:300;">From $58</p>
+        </div>
+        <div onClick="{{ goSearch }}" style="cursor:pointer;">
+          <div style="aspect-ratio:3/4;background:#386395;position:relative;overflow:hidden;margin-bottom:9px;border-radius:14px;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
+            <p style="position:absolute;bottom:12px;left:13px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.18em;color:rgba(240,240,229,0.9);text-transform:uppercase;">Hoodie</p>
+          </div>
+          <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#23405e;margin-bottom:2px;">Star Sapphire Hoodie</p>
+          <p style="font-size:10px;color:#9fb0c4;font-weight:300;">From $145</p>
+        </div>
+        <div onClick="{{ goSearch }}" style="cursor:pointer;margin-top:30px;">
+          <div style="aspect-ratio:3/4;background:#F5A169;position:relative;overflow:hidden;margin-bottom:9px;border-radius:14px;">
+            <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
+            <p style="position:absolute;bottom:12px;left:13px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.18em;color:rgba(240,240,229,0.9);text-transform:uppercase;">All</p>
+          </div>
+          <p style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#23405e;margin-bottom:2px;">New Arrivals</p>
+          <p style="font-size:10px;color:#9fb0c4;font-weight:300;">Full collection</p>
         </div>
       </div>
 
-      <div style="display:flex;gap:10px;padding:0 16px;margin-bottom:26px;">
-        <div style="flex:1;background:#fff;border:1px solid #e7e6d6;border-radius:14px;padding:14px;">
-          <p style="font-family:'ITC Legacy Serif',serif;font-size:20px;color:#386395;">24h</p>
-          <p style="font-size:11px;font-weight:300;color:#7a8aa0;line-height:1.4;margin-top:2px;">Island delivery, every order.</p>
-        </div>
-        <div style="flex:1;background:#fff;border:1px solid #e7e6d6;border-radius:14px;padding:14px;">
-          <p style="font-family:'ITC Legacy Serif',serif;font-size:20px;color:#386395;">Free</p>
-          <p style="font-size:11px;font-weight:300;color:#7a8aa0;line-height:1.4;margin-top:2px;">Returns within 30 days.</p>
-        </div>
-      </div>
 
       <div style="display:flex;align-items:flex-end;justify-content:space-between;padding:0 18px;margin-bottom:16px;">
         <h3 style="font-family:'ITC Legacy Serif',serif;font-size:22px;color:#23405e;">New arrivals</h3>
@@ -126,7 +195,7 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px 12px;padding:0 16px;">
         <sc-for list="{{ products }}" as="p" hint-placeholder-count="6">
           <div onClick="{{ p.open }}" style="cursor:pointer;">
-            <div style="position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:#386395;margin-bottom:9px;">
+            <div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:#386395;margin-bottom:9px;">
               <div style="position:absolute;inset:0;background:{{ p.color }};"></div>
               <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.4;">
                 <span style="font-family:'ITC Legacy Serif',serif;font-size:15px;color:#fff;">✦</span>
@@ -138,6 +207,92 @@
           </div>
         </sc-for>
       </div>
+
+      <!-- Editorial Story -->
+      <section style="background:#386395;padding:64px 24px;margin-top:40px;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:-90px;right:-70px;width:260px;height:260px;border-radius:50%;background:rgba(95,139,184,0.22);pointer-events:none;"></div>
+        <div style="position:relative;z-index:1;">
+          <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.36em;color:rgba(240,240,229,0.4);text-transform:uppercase;margin-bottom:16px;">The Island</p>
+          <h2 style="font-family:'ITC Legacy Serif',serif;font-style:italic;font-size:32px;color:#F0F0E5;line-height:1.18;margin-bottom:26px;">"A quieter way to remember Aruba."</h2>
+          <div style="width:100%;aspect-ratio:3/2;overflow:hidden;margin-bottom:24px;">
+            <img src="preview-assets/media/brand-web.webp" alt="Arrive Aruba" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
+          <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:13px;line-height:1.85;color:rgba(240,240,229,0.65);margin-bottom:28px;">Every piece in the collection is shaped by the island — the light, the water, the warmth you carry home long after you've left. Resortwear made for sunlit arrivals.</p>
+          <button onClick="{{ goSearch }}" style="background:none;border:1px solid rgba(240,240,229,0.4);color:#F0F0E5;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.28em;text-transform:uppercase;padding:13px 30px;border-radius:9999px;cursor:pointer;">Read the story</button>
+        </div>
+      </section>
+
+      <!-- Featured editorial -->
+      <section style="background:#F0F0E5;">
+        <div style="aspect-ratio:5/3;position:relative;overflow:hidden;">
+          <img src="preview-assets/media/aruba-landscape.webp" alt="Aruba" style="width:100%;height:100%;object-fit:cover;object-position:center 30%;display:block;" />
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(44,79,120,0.7) 100%);"></div>
+          <div style="position:absolute;bottom:24px;left:24px;right:24px;">
+            <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(240,240,229,0.62);text-transform:uppercase;margin-bottom:8px;">Ss · 2025</p>
+            <p style="font-family:'ITC Legacy Serif',serif;font-style:italic;font-size:21px;color:#F0F0E5;line-height:1.2;">"Made for sunlit arrivals."</p>
+          </div>
+        </div>
+        <div style="padding:26px 22px 34px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(56,99,149,0.12);">
+          <div>
+            <p style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#23405e;margin-bottom:3px;">Spring Collection 2025</p>
+            <p style="font-size:11px;color:#9fb0c4;font-weight:300;">Polo · Tee · Hoodie — from $58</p>
+          </div>
+          <button onClick="{{ goSearch }}" style="background:none;border:none;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#386395;cursor:pointer;">Explore ↗</button>
+        </div>
+      </section>
+
+      <!-- Heritage -->
+      <section style="background:#F0F0E5;padding:60px 24px 56px;">
+        <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.36em;color:#5F8BB8;text-transform:uppercase;margin-bottom:13px;">Heritage</p>
+        <h2 style="font-family:'ITC Legacy Serif',serif;font-size:30px;color:#23405e;line-height:1.15;margin-bottom:18px;">Born on the island.<br />Made for the return.</h2>
+        <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:13px;line-height:1.85;color:#6a7a90;margin-bottom:24px;">ARRIVE ARUBA was founded on a simple idea: the island stays with you. Each garment is a memory, a quiet invitation to return.</p>
+        <div style="width:100%;aspect-ratio:4/3;overflow:hidden;">
+          <img src="preview-assets/media/brand-web.webp" alt="Arrive Aruba brand" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+      </section>
+
+      <!-- Newsletter -->
+      <section style="background:#2c4f78;padding:64px 28px;text-align:center;">
+        <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.36em;color:rgba(240,240,229,0.38);text-transform:uppercase;margin-bottom:13px;">Stay Close</p>
+        <h2 style="font-family:'ITC Legacy Serif',serif;font-style:italic;font-size:28px;color:#F0F0E5;line-height:1.25;margin-bottom:10px;">The island, in your inbox.</h2>
+        <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:12px;color:rgba(240,240,229,0.45);line-height:1.75;margin-bottom:32px;">New arrivals, island stories, and quiet moments — delivered with care.</p>
+        <sc-if value="{{ newsletterSent }}" hint-placeholder-val="{{ false }}">
+          <p style="font-family:'Geologica',sans-serif;font-size:13px;color:#92AF88;letter-spacing:0.05em;">Welcome to the island. ✦</p>
+        </sc-if>
+        <sc-if value="{{ newsletterOpen }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ sendNewsletter }}" style="display:flex;flex-direction:column;gap:13px;max-width:320px;margin:0 auto;">
+            <input type="email" required="required" placeholder="your email address" style="background:transparent;border:none;border-bottom:1px solid rgba(240,240,229,0.3);padding:12px 0;font-family:'Geologica',sans-serif;font-size:14px;font-weight:300;color:#F0F0E5;outline:none;text-align:center;letter-spacing:0.04em;" />
+            <button type="submit" style="background:#386395;color:#F0F0E5;border:none;border-radius:9999px;padding:15px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;cursor:pointer;">Join the Island</button>
+          </form>
+        </sc-if>
+      </section>
+
+      <!-- Footer -->
+      <footer style="background:#07121e;padding:48px 24px 110px;">
+        <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba" style="height:26px;width:auto;display:block;margin-bottom:12px;" />
+        <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:11px;color:rgba(240,240,229,0.4);margin-bottom:34px;">Resortwear shaped by the island.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-bottom:32px;">
+          <div>
+            <p style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,240,229,0.35);margin-bottom:12px;">Shop</p>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <button onClick="{{ goSearch }}" style="background:none;border:none;text-align:left;font-size:12px;color:rgba(240,240,229,0.55);font-weight:300;cursor:pointer;padding:0;">Performance Polo</button>
+              <button onClick="{{ goSearch }}" style="background:none;border:none;text-align:left;font-size:12px;color:rgba(240,240,229,0.55);font-weight:300;cursor:pointer;padding:0;">Performance Tee</button>
+              <button onClick="{{ goSearch }}" style="background:none;border:none;text-align:left;font-size:12px;color:rgba(240,240,229,0.55);font-weight:300;cursor:pointer;padding:0;">Star Sapphire Hoodie</button>
+            </div>
+          </div>
+          <div>
+            <p style="font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,240,229,0.35);margin-bottom:12px;">Help</p>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <button onClick="{{ goSettings }}" style="background:none;border:none;text-align:left;font-size:12px;color:rgba(240,240,229,0.55);font-weight:300;cursor:pointer;padding:0;">Shipping</button>
+              <button onClick="{{ goSettings }}" style="background:none;border:none;text-align:left;font-size:12px;color:rgba(240,240,229,0.55);font-weight:300;cursor:pointer;padding:0;">Returns</button>
+              <button onClick="{{ goProfile }}" style="background:none;border:none;text-align:left;font-size:12px;color:rgba(240,240,229,0.55);font-weight:300;cursor:pointer;padding:0;">Account</button>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid rgba(240,240,229,0.08);padding-top:20px;">
+          <p style="font-size:9px;color:rgba(240,240,229,0.22);font-weight:300;">© 2025 Arrive Aruba. Take home what you felt. ✦</p>
+        </div>
+      </footer>
     </div>
   </sc-if>
 
@@ -163,7 +318,7 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px 12px;padding:0 16px;">
         <sc-for list="{{ products }}" as="p" hint-placeholder-count="6">
           <div onClick="{{ p.open }}" style="cursor:pointer;">
-            <div style="position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;margin-bottom:9px;">
+            <div style="position:relative;aspect-ratio:4/5;overflow:hidden;margin-bottom:9px;">
               <div style="position:absolute;inset:0;background:{{ p.color }};"></div>
               <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.4;"><span style="font-family:'ITC Legacy Serif',serif;font-size:15px;color:#fff;">✦</span></div>
               <button onClick="{{ p.toggleFav }}" aria-label="Favorite" style="position:absolute;top:9px;right:9px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(240,240,229,0.85);display:flex;align-items:center;justify-content:center;font-size:14px;color:{{ p.favColor }};">{{ p.favIcon }}</button>
@@ -227,7 +382,7 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px 12px;padding:0 16px;">
           <sc-for list="{{ favProducts }}" as="p" hint-placeholder-count="2">
             <div onClick="{{ p.open }}" style="cursor:pointer;">
-              <div style="position:relative;aspect-ratio:4/5;border-radius:14px;overflow:hidden;margin-bottom:9px;">
+              <div style="position:relative;aspect-ratio:4/5;overflow:hidden;margin-bottom:9px;">
                 <div style="position:absolute;inset:0;background:{{ p.color }};"></div>
                 <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.4;"><span style="font-family:'ITC Legacy Serif',serif;font-size:15px;color:#fff;">✦</span></div>
                 <button onClick="{{ p.toggleFav }}" aria-label="Remove" style="position:absolute;top:9px;right:9px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(240,240,229,0.85);display:flex;align-items:center;justify-content:center;font-size:14px;color:#F5A169;">♥</button>
@@ -335,7 +490,7 @@
 
   <!-- ══════════ PROFILE ══════════ -->
   <sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
-    <div class="aa-screen aa-scr" style="padding:0 0 96px;background:#F0F0E5;min-height:100svh;">
+    <div class="aa-screen aa-scr" style="padding:0;background:#F0F0E5;min-height:100svh;">
       <div style="background:#386395;padding:60px 22px 30px;text-align:center;background-image:radial-gradient(ellipse 80% 70% at 50% 0%, rgba(95,139,184,0.6) 0%, transparent 60%);position:relative;">
         <button onClick="{{ goHome }}" style="position:absolute;top:50px;left:18px;background:none;border:none;font-size:22px;color:#F0F0E5;">‹</button>
         <div style="width:84px;height:84px;border-radius:50%;background:#F0F0E5;color:#386395;font-family:'ITC Legacy Serif',serif;font-size:34px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;">M</div>
@@ -466,6 +621,7 @@ class Component extends DCLogic {
     screen: 'splash',       // splash|login|signup|home|search|detail|favorites|cart|checkout|confirm|profile|sub
     sub: null,              // personal|friends|cards|reviews|settings
     prevScreen: 'home',
+    newsletterSent: false,
     activeId: null,
     qty: 1,
     size: 'M',
@@ -503,8 +659,8 @@ class Component extends DCLogic {
 
   componentDidMount() {
     this._t = setTimeout(() => {
-      if (this.state.screen === 'splash') this.setState({ screen:'login' });
-    }, 2200);
+      if (this.state.screen === 'splash') this.setState({ screen:'home' });
+    }, 1900);
   }
   componentWillUnmount() { clearTimeout(this._t); }
 
@@ -626,6 +782,11 @@ class Component extends DCLogic {
 
       // nav handlers
       goLogin:()=>this.go('login'), goSignup:()=>this.go('signup'),
+      goLoginStop:(e)=>{ if(e&&e.stopPropagation)e.stopPropagation(); this.go('login'); },
+      scrollToShop:()=>{ const el=document.getElementById('aa-home-shop'); if(el){ const y=el.getBoundingClientRect().top+window.scrollY-12; window.scrollTo({top:y,behavior:'smooth'}); } },
+      newsletterSent: s.newsletterSent,
+      newsletterOpen: !s.newsletterSent,
+      sendNewsletter:(e)=>{ if(e&&e.preventDefault)e.preventDefault(); this.setState({ newsletterSent:true }); },
       goHome:()=>this.go('home'), goSearch:()=>this.go('search'),
       goFavorites:()=>this.go('favorites'), goCart:()=>this.go('cart'),
       goCheckout:()=>this.go('checkout'), placeOrder:()=>this.go('confirm'),

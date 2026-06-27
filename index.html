@@ -1,538 +1,96 @@
 <!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Arrive Aruba branded temporary preview using the official identity, typography, colors, and app flow structure.">
-    <title>Arrive Aruba - Branded Preview</title>
-    <link rel="icon" href="preview-assets/brand/logo-mark.svg">
-    <link rel="preload" as="image" href="preview-assets/media/aruba-landscape.webp">
-    <link rel="stylesheet" href="preview.css">
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Arrive Aruba — Project Launcher</title>
+  <link rel="icon" href="preview-assets/brand/logo-mark.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Medium.otf') format('opentype'); font-weight:500; font-display:swap; }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Geologica',sans-serif; background:#F0F0E5; color:#23405e; -webkit-font-smoothing:antialiased; min-height:100vh; display:flex; flex-direction:column; }
+    a { text-decoration:none; color:inherit; }
+    header { background:#386395; padding:32px 24px 28px; display:flex; flex-direction:column; align-items:center; gap:16px; }
+    header img { height:36px; width:auto; display:block; }
+    header p { font-family:'ITC Legacy Serif',serif; font-style:italic; font-size:16px; color:rgba(240,240,229,0.75); }
+    main { flex:1; padding:40px 24px 60px; max-width:680px; margin:0 auto; width:100%; }
+    h2 { font-size:9px; letter-spacing:0.32em; text-transform:uppercase; color:#5F8BB8; margin-bottom:20px; }
+    .cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:40px; }
+    @media(max-width:480px){ .cards { grid-template-columns:1fr; } }
+    .card { display:flex; flex-direction:column; background:#fff; border:1px solid #e4e3d8; border-radius:14px; overflow:hidden; transition:box-shadow 0.2s ease, transform 0.2s ease; }
+    .card:hover { box-shadow:0 8px 28px rgba(56,99,149,0.13); transform:translateY(-3px); }
+    .card-thumb { aspect-ratio:16/9; background:#386395; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
+    .card-thumb img.photo { width:100%; height:100%; object-fit:cover; object-position:center 35%; display:block; }
+    .card-thumb img.logo { width:52%; height:auto; opacity:0.85; }
+    .card-body { padding:18px 18px 20px; flex:1; display:flex; flex-direction:column; }
+    .card-label { font-size:8px; letter-spacing:0.22em; text-transform:uppercase; color:#5F8BB8; margin-bottom:6px; }
+    .card-title { font-family:'ITC Legacy Serif',serif; font-size:18px; color:#23405e; margin-bottom:6px; }
+    .card-desc { font-size:12px; font-weight:300; color:#7a8aa0; line-height:1.7; flex:1; margin-bottom:16px; }
+    .card-cta { align-self:flex-start; background:#386395; color:#F0F0E5; border:none; border-radius:9999px; padding:11px 22px; font-family:'Geologica',sans-serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:500; cursor:pointer; transition:background 0.2s ease; }
+    .card-cta:hover { background:#2c4f78; }
+    .meta { border-top:1px solid #e4e3d8; padding-top:28px; }
+    .meta-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+    @media(max-width:480px){ .meta-grid { grid-template-columns:1fr 1fr; } }
+    .meta-item { background:#fff; border:1px solid #e4e3d8; border-radius:12px; padding:14px; }
+    .meta-item .val { font-family:'ITC Legacy Serif',serif; font-size:22px; color:#386395; }
+    .meta-item .lbl { font-size:11px; font-weight:300; color:#7a8aa0; margin-top:3px; line-height:1.4; }
+    footer { background:#2c4f78; padding:24px; text-align:center; }
+    footer p { font-size:10px; font-weight:300; color:rgba(240,240,229,0.4); }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
+    <p>Take home what you felt. ✦</p>
+  </header>
 
-    <header class="site-header" data-header>
-      <button class="menu-button" type="button" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-      <nav class="desktop-nav" aria-label="Primary">
-        <a href="#flow-map">Flow</a>
-        <a href="#home-system">Home</a>
-        <a href="#commerce-system">Shop</a>
-        <a href="#account-system">Account</a>
-      </nav>
-      <a class="brand-lockup" href="#top" aria-label="Arrive Aruba">
-        <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
+  <main>
+    <h2>Project Files</h2>
+    <div class="cards">
+
+      <a class="card" href="Arrive Aruba - Homepage.dc.html">
+        <div class="card-thumb">
+          <img class="photo" src="preview-assets/media/aruba-landscape.webp" alt="Aruba">
+        </div>
+        <div class="card-body">
+          <p class="card-label">Web · Desktop &amp; Mobile</p>
+          <p class="card-title">Homepage</p>
+          <p class="card-desc">Hero full-bleed, shop by category, new arrivals, island story, heritage, newsletter. Shopify-ready structure.</p>
+          <span class="card-cta">Open homepage</span>
+        </div>
       </a>
-      <div class="header-actions" aria-label="Tools">
-        <a href="#search-flow" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>
-        </a>
-        <a href="#profile-flow" aria-label="Account">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
-        </a>
-        <a href="#cart-flow" aria-label="Cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 7h12l-1 14H7L6 7Z"></path><path d="M9 7a3 3 0 0 1 6 0"></path></svg>
-        </a>
+
+      <a class="card" href="Arrive Aruba - App.dc.html">
+        <div class="card-thumb" style="background:#386395;">
+          <img class="logo" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba App">
+        </div>
+        <div class="card-body">
+          <p class="card-label">Mobile App · iOS-first</p>
+          <p class="card-title">App Prototype</p>
+          <p class="card-desc">Full 15-screen interactive flow: splash, login, home, search, product detail, favorites, cart, checkout, profile.</p>
+          <span class="card-cta">Open app</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="meta">
+      <h2 style="margin-bottom:16px;">Brand System</h2>
+      <div class="meta-grid">
+        <div class="meta-item"><div class="val" style="color:#386395;">●</div><div class="lbl">Star Sapphire<br>#386395</div></div>
+        <div class="meta-item"><div class="val" style="color:#5F8BB8;">●</div><div class="lbl">Silver Lake Blue<br>#5F8BB8</div></div>
+        <div class="meta-item"><div class="val" style="color:#92AF88;">●</div><div class="lbl">Fair Green<br>#92AF88</div></div>
+        <div class="meta-item"><div class="val" style="color:#F5A169;">●</div><div class="lbl">Mock Orange<br>#F5A169</div></div>
+        <div class="meta-item"><div class="val" style="color:#b0a898;">●</div><div class="lbl">Cannoli Cream<br>#F0F0E5</div></div>
+        <div class="meta-item"><div class="val">✦</div><div class="lbl">Port Blair Alternate<br>ITC Legacy Serif</div></div>
       </div>
-    </header>
+    </div>
+  </main>
 
-    <main id="main">
-      <section class="hero" id="top">
-        <picture>
-          <source media="(min-width: 760px)" srcset="preview-assets/media/aruba-landscape.webp">
-          <img src="preview-assets/media/aruba-landscape.webp" alt="Aruba landscape from the approved Arrive Aruba web art" fetchpriority="high">
-        </picture>
-        <div class="hero-shade"></div>
-        <div class="hero-menu reveal" aria-label="Merch preview">
-          <span>Chemise</span>
-          <span>Cap</span>
-          <span>Jacket</span>
-        </div>
-        <div class="hero-content reveal">
-          <img class="hero-logo" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
-          <p class="kicker">The island stays with</p>
-          <h1>you</h1>
-          <p class="hero-copy">A mobile-first commerce structure based on the Arrive Aruba app flow: discovery, search, favorites, cart, profile, cards, reviews, configuration, and 24-hour delivery.</p>
-          <div class="actions">
-            <a class="button button-brand" href="#flow-map">Start</a>
-            <a class="button button-ghost" href="#commerce-system">View shop flow</a>
-          </div>
-        </div>
-      </section>
-
-      <nav class="structure-nav" aria-label="Prototype sections">
-        <a href="#flow-map">Flow</a>
-        <a href="#home-system">Home</a>
-        <a href="#commerce-system">Search</a>
-        <a href="#detail-system">Product</a>
-        <a href="#cart-system">Cart</a>
-        <a href="#account-system">Profile</a>
-      </nav>
-
-      <section class="section identity-band">
-        <div class="shell identity-grid">
-          <div class="identity-copy reveal">
-            <p class="kicker blue">Brand identity</p>
-            <h2>Color, type, island rhythm.</h2>
-            <p>Esta version usa la paleta oficial: Star Sapphire, Silver Lake Blue, Fair Green, Mock Orange y Cannoli Cream. El sistema tipografico carga Port Blair Alternate e ITC Legacy Serif desde la carpeta de marca.</p>
-          </div>
-          <div class="palette reveal" aria-label="Official color palette">
-            <span style="--swatch:#386395">Star Sapphire</span>
-            <span style="--swatch:#5F8BB8">Silver Lake Blue</span>
-            <span style="--swatch:#92AF88">Fair Green</span>
-            <span style="--swatch:#F5A169">Mock Orange</span>
-            <span style="--swatch:#F0F0E5">Cannoli Cream</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="section flow-map" id="flow-map">
-        <div class="shell section-head reveal">
-          <div>
-            <p class="kicker blue">PDF app flow</p>
-            <h2>La estructura base antes de disenar.</h2>
-          </div>
-          <p>Esta capa traduce los PDFs a una arquitectura web/Shopify clara. Cada bloque puede convertirse despues en seccion editable, template o app integration.</p>
-        </div>
-
-        <div class="shell journey reveal" aria-label="Arrive Aruba app flow">
-          <article>
-            <span>01</span>
-            <h3>Inicio</h3>
-            <p>Logo centrado, video o frame de marca, verificacion de sesion.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <h3>Login / Sign Up</h3>
-            <p>Email, password, recover password y creacion de cuenta.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <h3>Home</h3>
-            <p>Perfil, menu, video destacado, delivery 24h, beneficios y productos.</p>
-          </article>
-          <article>
-            <span>04</span>
-            <h3>Search</h3>
-            <p>Busqueda con filtros de color, categoria, marca, prenda, talla, condicion y ubicacion.</p>
-          </article>
-          <article>
-            <span>05</span>
-            <h3>Results</h3>
-            <p>Grid con imagen, nombre, precio y favorito.</p>
-          </article>
-          <article>
-            <span>06</span>
-            <h3>Product Detail</h3>
-            <p>Galeria, descripcion, talla, cantidad, favorito, add to cart y buy.</p>
-          </article>
-          <article>
-            <span>07</span>
-            <h3>Favorites</h3>
-            <p>Grid guardado con acceso rapido y eliminacion.</p>
-          </article>
-          <article>
-            <span>08</span>
-            <h3>Cart / Checkout</h3>
-            <p>Cantidad, subtotal, total, eliminar, continuar comprando y checkout.</p>
-          </article>
-          <article>
-            <span>09</span>
-            <h3>Profile</h3>
-            <p>Personal information, friends, cards, reviews y logout.</p>
-          </article>
-          <article>
-            <span>10</span>
-            <h3>Configuration</h3>
-            <p>Language, security, help, theme y privacidad.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section home-system" id="home-system">
-        <div class="shell section-head reveal">
-          <div>
-            <p class="kicker blue">Home structure</p>
-            <h2>Discovery primero, compra despues.</h2>
-          </div>
-          <p>La home deja de ser solo hero. Debe guiar al usuario desde el mood de Aruba hasta categorias, productos y delivery.</p>
-        </div>
-
-        <div class="shell home-grid reveal">
-          <article class="home-video module">
-            <div class="module-top">
-              <span class="avatar"></span>
-              <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
-            </div>
-            <div class="video-card">
-              <img src="preview-assets/media/aruba-landscape.webp" alt="Arrive Aruba home video structure">
-              <span class="play">Play</span>
-            </div>
-          </article>
-
-          <article class="module">
-            <p class="module-label">Service promise</p>
-            <h3>24-hour delivery</h3>
-            <p>Visible en Home antes del grid. Debe explicar el valor operativo de Arrive Aruba sin convertirlo en banner promocional.</p>
-          </article>
-
-          <article class="module">
-            <p class="module-label">Benefits</p>
-            <ul class="check-list">
-              <li>Entrega local en Aruba.</li>
-              <li>Checkout seguro.</li>
-              <li>Productos seleccionados por temporada.</li>
-            </ul>
-          </article>
-
-          <article class="module categories-module">
-            <p class="module-label">Categories</p>
-            <div class="category-row">
-              <span>Shirt</span>
-              <span>Cap</span>
-              <span>Sweater</span>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section commerce-system" id="commerce-system">
-        <div class="shell section-head reveal">
-          <div>
-            <p class="kicker blue">Commerce structure</p>
-            <h2>Search, filters, results, detail.</h2>
-          </div>
-          <p>Esta es la ruta principal de compra. Primero se ordena la informacion; luego trabajamos la capa visual de lujo.</p>
-        </div>
-
-        <div class="shell commerce-grid reveal">
-          <article class="module search-module">
-            <p class="module-label">Search</p>
-            <label class="search-field">
-              <span>Find your perfect fit</span>
-              <input value="Sweater" aria-label="Search preview">
-            </label>
-            <div class="filter-grid">
-              <button>Color</button>
-              <button>Category</button>
-              <button>Brand</button>
-              <button>Garment type</button>
-              <button>Size</button>
-              <button>Condition</button>
-              <button>Location</button>
-            </div>
-          </article>
-
-          <article class="module results-module">
-            <p class="module-label">Results</p>
-            <div class="result-card">
-              <span></span>
-              <div><b>Cashmere Crewneck</b><small>$120.00</small></div>
-              <button aria-label="Favorite">Heart</button>
-            </div>
-            <div class="result-card">
-              <span></span>
-              <div><b>Chunky Cable-knit</b><small>$98.00</small></div>
-              <button aria-label="Favorite">Heart</button>
-            </div>
-            <div class="result-card">
-              <span></span>
-              <div><b>Essential Turtleneck</b><small>$86.00</small></div>
-              <button aria-label="Favorite">Heart</button>
-            </div>
-          </article>
-
-          <article class="module detail-module" id="detail-system">
-            <p class="module-label">Product detail</p>
-            <div class="detail-layout">
-              <div class="detail-gallery">
-                <img src="preview-assets/brand/logo-blue.webp" alt="Product placeholder">
-              </div>
-              <div>
-                <h3>Cashmere Crewneck</h3>
-                <strong>$120.00</strong>
-                <p>Talla, cantidad disponible, descripcion, favorito y acciones principales.</p>
-                <div class="detail-actions">
-                  <button>Add to cart</button>
-                  <button>Buy</button>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="section cart-system" id="cart-system">
-        <div class="shell section-head reveal">
-          <div>
-            <p class="kicker blue">Decision structure</p>
-            <h2>Favorites y cart sin friccion.</h2>
-          </div>
-          <p>El usuario puede guardar, comparar y comprar sin perder el contexto de producto.</p>
-        </div>
-
-        <div class="shell decision-grid reveal">
-          <article class="module">
-            <p class="module-label">Favorites</p>
-            <div class="favorites-grid">
-              <span>Cashmere Crewneck</span>
-              <span>Performance Golf Polo</span>
-              <span>Classic Cotton Shirt</span>
-              <span>Island Cap</span>
-            </div>
-          </article>
-
-          <article class="module">
-            <p class="module-label">Cart</p>
-            <div class="cart-row"><span>Soft Touch Turtleneck</span><b>$120.00</b></div>
-            <div class="cart-row"><span>Cashmere Crewneck</span><b>$120.00</b></div>
-            <div class="cart-total"><span>Total</span><b>$240.00</b></div>
-            <button class="checkout-button">Checkout</button>
-          </article>
-        </div>
-      </section>
-
-      <section class="section account-system" id="account-system">
-        <div class="shell section-head reveal">
-          <div>
-            <p class="kicker blue">Account structure</p>
-            <h2>Profile, friends, cards, reviews, settings.</h2>
-          </div>
-          <p>El perfil no debe quedar escondido: es parte del ecosistema social y de confianza del flujo.</p>
-        </div>
-
-        <div class="shell account-grid reveal">
-          <article class="module profile-module">
-            <div class="profile-mark"></div>
-            <h3>Patrick Hennessy</h3>
-            <p>@patrickhennessy</p>
-          </article>
-          <article class="module">
-            <p class="module-label">Personal information</p>
-            <ul class="profile-list compact">
-              <li>Name</li>
-              <li>Email</li>
-              <li>Phone</li>
-              <li>Address</li>
-            </ul>
-          </article>
-          <article class="module">
-            <p class="module-label">Friends</p>
-            <div class="friend-list">
-              <span>Josh Homme</span>
-              <span>Jenny Rrose</span>
-              <span>Tim Graver</span>
-            </div>
-          </article>
-          <article class="module">
-            <p class="module-label">Cards</p>
-            <ul class="profile-list compact">
-              <li>Update profile</li>
-              <li>Change account details</li>
-              <li>Add new bank account</li>
-              <li>Add new card</li>
-            </ul>
-          </article>
-          <article class="module">
-            <p class="module-label">Reviews</p>
-            <p>Calificaciones, comentarios e historial de reputacion.</p>
-          </article>
-          <article class="module">
-            <p class="module-label">Configuration</p>
-            <ul class="profile-list compact">
-              <li>Language</li>
-              <li>Security & Privacy</li>
-              <li>Help & Support</li>
-              <li>Theme</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section class="section app-structure" id="app-structure">
-        <div class="shell section-head reveal">
-          <div>
-            <p class="kicker blue">Structure from PDF</p>
-            <h2>Inicio, home, search, favorites, cart, profile.</h2>
-          </div>
-          <p>The site preview follows the mobile-first app flow: onboarding, product discovery, product detail, purchase, and account management.</p>
-        </div>
-
-        <div class="shell flow-layout">
-          <nav class="flow-tabs reveal" aria-label="App flow screens">
-            <button class="flow-tab is-active" type="button" data-screen="splash">01 Inicio</button>
-            <button class="flow-tab" type="button" data-screen="home">02 Home</button>
-            <button class="flow-tab" type="button" data-screen="search">03 Search</button>
-            <button class="flow-tab" type="button" data-screen="product">04 Product</button>
-            <button class="flow-tab" type="button" data-screen="cart">05 Cart</button>
-            <button class="flow-tab" type="button" data-screen="profile">06 Profile</button>
-          </nav>
-
-          <div class="phone reveal" aria-live="polite">
-            <section class="phone-screen is-active" data-phone-screen="splash" id="home-flow">
-              <div class="phone-media">
-                <img src="preview-assets/media/aruba-landscape.webp" alt="Aruba opening screen">
-                <img class="phone-logo phone-logo-center" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
-              </div>
-              <div class="phone-actions">
-                <button>Log In</button>
-                <button>Sign In</button>
-              </div>
-            </section>
-
-            <section class="phone-screen" data-phone-screen="home">
-              <div class="phone-topbar">
-                <span class="avatar"></span>
-                <button class="hamburger" aria-label="Configuration"><span></span><span></span><span></span></button>
-              </div>
-              <div class="video-card">
-                <img src="preview-assets/media/aruba-landscape.webp" alt="Featured Arrive Aruba video frame">
-                <span class="play">Play</span>
-              </div>
-              <h3>24-hour delivery</h3>
-              <div class="mini-products">
-                <article><span>Chemise</span><b>$85.00</b></article>
-                <article><span>Cap</span><b>$38.00</b></article>
-                <article><span>Sweater</span><b>$120.00</b></article>
-              </div>
-              <div class="bottom-nav"><span>Home</span><span>Search</span><span>Favorites</span><span>Cart</span></div>
-            </section>
-
-            <section class="phone-screen" data-phone-screen="search" id="search-flow">
-              <div class="phone-topbar">
-                <span class="avatar"></span>
-                <button class="hamburger" aria-label="Configuration"><span></span><span></span><span></span></button>
-              </div>
-              <h3>Find your perfect fit</h3>
-              <label class="search-field">
-                <span>Search</span>
-                <input value="Sweater" aria-label="Search product">
-              </label>
-              <div class="result-list">
-                <article><span>Cashmere Crewneck</span><small>Portuguese</small></article>
-                <article><span>Chunky Cable-knit</span><small>Portugal</small></article>
-                <article><span>Essential Turtleneck</span><small>Portugal</small></article>
-                <article><span>Lightweight V-Neck</span><small>Portugal</small></article>
-              </div>
-              <div class="bottom-nav"><span>Home</span><span>Search</span><span>Favorites</span><span>Cart</span></div>
-            </section>
-
-            <section class="phone-screen" data-phone-screen="product">
-              <div class="phone-topbar">
-                <span class="avatar"></span>
-                <button class="hamburger" aria-label="Configuration"><span></span><span></span><span></span></button>
-              </div>
-              <div class="product-hero">
-                <img src="preview-assets/brand/logo-blue.webp" alt="Arrive Aruba product placeholder">
-              </div>
-              <div class="product-thumbs"><span></span><span></span><span></span></div>
-              <h3>Cashmere Crewneck</h3>
-              <strong>$120.00</strong>
-              <p>Experience pure luxury with this crewneck sweater, crafted entirely from premium cashmere.</p>
-              <button class="buy-button">Add to cart</button>
-            </section>
-
-            <section class="phone-screen" data-phone-screen="cart" id="cart-flow">
-              <div class="cart-icon">Bag</div>
-              <div class="cart-line">
-                <span>Soft Touch Turtleneck</span>
-                <b>$120.00</b>
-              </div>
-              <div class="cart-line">
-                <span>Cashmere Crewneck</span>
-                <b>$120.00</b>
-              </div>
-              <div class="quantity">Quantity <button>-</button><b>1</b><button>+</button></div>
-              <button class="buy-button">Buy</button>
-              <a class="phone-link" href="#merch">Shop similar</a>
-            </section>
-
-            <section class="phone-screen" data-phone-screen="profile" id="profile-flow">
-              <button class="close-button" aria-label="Close">X</button>
-              <div class="profile-mark"></div>
-              <h3>Patrick Hennessy</h3>
-              <ul class="profile-list">
-                <li>Personal Information</li>
-                <li>Friends</li>
-                <li>Cards</li>
-                <li>Reviews</li>
-                <li>Security & Privacy</li>
-                <li>Theme</li>
-              </ul>
-              <button class="logout">Log Out</button>
-            </section>
-          </div>
-        </div>
-      </section>
-
-      <section class="section merch" id="merch">
-        <div class="shell section-head reveal">
-          <div>
-            <p class="kicker blue">Merch</p>
-            <h2>Luxury product grid, ready for Shopify.</h2>
-          </div>
-          <p>Producto limpio, sobrio y editable: la imagen final se reemplaza por productos reales en Shopify.</p>
-        </div>
-        <div class="product-grid reveal">
-          <article class="product-card">
-            <div class="product-art"><img src="preview-assets/brand/logo-blue.webp" alt=""></div>
-            <h3>Classic Cotton Polo Shirt</h3>
-            <p>$45.00</p>
-          </article>
-          <article class="product-card">
-            <div class="product-art cream"><img src="preview-assets/brand/logo-mark.svg" alt=""></div>
-            <h3>Performance Golf Polo</h3>
-            <p>$85.00</p>
-          </article>
-          <article class="product-card">
-            <div class="product-art green"><img src="preview-assets/brand/divi-divi.svg" alt=""></div>
-            <h3>Cashmere Crewneck</h3>
-            <p>$120.00</p>
-          </article>
-          <article class="product-card">
-            <div class="product-art orange"><img src="preview-assets/brand/logo-blue.webp" alt=""></div>
-            <h3>Island Cap</h3>
-            <p>$38.00</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section web-reference">
-        <div class="shell web-grid">
-          <div class="reveal">
-            <p class="kicker blue">Website direction</p>
-            <h2>Based on the approved web brand art.</h2>
-            <p>La portada retoma la composicion de la guia: logo blanco, paisaje de Aruba, dropdown limpio para Merch, y el mensaje emocional “The island stays with you”.</p>
-          </div>
-          <img class="reveal" src="preview-assets/media/brand-web.webp" alt="Approved Arrive Aruba web direction">
-        </div>
-      </section>
-    </main>
-
-    <footer class="footer">
-      <div class="shell footer-grid">
-        <div>
-          <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
-          <p>Take home what you felt.</p>
-        </div>
-        <nav>
-          <p class="kicker">Flow</p>
-          <a href="#home-flow">Inicio / Home</a>
-          <a href="#search-flow">Search</a>
-          <a href="#cart-flow">Cart</a>
-          <a href="#profile-flow">Profile</a>
-        </nav>
-        <nav>
-          <p class="kicker">Shopify</p>
-          <a href="#merch">Products</a>
-          <a href="#app-structure">Editable sections</a>
-          <a href="#top">Hero</a>
-        </nav>
-      </div>
-    </footer>
-
-    <script src="preview.js"></script>
-  </body>
+  <footer>
+    <p>Arrive Aruba Premium Web &nbsp;·&nbsp; morfemartin/Web_Arrive-Aruba &nbsp;·&nbsp; Branch: codex/current-upload</p>
+  </footer>
+</body>
 </html>
