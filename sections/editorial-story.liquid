@@ -1,0 +1,56 @@
+<section class="aa-editorial aa-section">
+  <div class="aa-shell aa-editorial__stack">
+    <div class="aa-reveal">
+      <p class="aa-kicker">{{ section.settings.kicker | escape }}</p>
+      <h2 class="aa-title">{{ section.settings.heading | escape }}</h2>
+      <p class="aa-copy" style="margin-inline:auto;">{{ section.settings.text | escape }}</p>
+    </div>
+    {%- for block in section.blocks -%}
+      <article class="aa-reveal" {{ block.shopify_attributes }}>
+        <div class="aa-editorial__image">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 1100 | image_tag: loading: 'lazy', widths: '420, 680, 900, 1100', sizes: '(min-width: 760px) 520px, 86vw', alt: block.settings.title }}
+          {%- else -%}
+            {{ 'lifestyle-2' | placeholder_svg_tag }}
+          {%- endif -%}
+        </div>
+        <p class="aa-kicker">{{ block.settings.year | escape }}</p>
+        <h3>{{ block.settings.title | escape }}</h3>
+        <p class="aa-copy" style="margin-inline:auto;">{{ block.settings.text | escape }}</p>
+      </article>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial story",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Heritage" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The island stays with you" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "A vertical editorial rhythm inspired by arrival, light, texture, and the pieces that carry a place home." }
+  ],
+  "blocks": [
+    {
+      "type": "story",
+      "name": "Story moment",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "year", "label": "Small label", "default": "Aruba" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Sun-drenched ease" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Clean silhouettes, calm color, and resort pieces made to feel discovered rather than announced." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial story",
+      "blocks": [
+        { "type": "story" },
+        { "type": "story", "settings": { "title": "Quiet hospitality" } },
+        { "type": "story", "settings": { "title": "A memory in cloth" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

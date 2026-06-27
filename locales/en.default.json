@@ -1,0 +1,47 @@
+{
+  "accessibility": {
+    "skip_to_text": "Skip to content",
+    "close": "Close",
+    "menu": "Menu",
+    "search": "Search",
+    "account": "Account",
+    "cart": "Cart"
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "buy_now": "Buy now",
+      "quantity": "Quantity",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "Cart",
+      "empty": "Your cart is empty",
+      "checkout": "Checkout",
+      "remove": "Remove",
+      "subtotal": "Subtotal"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "Log in",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Log in",
+      "create_account": "Create account",
+      "forgot_password": "Forgot password?"
+    }
+  },
+  "general": {
+    "newsletter": {
+      "email": "Email address",
+      "submit": "Subscribe"
+    },
+    "search": {
+      "placeholder": "Search resortwear, linen, caps..."
+    }
+  }
+}
