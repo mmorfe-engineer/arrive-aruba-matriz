@@ -47,9 +47,9 @@
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
     }
-    .aa-flight-dash {
-      stroke-dasharray: 1 14;
-      animation: aa-flight-drift 18s linear infinite;
+    .aa-logo-flight-line {
+      stroke-dasharray: 0.2 12;
+      animation: aa-flight-drift 20s linear infinite;
     }
     @keyframes aa-flight-drift {
       from { stroke-dashoffset: 0; }
@@ -114,12 +114,12 @@
   <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,18,30,0.35) 0%,rgba(7,18,30,0.12) 40%,rgba(7,18,30,0.75) 100%);z-index:1;"></div>
   <div data-flight-scene aria-hidden="true" style="position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0.92;">
     <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
-      <path id="aa-flight-path" d="M 18 -8 C 82 12 16 32 75 49 C 96 60 23 78 54 108" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" fill="none" stroke="rgba(240,240,229,0.26)" stroke-width="0.17" stroke-linecap="round" vector-effect="non-scaling-stroke" />
-      <path class="aa-flight-dash" d="M 18 -8 C 82 12 16 32 75 49 C 96 60 23 78 54 108" fill="none" stroke="rgba(245,161,105,0.48)" stroke-width="0.11" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+      <path id="aa-flight-path" d="M -8 70 C 16 66 36 58 52 45 C 68 32 84 20 108 16 C 83 28 66 42 52 57 C 37 73 21 84 -6 91" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" fill="none" stroke="rgba(240,240,229,0.42)" stroke-width="0.32" stroke-linecap="round" vector-effect="non-scaling-stroke" />
+      <path class="aa-logo-flight-line" d="M -8 70 C 16 66 36 58 52 45 C 68 32 84 20 108 16 C 83 28 66 42 52 57 C 37 73 21 84 -6 91" fill="none" stroke="rgba(240,240,229,0.32)" stroke-width="0.16" stroke-linecap="round" vector-effect="non-scaling-stroke" />
     </svg>
-    <svg data-flight-plane viewBox="0 0 40 40" style="position:absolute;top:0;left:0;width:42px;height:42px;filter:drop-shadow(0 8px 18px rgba(7,18,30,0.2));">
-      <path d="M34.2 6.4 4.8 18.4c-1.25.5-1.18 2.3.1 2.7l11.16 3.42 3.42 11.16c.39 1.28 2.19 1.35 2.7.1L34.2 6.4Z" fill="#F0F0E5" opacity="0.94"/>
-      <path d="m16.06 24.52 7.67-8.25" fill="none" stroke="#386395" stroke-width="1.2" stroke-linecap="round"/>
+    <svg data-flight-plane viewBox="0 0 160 54" style="position:absolute;top:0;left:0;width:124px;height:42px;filter:drop-shadow(0 8px 18px rgba(7,18,30,0.22));">
+      <path d="M0 40.2 91.8 24.2c6.6-1.15 13.35-1.06 19.93.26l27.3 5.5c4.52.91 9.18.78 13.64-.39l5.78-1.51c1.47-.39 2.1-2.12 1.2-3.34-1.86-2.51-5.07-3.64-8.08-2.85l-15.55 4.08-28.05-17.92c-1.45-.93-3.18-1.32-4.88-1.11l-8.42 1.02 18.12 21.35-44.66 7.82-23.35-13.8c-1.73-1.02-3.82-1.25-5.74-.63l-7.46 2.41 17.6 16.11L1.22 45.02C-.42 45.16-.68 40.52 0 40.2Z" fill="#F0F0E5" opacity="0.95"/>
+      <path d="M5 40.2 92 25" fill="none" stroke="#F0F0E5" stroke-width="8" stroke-linecap="round" opacity="0.72"/>
     </svg>
   </div>
 
@@ -439,7 +439,7 @@ class Component extends DCLogic {
     const hero = document.querySelector('[data-screen-label="01 Hero"]');
     const mark = document.querySelector('.aa-hero-mark');
     const path = document.getElementById('aa-flight-path');
-    const dash = document.querySelector('.aa-flight-dash');
+    const dash = document.querySelector('.aa-logo-flight-line');
     const plane = document.querySelector('[data-flight-plane]');
     const scene = document.querySelector('[data-flight-scene]');
     if (!hero || !mark || !path || !dash || !plane || !scene) return;
