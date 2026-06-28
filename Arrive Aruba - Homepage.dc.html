@@ -47,14 +47,6 @@
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
     }
-    .aa-logo-flight-line {
-      stroke-dasharray: 0.2 12;
-      animation: aa-flight-drift 20s linear infinite;
-    }
-    @keyframes aa-flight-drift {
-      from { stroke-dashoffset: 0; }
-      to { stroke-dashoffset: -180; }
-    }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
@@ -112,22 +104,12 @@
 <section data-screen-label="01 Hero" style="position:relative;height:100vh;min-height:100svh;min-height:100dvh;overflow:hidden;display:flex;align-items:center;justify-content:center;">
   <img src="preview-assets/media/aruba-landscape.webp" alt="Aruba" fetchpriority="high" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;z-index:0;" />
   <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,18,30,0.35) 0%,rgba(7,18,30,0.12) 40%,rgba(7,18,30,0.75) 100%);z-index:1;"></div>
-  <div data-flight-scene aria-hidden="true" style="position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0.92;">
-    <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;">
-      <path id="aa-flight-path" d="M -8 70 C 16 66 36 58 52 45 C 68 32 84 20 108 16 C 83 28 66 42 52 57 C 37 73 21 84 -6 91" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" fill="none" stroke="rgba(240,240,229,0.42)" stroke-width="0.32" stroke-linecap="round" vector-effect="non-scaling-stroke" />
-      <path class="aa-logo-flight-line" d="M -8 70 C 16 66 36 58 52 45 C 68 32 84 20 108 16 C 83 28 66 42 52 57 C 37 73 21 84 -6 91" fill="none" stroke="rgba(240,240,229,0.32)" stroke-width="0.16" stroke-linecap="round" vector-effect="non-scaling-stroke" />
-    </svg>
-    <svg data-flight-plane viewBox="0 0 160 54" style="position:absolute;top:0;left:0;width:124px;height:42px;filter:drop-shadow(0 8px 18px rgba(7,18,30,0.22));">
-      <path d="M0 40.2 91.8 24.2c6.6-1.15 13.35-1.06 19.93.26l27.3 5.5c4.52.91 9.18.78 13.64-.39l5.78-1.51c1.47-.39 2.1-2.12 1.2-3.34-1.86-2.51-5.07-3.64-8.08-2.85l-15.55 4.08-28.05-17.92c-1.45-.93-3.18-1.32-4.88-1.11l-8.42 1.02 18.12 21.35-44.66 7.82-23.35-13.8c-1.73-1.02-3.82-1.25-5.74-.63l-7.46 2.41 17.6 16.11L1.22 45.02C-.42 45.16-.68 40.52 0 40.2Z" fill="#F0F0E5" opacity="0.95"/>
-      <path d="M5 40.2 92 25" fill="none" stroke="#F0F0E5" stroke-width="8" stroke-linecap="round" opacity="0.72"/>
-    </svg>
-  </div>
 
   <div style="position:relative;z-index:10;text-align:center;padding:0 28px;max-width:500px;width:100%;">
     <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
 
-    <h1 data-hero="title" aria-label="Arrive Aruba" style="margin:0 auto 30px;width:100%;max-width:250px;line-height:0;">
-      <span class="aa-hero-mark" aria-hidden="true" style="display:block;width:100%;aspect-ratio:832.01/791.21;background:#F0F0E5;filter:blur(0);opacity:0.94;transform:translateZ(0);will-change:transform,opacity,filter;-webkit-mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;"></span>
+    <h1 data-hero="title" aria-label="Arrive Aruba" style="position:relative;margin:0 auto 30px;width:100%;max-width:250px;line-height:0;">
+      <span class="aa-hero-mark" aria-hidden="true" style="display:block;width:100%;aspect-ratio:832.01/791.21;background:#F0F0E5;opacity:0.94;transform:translateZ(0);-webkit-mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;"></span>
     </h1>
 
     <p data-hero="tag" style="font-family:'Port Blair Alternate',serif;font-size:clamp(20px,5vw,28px);color:rgba(240,240,229,0.88);letter-spacing:0.03em;line-height:1.4;margin-bottom:52px;">Take home what you felt. ✦</p>
@@ -410,92 +392,6 @@ class Component extends DCLogic {
     emailSubmitted: false,
   };
 
-  loadExternalScript(src) {
-    return new Promise((resolve, reject) => {
-      const existing = document.querySelector(`script[src="${src}"]`);
-      if (existing) {
-        if (existing.dataset.ready === 'true') {
-          resolve();
-          return;
-        }
-        existing.addEventListener('load', () => resolve(), { once: true });
-        existing.addEventListener('error', () => reject(new Error(`Could not load ${src}`)), { once: true });
-        return;
-      }
-
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = true;
-      script.onload = () => {
-        script.dataset.ready = 'true';
-        resolve();
-      };
-      script.onerror = () => reject(new Error(`Could not load ${src}`));
-      document.head.appendChild(script);
-    });
-  }
-
-  async mountFlightAnimation(reduce) {
-    const hero = document.querySelector('[data-screen-label="01 Hero"]');
-    const mark = document.querySelector('.aa-hero-mark');
-    const path = document.getElementById('aa-flight-path');
-    const dash = document.querySelector('.aa-logo-flight-line');
-    const plane = document.querySelector('[data-flight-plane]');
-    const scene = document.querySelector('[data-flight-scene]');
-    if (!hero || !mark || !path || !dash || !plane || !scene) return;
-
-    if (reduce) {
-      plane.style.transform = 'translate(50vw, 18vh)';
-      scene.style.opacity = '0.55';
-      return;
-    }
-
-    try {
-      await this.loadExternalScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js');
-      await this.loadExternalScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js');
-      await this.loadExternalScript('https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/MotionPathPlugin.min.js');
-
-      const { gsap, ScrollTrigger, MotionPathPlugin } = window;
-      if (!gsap || !ScrollTrigger || !MotionPathPlugin) return;
-
-      gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
-
-      const pathLength = path.getTotalLength();
-      path.style.strokeDasharray = pathLength;
-      path.style.strokeDashoffset = pathLength;
-      gsap.set(plane, { xPercent: -50, yPercent: -50, transformOrigin: '50% 50%' });
-      gsap.set(mark, { transformOrigin: '50% 50%' });
-
-      this._flightTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: hero,
-          start: 'top top',
-          end: 'bottom+=110% top',
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        },
-      });
-
-      this._flightTl
-        .to(path, { strokeDashoffset: 0, ease: 'none' }, 0)
-        .to(dash, { strokeDashoffset: -260, ease: 'none' }, 0)
-        .to(plane, {
-          motionPath: {
-            path,
-            align: path,
-            alignOrigin: [0.5, 0.5],
-            autoRotate: true,
-          },
-          ease: 'none',
-        }, 0)
-        .to(mark, { opacity: 0.14, filter: 'blur(12px)', scale: 1.06, ease: 'none' }, 0.08);
-    } catch (error) {
-      console.warn('Arrive Aruba scroll animation skipped.', error);
-    }
-  }
-
   componentDidMount() {
     // ── Hero entrance — transform + CSS animation ONLY. Content is
     //    visible by default; we never gate visibility on JS. If reduced
@@ -547,7 +443,6 @@ class Component extends DCLogic {
       });
     }
     this._obs = obs;
-    this.mountFlightAnimation(reduce);
 
     // ── Nav scroll color shift ──────────────────────────────────
     const $nav   = document.getElementById('aa-nav');
@@ -577,10 +472,6 @@ class Component extends DCLogic {
   componentWillUnmount() {
     if (this._obs)      this._obs.disconnect();
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
-    if (this._flightTl) {
-      if (this._flightTl.scrollTrigger) this._flightTl.scrollTrigger.kill();
-      this._flightTl.kill();
-    }
   }
 
   renderVals() {
