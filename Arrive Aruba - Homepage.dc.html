@@ -128,6 +128,8 @@
       <div style="position:absolute;top:0;left:0;right:0;height:55%;background:rgba(240,240,229,0.75);animation:aa-scroll-line 2.1s ease-in-out infinite;"></div>
     </div>
   </div>
+
+  <button id="aa-sound-toggle" type="button" aria-label="Turn hero sound on" aria-pressed="false" style="position:absolute;right:22px;bottom:28px;z-index:12;min-height:34px;padding:9px 12px;border:1px solid rgba(240,240,229,0.24);background:rgba(5,12,18,0.14);color:rgba(240,240,229,0.72);font-family:'Geologica',sans-serif;font-size:9px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:color 0.2s ease,border-color 0.2s ease,background 0.2s ease;">Sound off</button>
 </section>
 
 <!-- ─── SHOP BY CATEGORY ──────────────────────────────── -->
@@ -401,16 +403,52 @@ class Component extends DCLogic {
     //    motion is on, skip the staged drift entirely. ──
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const heroVideo = document.querySelector('[data-screen-label="01 Hero"] video');
-    if (heroVideo && !reduce) {
+    const soundToggle = document.getElementById('aa-sound-toggle');
+    if (heroVideo) {
       heroVideo.muted = true;
       heroVideo.defaultMuted = true;
       heroVideo.playsInline = true;
+      heroVideo.volume = 0.82;
       const playHero = () => {
         const playPromise = heroVideo.play();
         if (playPromise && playPromise.catch) playPromise.catch(() => {});
       };
-      playHero();
-      document.addEventListener('visibilitychange', playHero, { once: true });
+      if (!reduce) {
+        playHero();
+        document.addEventListener('visibilitychange', playHero, { once: true });
+      }
+      if (soundToggle) {
+        const syncSoundToggle = () => {
+          const soundOn = !heroVideo.muted;
+          soundToggle.textContent = soundOn ? 'Sound on' : 'Sound off';
+          soundToggle.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+          soundToggle.setAttribute('aria-label', soundOn ? 'Turn hero sound off' : 'Turn hero sound on');
+        };
+        const onSoundToggle = () => {
+          const turnSoundOn = heroVideo.muted;
+          heroVideo.muted = !turnSoundOn;
+          heroVideo.defaultMuted = !turnSoundOn;
+          if (turnSoundOn && heroVideo.ended) heroVideo.currentTime = 0;
+          const playPromise = heroVideo.play();
+          if (playPromise && playPromise.catch) {
+            playPromise
+              .then(syncSoundToggle)
+              .catch(() => {
+                heroVideo.muted = true;
+                heroVideo.defaultMuted = true;
+                playHero();
+                syncSoundToggle();
+              });
+          } else {
+            syncSoundToggle();
+          }
+          syncSoundToggle();
+        };
+        soundToggle.addEventListener('click', onSoundToggle);
+        this._onSoundToggle = onSoundToggle;
+        this._soundToggle = soundToggle;
+        syncSoundToggle();
+      }
     }
     if (!reduce) {
       const HERO = [
@@ -492,6 +530,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     if (this._obs)      this._obs.disconnect();
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if (this._soundToggle && this._onSoundToggle) this._soundToggle.removeEventListener('click', this._onSoundToggle);
   }
 
   renderVals() {
