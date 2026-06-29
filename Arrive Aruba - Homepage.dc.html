@@ -47,6 +47,199 @@
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
     }
+    .aa-header-action {
+      background:none;
+      border:none;
+      color:#F0F0E5;
+      padding:4px;
+      cursor:pointer;
+      transition:color 0.5s ease, opacity 0.2s ease;
+    }
+    .aa-header-action:hover { opacity: 0.72; }
+    .aa-header-save {
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .aa-header-save__count {
+      position:absolute;
+      right:-7px;
+      top:-7px;
+      min-width:15px;
+      height:15px;
+      padding:0 4px;
+      border-radius:999px;
+      background:#F5A169;
+      color:#23405e;
+      font-family:'Geologica',sans-serif;
+      font-size:8px;
+      font-weight:600;
+      line-height:15px;
+      text-align:center;
+      opacity:0;
+      transform:scale(0.75);
+      transition:opacity 0.18s ease, transform 0.18s ease;
+    }
+    .aa-header-save__count.is-visible {
+      opacity:1;
+      transform:scale(1);
+    }
+    .aa-save-button {
+      position:absolute;
+      top:10px;
+      right:10px;
+      z-index:4;
+      width:34px;
+      height:34px;
+      border:1px solid rgba(240,240,229,0.58);
+      border-radius:50%;
+      background:rgba(240,240,229,0.18);
+      color:#F0F0E5;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      transition:background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+    }
+    .aa-save-button:hover {
+      transform:translateY(-1px);
+      background:rgba(240,240,229,0.28);
+      border-color:rgba(240,240,229,0.86);
+    }
+    .aa-save-button.is-saved {
+      background:#F0F0E5;
+      color:#386395;
+      border-color:#F0F0E5;
+    }
+    .aa-save-button svg {
+      width:16px;
+      height:16px;
+      fill:transparent;
+      transition:fill 0.2s ease;
+    }
+    .aa-save-button.is-saved svg { fill:currentColor; }
+    .aa-saved-drawer {
+      position:fixed;
+      top:0;
+      right:0;
+      bottom:0;
+      z-index:240;
+      width:min(420px, 100vw);
+      background:#F0F0E5;
+      color:#23405e;
+      padding:84px 22px 28px;
+      box-shadow:-28px 0 70px rgba(5,12,18,0.24);
+      transform:translateX(102%);
+      transition:transform 0.36s cubic-bezier(0.22,0.61,0.36,1);
+      pointer-events:none;
+      overflow-y:auto;
+    }
+    .aa-saved-drawer.is-open {
+      transform:translateX(0);
+      pointer-events:auto;
+    }
+    .aa-saved-drawer__top {
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:28px;
+      padding-bottom:18px;
+      border-bottom:1px solid rgba(56,99,149,0.18);
+    }
+    .aa-saved-drawer__eyebrow {
+      font-family:'Geologica',sans-serif;
+      font-size:9px;
+      letter-spacing:0.32em;
+      text-transform:uppercase;
+      color:#5F8BB8;
+      margin-bottom:8px;
+    }
+    .aa-saved-drawer__title {
+      font-family:'ITC Legacy Serif',Georgia,serif;
+      font-size:30px;
+      font-weight:400;
+      line-height:1.05;
+      color:#23405e;
+    }
+    .aa-saved-close {
+      width:36px;
+      height:36px;
+      border:1px solid rgba(56,99,149,0.24);
+      background:transparent;
+      color:#23405e;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+    .aa-saved-drawer__list {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .aa-saved-drawer__item {
+      display:grid;
+      grid-template-columns:58px 1fr auto;
+      gap:13px;
+      align-items:center;
+      min-height:76px;
+      border-bottom:1px solid rgba(56,99,149,0.12);
+      padding-bottom:12px;
+      color:#23405e;
+    }
+    .aa-saved-drawer__swatch {
+      width:58px;
+      height:76px;
+      background:var(--saved-swatch, #5F8BB8);
+      position:relative;
+      overflow:hidden;
+    }
+    .aa-saved-drawer__swatch::after {
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to bottom, rgba(240,240,229,0.18), rgba(35,64,94,0.18));
+    }
+    .aa-saved-drawer__name {
+      display:block;
+      font-family:'Geologica',sans-serif;
+      font-size:12px;
+      font-weight:500;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      margin-bottom:5px;
+    }
+    .aa-saved-drawer__meta {
+      display:block;
+      font-family:'Geologica',sans-serif;
+      font-size:11px;
+      color:#7e9bb8;
+      font-weight:300;
+      line-height:1.45;
+    }
+    .aa-saved-drawer__price {
+      font-family:'Geologica',sans-serif;
+      font-size:12px;
+      color:#386395;
+      align-self:start;
+      padding-top:4px;
+    }
+    .aa-saved-empty {
+      border:1px solid rgba(56,99,149,0.18);
+      padding:24px 18px;
+      color:#6e87a2;
+      font-family:'Geologica',sans-serif;
+      font-size:13px;
+      line-height:1.55;
+    }
+    @media (max-width: 520px) {
+      .aa-saved-drawer { width:100vw; padding:82px 20px 26px; }
+      .aa-saved-drawer__title { font-size:28px; }
+    }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     }
@@ -66,11 +259,15 @@
     <img id="aa-wm-sapphire" src="preview-assets/brand/logo-blue.webp" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity 0.5s ease;" />
   </a>
 
-  <div style="display:flex;gap:20px;align-items:center;">
-    <button aria-label="Search" id="aa-search-btn" style="background:none;border:none;color:#F0F0E5;padding:4px;cursor:pointer;transition:color 0.5s ease;">
+  <div style="display:flex;gap:18px;align-items:center;">
+    <button aria-label="Search" id="aa-search-btn" class="aa-header-action">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
-    <button aria-label="Cart" id="aa-cart-btn" style="background:none;border:none;color:#F0F0E5;padding:4px;cursor:pointer;display:flex;align-items:center;gap:5px;transition:color 0.5s ease;" onClick="{{ toggleCart }}">
+    <button aria-label="View saved pieces" id="aa-saved-btn" class="aa-header-action aa-header-save" type="button">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+      <span id="aa-saved-count" class="aa-header-save__count" aria-hidden="true">0</span>
+    </button>
+    <button aria-label="Cart" id="aa-cart-btn" class="aa-header-action" style="display:flex;align-items:center;gap:5px;" onClick="{{ toggleCart }}">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
       <sc-if value="{{ showCartBadge }}" hint-placeholder-val="{{ false }}">
         <span style="background:#F5A169;color:#2c4f78;border-radius:9999px;min-width:16px;height:16px;font-size:9px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 3px;">{{ cartCount }}</span>
@@ -78,6 +275,20 @@
     </button>
   </div>
 </nav>
+
+<!-- ─── SAVED DRAWER ─────────────────────────────────── -->
+<aside id="aa-saved-drawer" class="aa-saved-drawer" aria-hidden="true" aria-labelledby="aa-saved-title" data-screen-label="Saved Pieces">
+  <div class="aa-saved-drawer__top">
+    <div>
+      <p class="aa-saved-drawer__eyebrow">Wishlist</p>
+      <h2 id="aa-saved-title" class="aa-saved-drawer__title">Saved Pieces</h2>
+    </div>
+    <button id="aa-saved-close" class="aa-saved-close" type="button" aria-label="Close saved pieces">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="aa-saved-list" class="aa-saved-drawer__list"></div>
+</aside>
 
 <!-- ─── NAV DRAWER ────────────────────────────────────── -->
 <div style="{{ drawerStyle }}" aria-hidden="{{ !navOpen }}" data-screen-label="Nav Drawer">
@@ -145,6 +356,9 @@
       <div style="aspect-ratio:3/4;background:#5F8BB8;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.5) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
+        <button class="aa-save-button" type="button" aria-label="Save Performance Polo" data-save-button data-product-id="performance-polo-blue" data-product-title="Performance Polo" data-product-color="Silver Lake Blue" data-product-price="$85" data-product-url="product-performance-pique-polo.html" data-product-swatch="#5F8BB8">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        </button>
         <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Polo</p>
       </div>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Performance Polo</p>
@@ -155,6 +369,9 @@
       <div style="aspect-ratio:3/4;background:#92AF88;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
+        <button class="aa-save-button" type="button" aria-label="Save Performance Tee" data-save-button data-product-id="performance-tee-green" data-product-title="Performance Tee" data-product-color="Fair Green" data-product-price="$58" data-product-url="product-smooth-performance-tee.html" data-product-swatch="#92AF88">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        </button>
         <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Tee</p>
       </div>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Performance Tee</p>
@@ -165,6 +382,9 @@
       <div style="aspect-ratio:3/4;background:#386395;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
+        <button class="aa-save-button" type="button" aria-label="Save Star Sapphire Hoodie" data-save-button data-product-id="star-sapphire-hoodie" data-product-title="Star Sapphire Hoodie" data-product-color="Star Sapphire" data-product-price="$145" data-product-url="product-star-sapphire-hoodie.html" data-product-swatch="#386395">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        </button>
         <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Hoodie</p>
       </div>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">Star Sapphire Hoodie</p>
@@ -175,6 +395,9 @@
       <div style="aspect-ratio:3/4;background:#F5A169;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.16;" /></div>
+        <button class="aa-save-button" type="button" aria-label="Save New Arrivals" data-save-button data-product-id="new-arrivals-edit" data-product-title="New Arrivals Edit" data-product-color="Seasonal Selection" data-product-price="From $58" data-product-url="#collections" data-product-swatch="#F5A169">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        </button>
         <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">All</p>
       </div>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:3px;">New Arrivals</p>
@@ -223,6 +446,9 @@
       <a href="product-performance-pique-polo.html" style="display:block;aspect-ratio:3/4;background:#5F8BB8;position:relative;overflow:hidden;margin-bottom:12px;">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
         <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
+        <button class="aa-save-button" type="button" aria-label="Save Performance Piqué Polo" data-save-button data-product-id="performance-pique-polo-silver-lake-blue" data-product-title="Performance Piqué Polo" data-product-color="Silver Lake Blue" data-product-price="$85" data-product-url="product-performance-pique-polo.html" data-product-swatch="#5F8BB8">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        </button>
       </a>
       <a href="product-performance-pique-polo.html" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Performance Piqué Polo</a>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Silver Lake Blue</p>
@@ -234,6 +460,9 @@
       <a href="product-smooth-performance-tee.html" style="display:block;aspect-ratio:3/4;background:#F5A169;position:relative;overflow:hidden;margin-bottom:12px;">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
         <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
+        <button class="aa-save-button" type="button" aria-label="Save Smooth Performance Tee" data-save-button data-product-id="smooth-performance-tee-mock-orange" data-product-title="Smooth Performance Tee" data-product-color="Mock Orange" data-product-price="$58" data-product-url="product-smooth-performance-tee.html" data-product-swatch="#F5A169">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        </button>
       </a>
       <a href="product-smooth-performance-tee.html" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Smooth Performance Tee</a>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Mock Orange</p>
@@ -245,6 +474,9 @@
       <a href="product-star-sapphire-hoodie.html" style="display:block;aspect-ratio:3/4;background:#386395;position:relative;overflow:hidden;margin-bottom:12px;">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
         <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
+        <button class="aa-save-button" type="button" aria-label="Save Star Sapphire Hoodie" data-save-button data-product-id="star-sapphire-hoodie-star-sapphire" data-product-title="Star Sapphire Hoodie" data-product-color="Star Sapphire" data-product-price="$145" data-product-url="product-star-sapphire-hoodie.html" data-product-swatch="#386395">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        </button>
       </a>
       <a href="product-star-sapphire-hoodie.html" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Star Sapphire Hoodie</a>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Star Sapphire</p>
@@ -255,6 +487,9 @@
     <div data-reveal data-delay="0.12">
       <a href="product-performance-pique-polo.html" style="display:block;aspect-ratio:3/4;background:#92AF88;position:relative;overflow:hidden;margin-bottom:12px;">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
+        <button class="aa-save-button" type="button" aria-label="Save Performance Piqué Polo in Fair Green" data-save-button data-product-id="performance-pique-polo-fair-green" data-product-title="Performance Piqué Polo" data-product-color="Fair Green" data-product-price="$85" data-product-url="product-performance-pique-polo.html" data-product-swatch="#92AF88">
+          <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
+        </button>
       </a>
       <a href="product-performance-pique-polo.html" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Performance Piqué Polo</a>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Fair Green</p>
@@ -503,6 +738,7 @@ class Component extends DCLogic {
     const $wmW   = document.getElementById('aa-wm-white');
     const $wmS   = document.getElementById('aa-wm-sapphire');
     const $srch  = document.getElementById('aa-search-btn');
+    const $saved = document.getElementById('aa-saved-btn');
     const $cart  = document.getElementById('aa-cart-btn');
 
     const onScroll = () => {
@@ -520,17 +756,134 @@ class Component extends DCLogic {
       if ($wmW) $wmW.style.opacity = past ? '0' : '1';
       if ($wmS) $wmS.style.opacity = past ? '1' : '0';
       if ($srch) $srch.style.color = c;
+      if ($saved) $saved.style.color = c;
       if ($cart) $cart.style.color = c;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     this._onScroll = onScroll;
     onScroll();
+
+    // ── Saved products — static prototype now, Shopify-ready later.
+    //    Buttons carry data-product-* so this can map to product handles,
+    //    variant IDs, customer metafields, or a wishlist app in theme code.
+    const savedKey = 'arriveAruba.savedProducts.v1';
+    const savedOpenButton = document.getElementById('aa-saved-btn');
+    const savedCloseButton = document.getElementById('aa-saved-close');
+    const savedDrawer = document.getElementById('aa-saved-drawer');
+    const savedList = document.getElementById('aa-saved-list');
+    const savedCount = document.getElementById('aa-saved-count');
+    const saveButtons = Array.from(document.querySelectorAll('[data-save-button]'));
+    const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;',
+    })[char]);
+    const readSaved = () => {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(savedKey) || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (_) {
+        return [];
+      }
+    };
+    const writeSaved = items => {
+      try {
+        localStorage.setItem(savedKey, JSON.stringify(items));
+      } catch (_) {}
+    };
+    const productFromButton = button => ({
+      id: button.dataset.productId,
+      title: button.dataset.productTitle,
+      color: button.dataset.productColor,
+      price: button.dataset.productPrice,
+      url: button.dataset.productUrl || '#',
+      swatch: button.dataset.productSwatch || '#5F8BB8',
+    });
+    const setSavedOpen = isOpen => {
+      if (!savedDrawer) return;
+      savedDrawer.classList.toggle('is-open', isOpen);
+      savedDrawer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    };
+    const renderSaved = () => {
+      const items = readSaved().filter(item => item && item.id);
+      const savedIds = new Set(items.map(item => item.id));
+      saveButtons.forEach(button => {
+        const active = savedIds.has(button.dataset.productId);
+        button.classList.toggle('is-saved', active);
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
+        button.setAttribute('aria-label', `${active ? 'Remove' : 'Save'} ${button.dataset.productTitle || 'product'}`);
+      });
+      if (savedCount) {
+        savedCount.textContent = String(items.length);
+        savedCount.classList.toggle('is-visible', items.length > 0);
+      }
+      if (!savedList) return;
+      if (!items.length) {
+        savedList.innerHTML = '<div class="aa-saved-empty">Save resortwear pieces as you browse. Your selection will stay on this device for the next visit.</div>';
+        return;
+      }
+      savedList.innerHTML = items.map(item => `
+        <a class="aa-saved-drawer__item" href="${escapeHtml(item.url)}">
+          <span class="aa-saved-drawer__swatch" style="--saved-swatch:${escapeHtml(item.swatch)}"></span>
+          <span>
+            <span class="aa-saved-drawer__name">${escapeHtml(item.title)}</span>
+            <span class="aa-saved-drawer__meta">${escapeHtml(item.color)}</span>
+          </span>
+          <span class="aa-saved-drawer__price">${escapeHtml(item.price)}</span>
+        </a>
+      `).join('');
+    };
+    const toggleSavedProduct = button => {
+      const product = productFromButton(button);
+      if (!product.id) return;
+      const items = readSaved();
+      const exists = items.some(item => item.id === product.id);
+      const nextItems = exists
+        ? items.filter(item => item.id !== product.id)
+        : [product, ...items.filter(item => item.id !== product.id)];
+      writeSaved(nextItems);
+      renderSaved();
+    };
+    const savedHandlers = [];
+    saveButtons.forEach(button => {
+      const handler = event => {
+        event.preventDefault();
+        event.stopPropagation();
+        toggleSavedProduct(button);
+      };
+      button.addEventListener('click', handler);
+      savedHandlers.push([button, 'click', handler]);
+    });
+    if (savedOpenButton) {
+      const handler = () => {
+        renderSaved();
+        setSavedOpen(true);
+      };
+      savedOpenButton.addEventListener('click', handler);
+      savedHandlers.push([savedOpenButton, 'click', handler]);
+    }
+    if (savedCloseButton) {
+      const handler = () => setSavedOpen(false);
+      savedCloseButton.addEventListener('click', handler);
+      savedHandlers.push([savedCloseButton, 'click', handler]);
+    }
+    const onSavedKeydown = event => {
+      if (event.key === 'Escape') setSavedOpen(false);
+    };
+    document.addEventListener('keydown', onSavedKeydown);
+    this._savedHandlers = savedHandlers;
+    this._onSavedKeydown = onSavedKeydown;
+    renderSaved();
   }
 
   componentWillUnmount() {
     if (this._obs)      this._obs.disconnect();
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
     if (this._soundToggle && this._onSoundToggle) this._soundToggle.removeEventListener('click', this._onSoundToggle);
+    if (this._savedHandlers) this._savedHandlers.forEach(([target, event, handler]) => target.removeEventListener(event, handler));
+    if (this._onSavedKeydown) document.removeEventListener('keydown', this._onSavedKeydown);
   }
 
   renderVals() {
