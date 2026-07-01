@@ -38,7 +38,7 @@
     .intro { color:#6c7b8e; font-size:14px; font-weight:300; line-height:1.7; margin-bottom:28px; max-width:520px; }
     .cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:40px; }
     @media(max-width:560px){ .cards { grid-template-columns:1fr; } }
-    .card { display:flex; flex-direction:column; background:#fff; border:1px solid #e4e3d8; border-radius:14px; overflow:hidden; transition:box-shadow 0.2s ease, transform 0.2s ease; }
+    .card { display:flex; flex-direction:column; background:#fff; border:1px solid #e4e3d8; overflow:hidden; transition:box-shadow 0.2s ease, transform 0.2s ease; }
     .card:hover { box-shadow:0 8px 28px rgba(56,99,149,0.13); transform:translateY(-3px); }
     .card-thumb { aspect-ratio:16/9; background:#386395; display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; }
     .card-thumb img.photo { width:100%; height:100%; object-fit:cover; object-position:center 35%; display:block; }
@@ -47,7 +47,7 @@
     .card-label { font-size:8px; letter-spacing:0.22em; text-transform:uppercase; color:#5F8BB8; margin-bottom:6px; }
     .card-title { font-family:'ITC Legacy Serif',serif; font-size:18px; color:#23405e; margin-bottom:6px; }
     .card-desc { font-size:12px; font-weight:300; color:#7a8aa0; line-height:1.7; flex:1; margin-bottom:16px; }
-    .card-cta { align-self:flex-start; background:#386395; color:#F0F0E5; border:none; border-radius:9999px; padding:11px 22px; font-family:'Geologica',sans-serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:500; }
+    .card-cta { align-self:flex-start; background:#386395; color:#F0F0E5; border:none; padding:11px 22px; font-family:'Geologica',sans-serif; font-size:9px; letter-spacing:0.2em; text-transform:uppercase; font-weight:500; }
     footer { background:#2c4f78; padding:24px; text-align:center; }
     footer p { font-size:10px; font-weight:300; color:rgba(240,240,229,0.4); }
   </style>
@@ -63,7 +63,7 @@
     <p class="intro">This page opens the right experience automatically. Phones and touch tablets open the app prototype; desktop and laptop screens open the web homepage.</p>
 
     <div class="cards">
-      <a class="card" href="Arrive%20Aruba%20-%20Homepage.dc.html?view=web">
+      <a class="card" href="Arrive%20Aruba%20-%20Homepage.dc.html">
         <div class="card-thumb">
           <img class="photo" src="preview-assets/media/aruba-landscape.webp" alt="Aruba">
         </div>
@@ -75,7 +75,7 @@
         </div>
       </a>
 
-      <a class="card" href="Arrive%20Aruba%20-%20App.dc.html?view=app">
+      <a class="card" href="Arrive%20Aruba%20-%20App.dc.html">
         <div class="card-thumb">
           <img class="logo" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba App">
         </div>
@@ -84,6 +84,30 @@
           <p class="card-title">App Prototype</p>
           <p class="card-desc">Mobile-first app flow for phone-sized review.</p>
           <span class="card-cta">Open app</span>
+        </div>
+      </a>
+
+      <a class="card" href="Arrive%20Aruba%20-%20Collection.dc.html">
+        <div class="card-thumb" style="background:#dceaf4;">
+          <img class="logo" src="preview-assets/brand/logo-negative.webp" alt="Collection" style="opacity:0.6;">
+        </div>
+        <div class="card-body">
+          <p class="card-label">Mobile · Shop</p>
+          <p class="card-title">Collection</p>
+          <p class="card-desc">Product grid with filters, sorting and wishlist.</p>
+          <span class="card-cta">Open collection</span>
+        </div>
+      </a>
+
+      <a class="card" href="Arrive%20Aruba%20-%20Product.dc.html">
+        <div class="card-thumb" style="background:#c8daea;">
+          <img class="logo" src="preview-assets/brand/logo-mark.svg" alt="Product" style="width:36%;opacity:0.4;">
+        </div>
+        <div class="card-body">
+          <p class="card-label">Mobile · Product</p>
+          <p class="card-title">Product Detail</p>
+          <p class="card-desc">Full PDP with size select, colors, bag and checkout flow.</p>
+          <span class="card-cta">Open product</span>
         </div>
       </a>
     </div>

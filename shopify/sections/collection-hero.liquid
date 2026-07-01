@@ -1,0 +1,209 @@
+{% comment %}
+  ARRIVE ARUBA — Collection Hero Section
+  Shopify OS 2.0 · Editable via Theme Editor
+{% endcomment %}
+
+<style>
+  .aa-col-hero {
+    background: {{ section.settings.bg_color }};
+    padding: {{ section.settings.padding_top }}px 24px {{ section.settings.padding_bottom }}px;
+    text-align: center;
+  }
+  .aa-col-hero__eyebrow {
+    font-family: 'Geologica', sans-serif;
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: {{ section.settings.accent_color }};
+    margin-bottom: 14px;
+  }
+  .aa-col-hero__title {
+    font-family: 'ITC Legacy Serif Std', 'Georgia', serif;
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 500;
+    color: {{ section.settings.text_color }};
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .aa-col-hero__desc {
+    font-family: 'Geologica', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    color: {{ section.settings.text_color | color_modify: 'alpha', 0.65 }};
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 20px;
+  }
+  .aa-col-hero__count {
+    font-family: 'Geologica', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: {{ section.settings.accent_color }};
+    letter-spacing: 0.1em;
+  }
+
+  /* Filter chips */
+  .aa-col-filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 24px 20px;
+    -ms-overflow-style: none;
+  }
+  .aa-col-filters::-webkit-scrollbar { display: none; }
+  .aa-col-filter-chip {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    padding: 9px 18px;
+    border-radius: 9999px;
+    font-family: 'Geologica', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(56,99,149,0.28);
+    color: #386395;
+    background: transparent;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+  }
+  .aa-col-filter-chip:hover,
+  .aa-col-filter-chip.active {
+    background: #386395;
+    color: #F0F0E5;
+    border-color: #386395;
+  }
+</style>
+
+<div class="aa-col-hero">
+  {% if section.settings.eyebrow != blank %}
+    <p class="aa-col-hero__eyebrow">{{ section.settings.eyebrow }}</p>
+  {% endif %}
+
+  <h1 class="aa-col-hero__title">
+    {% if section.settings.custom_title != blank %}
+      {{ section.settings.custom_title }}
+    {% else %}
+      {{ collection.title }}.
+    {% endif %}
+  </h1>
+
+  {% if section.settings.show_description %}
+    <p class="aa-col-hero__desc">
+      {% if section.settings.custom_description != blank %}
+        {{ section.settings.custom_description }}
+      {% elsif collection.description != blank %}
+        {{ collection.description | strip_html | truncate: 160 }}
+      {% endif %}
+    </p>
+  {% endif %}
+
+  <p class="aa-col-hero__count">{{ collection.products_count }} pieces</p>
+</div>
+
+{% if section.settings.show_filters %}
+  <nav class="aa-col-filters" aria-label="Filter by type">
+    <a href="{{ collection.url }}" class="aa-col-filter-chip {% unless current_tags %}active{% endunless %}">All</a>
+    {% for tag in collection.all_tags %}
+      <a href="{{ collection.url }}/{{ tag | handle }}"
+         class="aa-col-filter-chip {% if current_tags contains tag %}active{% endif %}">
+        {{ tag }}
+      </a>
+    {% endfor %}
+  </nav>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Collection hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Arrive Aruba ✦"
+    },
+    {
+      "type": "text",
+      "id": "custom_title",
+      "label": "Custom title (leave blank to use collection name)"
+    },
+    {
+      "type": "textarea",
+      "id": "custom_description",
+      "label": "Custom description (leave blank to use collection description)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filters",
+      "label": "Show tag filter chips",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#F0F0E5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#23405e"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent",
+      "default": "#5F8BB8"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 16,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 8,
+      "max": 80,
+      "step": 8,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection hero"
+    }
+  ]
+}
+{% endschema %}
