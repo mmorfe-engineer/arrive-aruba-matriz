@@ -153,6 +153,25 @@
       aspect-ratio:4/3;
       margin-top:36px;
     }
+    .aa-hero-mark-video {
+      display:block;
+      width:58%;
+      aspect-ratio:1;
+      object-fit:contain;
+      opacity:0.96;
+      pointer-events:none;
+      transform:translateZ(0);
+    }
+    .aa-hero-mark-static {
+      display:none;
+      width:50%;
+      aspect-ratio:832.01/791.21;
+      background:#F0F0E5;
+      opacity:0.94;
+      transform:translateZ(0);
+      -webkit-mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;
+      mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;
+    }
     .aa-saved-drawer {
       position:fixed;
       top:0;
@@ -521,7 +540,10 @@
     <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
 
     <h1 data-hero="title" aria-label="Arrive Aruba" style="position:relative;margin:0 auto 30px;width:100%;max-width:250px;height:clamp(118px,30vw,238px);line-height:0;display:flex;align-items:center;justify-content:center;">
-      <span class="aa-hero-mark" aria-hidden="true" style="display:block;width:50%;aspect-ratio:832.01/791.21;background:#F0F0E5;opacity:0.94;transform:translateZ(0);-webkit-mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;"></span>
+      <video class="aa-hero-mark-video" data-hero-mark-video aria-hidden="true" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="metadata" poster="preview-assets/media/arrive-a-mark-poster.png">
+        <source src="preview-assets/media/arrive-a-mark-alpha.webm" type="video/webm" />
+      </video>
+      <span class="aa-hero-mark-static" data-hero-mark-fallback aria-hidden="true"></span>
     </h1>
 
     <p data-hero="tag" style="font-family:'Port Blair Alternate',serif;font-size:clamp(20px,5vw,28px);color:rgba(240,240,229,0.88);letter-spacing:0.03em;line-height:1.4;margin-bottom:52px;">Take home what you felt. ✦</p>
@@ -845,6 +867,23 @@ class Component extends DCLogic {
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const heroVideo = document.querySelector('[data-screen-label="01 Hero"] video');
     const soundToggle = document.getElementById('aa-sound-toggle');
+    const heroMarkVideo = document.querySelector('[data-hero-mark-video]');
+    const heroMarkFallback = document.querySelector('[data-hero-mark-fallback]');
+    if (heroMarkVideo && heroMarkFallback) {
+      const canPlayAlphaMark = !!heroMarkVideo.canPlayType('video/webm; codecs="vp9"');
+      if (reduce || !canPlayAlphaMark) {
+        heroMarkVideo.style.display = 'none';
+        heroMarkFallback.style.display = 'block';
+      } else {
+        const markPlay = heroMarkVideo.play();
+        if (markPlay && markPlay.catch) {
+          markPlay.catch(() => {
+            heroMarkVideo.style.display = 'none';
+            heroMarkFallback.style.display = 'block';
+          });
+        }
+      }
+    }
     if (heroVideo) {
       heroVideo.muted = true;
       heroVideo.defaultMuted = true;
