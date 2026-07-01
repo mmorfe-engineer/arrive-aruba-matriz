@@ -13,7 +13,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="cart-store.js"></script>
   <style>
+    .aa-profile-row { display:flex; align-items:center; gap:14px; width:100%; padding:18px 4px; background:none; border:none; border-bottom:1px solid rgba(56,99,149,0.14); cursor:pointer; text-align:left; color:#23405e; transition:opacity 0.18s ease; }
+    .aa-profile-row:hover { opacity:0.66; }
+    .aa-edit-input { width:100%; background:#fff; border:1px solid #e7e6d6; padding:13px 14px; font-family:'Geologica',sans-serif; font-size:13px; color:#23405e; outline:none; }
+    .aa-edit-input:focus { border-color:#5F8BB8; }
+    .aa-qty-btn { transition:opacity 0.18s ease; }
+    .aa-qty-btn:hover { opacity:0.65; }
     @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Medium.otf') format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
     @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Book-Italic.otf') format('opentype'); font-weight:400; font-style:italic; font-display:swap; }
     @font-face { font-family:'Port Blair Alternate'; src:url('preview-assets/fonts/Port-Blair-Alternate.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
@@ -274,10 +281,15 @@
 <!-- ─── FIXED NAV ─────────────────────────────────────── -->
 <nav id="aa-nav" data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:100;height:74px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;transition:background 0.5s ease,border-bottom 0.5s ease;">
 
-  <button id="aa-ham" aria-label="Open menu" onClick="{{ toggleNav }}" style="background:none;border:none;padding:6px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;cursor:pointer;">
-    <span class="aa-bar" style="display:block;width:26px;height:1px;background:#F0F0E5;transition:background 0.5s ease;"></span>
-    <span class="aa-bar" style="display:block;width:17px;height:1px;background:#F0F0E5;transition:background 0.5s ease;"></span>
-  </button>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <button id="aa-profile-btn" aria-label="Account" class="aa-header-action" onClick="{{ openProfile }}" style="padding:4px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4 3.6-7 7.5-7s7.5 3 7.5 7"/></svg>
+    </button>
+    <button id="aa-ham" aria-label="Open menu" onClick="{{ toggleNav }}" style="background:none;border:none;padding:6px;display:flex;flex-direction:column;gap:5px;align-items:flex-start;cursor:pointer;">
+      <span class="aa-bar" style="display:block;width:26px;height:1px;background:#F0F0E5;transition:background 0.5s ease;"></span>
+      <span class="aa-bar" style="display:block;width:17px;height:1px;background:#F0F0E5;transition:background 0.5s ease;"></span>
+    </button>
+  </div>
 
   <a id="aa-wm" href="index.html?view=web" aria-label="Arrive Aruba — home" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:176px;height:51px;line-height:0;">
     <img id="aa-wm-white" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:1;transition:opacity 0.5s ease;" />
@@ -300,6 +312,167 @@
     </button>
   </div>
 </nav>
+
+<!-- ─── CART DRAWER ───────────────────────────────────── -->
+<aside id="aa-cart-drawer" class="aa-saved-drawer" aria-hidden="true" data-screen-label="Cart">
+  <div class="aa-saved-drawer__top">
+    <div>
+      <p class="aa-saved-drawer__eyebrow">Your Bag</p>
+      <h2 class="aa-saved-drawer__title">{{ cartCount }} items</h2>
+    </div>
+    <button id="aa-cart-close" class="aa-saved-close" type="button" aria-label="Close cart">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <sc-if value="{{ hasCartItems }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:22px;">
+      <sc-for list="{{ cartLines }}" as="item" hint-placeholder-count="1">
+        <div style="display:grid;grid-template-columns:58px 1fr auto;gap:13px;align-items:flex-start;border-bottom:1px solid rgba(56,99,149,0.12);padding-bottom:14px;">
+          <div style="width:58px;height:76px;background:{{ item.bg }};position:relative;overflow:hidden;"></div>
+          <div>
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+              <span class="aa-saved-drawer__name">{{ item.name }}</span>
+              <button onClick="{{ item.remove }}" aria-label="Remove" style="background:none;border:none;color:#9fb0c4;font-size:13px;cursor:pointer;">✕</button>
+            </div>
+            <span class="aa-saved-drawer__meta" style="display:block;margin-bottom:10px;">{{ item.variant }}</span>
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <button onClick="{{ item.dec }}" class="aa-qty-btn" style="width:22px;height:22px;border:1px solid rgba(56,99,149,0.28);background:none;color:#386395;font-size:13px;cursor:pointer;">−</button>
+                <span style="font-family:'Geologica',sans-serif;font-size:12px;color:#23405e;">{{ item.qty }}</span>
+                <button onClick="{{ item.inc }}" class="aa-qty-btn" style="width:22px;height:22px;border:1px solid rgba(56,99,149,0.28);background:none;color:#386395;font-size:13px;cursor:pointer;">+</button>
+              </div>
+              <span class="aa-saved-drawer__price">$&nbsp;{{ item.lineTotal }}</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <span style="font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#7a8aa0;">Subtotal</span>
+      <span style="font-family:'ITC Legacy Serif',Georgia,serif;font-size:22px;color:#23405e;">$&nbsp;{{ cartTotal }}</span>
+    </div>
+    <button style="width:100%;background:#386395;color:#F0F0E5;border:none;padding:17px;font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;cursor:pointer;">Checkout</button>
+  </sc-if>
+  <sc-if value="{{ noCartItems }}" hint-placeholder-val="{{ true }}">
+    <div class="aa-saved-empty">Your bag is empty. Add a piece from the collection and it will show up here.</div>
+  </sc-if>
+</aside>
+
+<!-- ─── ACCOUNT DRAWER ────────────────────────────────── -->
+<aside id="aa-profile-drawer" class="aa-saved-drawer" aria-hidden="true" data-screen-label="Account">
+  <button id="aa-profile-close" class="aa-saved-close" type="button" aria-label="Close account" style="position:absolute;top:24px;right:22px;">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+
+  <sc-if value="{{ isLoginView }}" hint-placeholder-val="{{ true }}">
+    <div style="padding-top:24px;">
+      <p class="aa-saved-drawer__eyebrow">Account</p>
+      <h2 class="aa-saved-drawer__title" style="margin-bottom:8px;">Welcome back.</h2>
+      <p style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:300;color:#5F8BB8;margin-bottom:28px;">Sign in to continue your island story.</p>
+      <form onSubmit="{{ doLogin }}" style="display:flex;flex-direction:column;gap:14px;">
+        <input class="aa-edit-input" type="email" placeholder="Email" required="required" />
+        <input class="aa-edit-input" type="password" placeholder="Password" required="required" />
+        <button type="submit" style="background:#386395;color:#F0F0E5;border:none;padding:16px;font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;cursor:pointer;margin-top:6px;">Log In</button>
+      </form>
+      <p style="font-family:'Geologica',sans-serif;font-size:13px;color:#7a8aa0;font-weight:300;margin-top:20px;text-align:center;">New here? <button onClick="{{ goSignup }}" style="background:none;border:none;color:#386395;font-size:13px;font-weight:500;border-bottom:1px solid #386395;cursor:pointer;padding:0;">Create an account</button></p>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isSignupView }}" hint-placeholder-val="{{ false }}">
+    <div style="padding-top:24px;">
+      <p class="aa-saved-drawer__eyebrow">Account</p>
+      <h2 class="aa-saved-drawer__title" style="margin-bottom:8px;">Create account.</h2>
+      <p style="font-family:'Geologica',sans-serif;font-size:13px;font-weight:300;color:#5F8BB8;margin-bottom:28px;">Made for the moment you step off the plane.</p>
+      <form onSubmit="{{ doLogin }}" style="display:flex;flex-direction:column;gap:14px;">
+        <input class="aa-edit-input" type="text" placeholder="Full name" required="required" />
+        <input class="aa-edit-input" type="email" placeholder="Email" required="required" />
+        <input class="aa-edit-input" type="password" placeholder="Create password" required="required" />
+        <button type="submit" style="background:#386395;color:#F0F0E5;border:none;padding:16px;font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;cursor:pointer;margin-top:6px;">Create account</button>
+      </form>
+      <p style="font-family:'Geologica',sans-serif;font-size:13px;color:#7a8aa0;font-weight:300;margin-top:20px;text-align:center;">Already have an account? <button onClick="{{ goLogin }}" style="background:none;border:none;color:#386395;font-size:13px;font-weight:500;border-bottom:1px solid #386395;cursor:pointer;padding:0;">Log in</button></p>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isProfileView }}" hint-placeholder-val="{{ false }}">
+    <div style="padding-top:16px;text-align:center;">
+      <div style="width:108px;height:108px;border-radius:50%;background:rgba(56,99,149,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:#23405e;">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </div>
+      <h2 style="font-family:'Geologica',sans-serif;font-weight:700;font-size:24px;color:#23405e;margin-bottom:24px;">{{ profileName }}</h2>
+    </div>
+    <div style="border-top:1px solid rgba(56,99,149,0.14);">
+      <button class="aa-profile-row" onClick="{{ openEdit }}">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.6 3.1-6.4 7-6.4s7 2.8 7 6.4"/></svg>
+        <span style="flex:1;font-size:14px;font-weight:500;">Personal Information</span>
+        <span style="color:#9fb0c4;font-size:16px;">›</span>
+      </button>
+      <button class="aa-profile-row">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="2.6"/><circle cx="5.5" cy="9.5" r="2"/><circle cx="18.5" cy="9.5" r="2"/><path d="M2.5 20c0-3 2.2-5 5-5M21.5 20c0-3-2.2-5-5-5M6.6 20c0-3.4 2.6-6 5.4-6s5.4 2.6 5.4 6"/></svg>
+        <span style="flex:1;font-size:14px;font-weight:500;">Friends</span>
+        <span style="color:#9fb0c4;font-size:16px;">›</span>
+      </button>
+      <button class="aa-profile-row">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5.5" width="19" height="13" rx="2"/><line x1="2.5" y1="10" x2="21.5" y2="10"/></svg>
+        <span style="flex:1;font-size:14px;font-weight:500;">Cards</span>
+        <span style="color:#9fb0c4;font-size:16px;">›</span>
+      </button>
+      <button class="aa-profile-row" style="border-bottom:none;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="2.6"/><circle cx="5.5" cy="10" r="2"/><circle cx="18.5" cy="10" r="2"/><path d="M2 20.5c0-3 2.2-5 5-5M22 20.5c0-3-2.2-5-5-5M6.4 20.5c0-3.4 2.6-6 5.6-6s5.6 2.6 5.6 6"/></svg>
+        <span style="flex:1;font-size:14px;font-weight:500;">Reviews</span>
+        <span style="color:#9fb0c4;font-size:16px;">›</span>
+      </button>
+    </div>
+    <button onClick="{{ logout }}" style="margin-top:26px;width:100%;background:none;border:1px solid rgba(217,119,87,0.4);color:#bc7148;padding:15px;font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;">Log out</button>
+  </sc-if>
+</aside>
+
+<!-- ─── EDIT PROFILE MODAL ────────────────────────────── -->
+<sc-if value="{{ showEditModal }}" hint-placeholder-val="{{ false }}">
+  <div onClick="{{ closeEdit }}" style="position:fixed;inset:0;background:rgba(7,18,30,0.5);z-index:300;"></div>
+  <div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:310;width:min(340px,90vw);max-height:88vh;overflow-y:auto;background:#F0F0E5;padding:26px 22px 28px;box-shadow:0 30px 80px rgba(5,12,18,0.32);">
+    <button onClick="{{ closeEdit }}" aria-label="Close" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#23405e;cursor:pointer;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px;">
+      <div style="width:46px;height:46px;border-radius:50%;background:rgba(56,99,149,0.12);display:flex;align-items:center;justify-content:center;color:#23405e;flex-shrink:0;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4 3.6-7 7.5-7s7.5 3 7.5 7"/></svg>
+      </div>
+      <div>
+        <p style="font-family:'Geologica',sans-serif;font-size:14px;font-weight:500;color:#23405e;">{{ profileHandle }}</p>
+        <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#5F8BB8;">Change profile</p>
+      </div>
+    </div>
+    <form onSubmit="{{ saveProfile }}" style="display:flex;flex-direction:column;gap:16px;">
+      <label style="display:block;">
+        <span style="display:block;font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;margin-bottom:6px;">Display name</span>
+        <input class="aa-edit-input" type="text" value="{{ editDraft.displayName }}" onInput="{{ setEditField_displayName }}" />
+      </label>
+      <label style="display:block;">
+        <span style="display:block;font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;margin-bottom:6px;">Email</span>
+        <input class="aa-edit-input" type="email" value="{{ editDraft.email }}" onInput="{{ setEditField_email }}" />
+      </label>
+      <label style="display:block;">
+        <span style="display:block;font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;margin-bottom:6px;">Phone number</span>
+        <input class="aa-edit-input" type="text" value="{{ editDraft.phone }}" onInput="{{ setEditField_phone }}" />
+      </label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <label style="display:block;">
+          <span style="display:block;font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;margin-bottom:6px;">Date of birth</span>
+          <input class="aa-edit-input" type="text" value="{{ editDraft.dob }}" onInput="{{ setEditField_dob }}" />
+        </label>
+        <label style="display:block;">
+          <span style="display:block;font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;margin-bottom:6px;">Nationality</span>
+          <input class="aa-edit-input" type="text" value="{{ editDraft.nationality }}" onInput="{{ setEditField_nationality }}" />
+        </label>
+      </div>
+      <label style="display:block;">
+        <span style="display:block;font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;margin-bottom:6px;">Home address</span>
+        <input class="aa-edit-input" type="text" value="{{ editDraft.address }}" onInput="{{ setEditField_address }}" />
+      </label>
+      <button type="submit" style="margin-top:6px;background:#23405e;color:#F0F0E5;border:none;padding:16px;font-family:'Geologica',sans-serif;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:500;cursor:pointer;">Save Changes</button>
+    </form>
+  </div>
+</sc-if>
 
 <!-- ─── SAVED DRAWER ─────────────────────────────────── -->
 <aside id="aa-saved-drawer" class="aa-saved-drawer" aria-hidden="true" aria-labelledby="aa-saved-title" data-screen-label="Saved Pieces">
@@ -325,7 +498,7 @@
 
   <div style="display:flex;flex-direction:column;gap:0;flex:1;">
     <a href="#shop" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">Shop</a>
-    <a href="#collections" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">Collections</a>
+    <a href="Arrive Aruba - Collection.dc.html" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">Collections</a>
     <a href="#story" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">Island Story</a>
     <a href="#about" onClick="{{ closeNav }}" style="font-family:'ITC Legacy Serif',Georgia,serif;font-style:italic;font-size:48px;font-weight:300;color:#F0F0E5;line-height:1.15;padding:12px 0;border-bottom:1px solid rgba(240,240,229,0.1);display:block;">About</a>
   </div>
@@ -377,11 +550,11 @@
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px;margin:0 auto;">
 
-    <a href="product-performance-pique-polo.html" data-reveal data-delay="0.05" style="display:block;color:#23405e;">
+    <a href="Arrive Aruba - Product.dc.html?id=p1" data-reveal data-delay="0.05" style="display:block;color:#23405e;">
       <div style="aspect-ratio:3/4;background:#5F8BB8;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.5) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
-        <button class="aa-save-button" type="button" aria-label="Save Performance Polo" data-save-button data-product-id="performance-polo-blue" data-product-title="Performance Polo" data-product-color="Silver Lake Blue" data-product-price="$85" data-product-url="product-performance-pique-polo.html" data-product-swatch="#5F8BB8">
+        <button class="aa-save-button" type="button" aria-label="Save Performance Polo" data-save-button data-product-id="performance-polo-blue" data-product-title="Performance Polo" data-product-color="Silver Lake Blue" data-product-price="$85" data-product-url="Arrive Aruba - Product.dc.html?id=p1" data-product-swatch="#5F8BB8">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
         </button>
         <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Polo</p>
@@ -390,11 +563,11 @@
       <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">From $85</p>
     </a>
 
-    <a href="product-smooth-performance-tee.html" data-reveal data-delay="0.1" style="display:block;color:#23405e;margin-top:36px;">
+    <a href="Arrive Aruba - Product.dc.html?id=p2" data-reveal data-delay="0.1" style="display:block;color:#23405e;margin-top:36px;">
       <div style="aspect-ratio:3/4;background:#92AF88;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
-        <button class="aa-save-button" type="button" aria-label="Save Performance Tee" data-save-button data-product-id="performance-tee-green" data-product-title="Performance Tee" data-product-color="Fair Green" data-product-price="$58" data-product-url="product-smooth-performance-tee.html" data-product-swatch="#92AF88">
+        <button class="aa-save-button" type="button" aria-label="Save Performance Tee" data-save-button data-product-id="performance-tee-green" data-product-title="Performance Tee" data-product-color="Fair Green" data-product-price="$58" data-product-url="Arrive Aruba - Product.dc.html?id=p2" data-product-swatch="#92AF88">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
         </button>
         <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Tee</p>
@@ -403,11 +576,11 @@
       <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">From $58</p>
     </a>
 
-    <a href="product-star-sapphire-hoodie.html" data-reveal data-delay="0.05" style="display:block;color:#23405e;">
+    <a href="Arrive Aruba - Product.dc.html?id=p3" data-reveal data-delay="0.05" style="display:block;color:#23405e;">
       <div style="aspect-ratio:3/4;background:#386395;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
-        <button class="aa-save-button" type="button" aria-label="Save Star Sapphire Hoodie" data-save-button data-product-id="star-sapphire-hoodie" data-product-title="Star Sapphire Hoodie" data-product-color="Star Sapphire" data-product-price="$145" data-product-url="product-star-sapphire-hoodie.html" data-product-swatch="#386395">
+        <button class="aa-save-button" type="button" aria-label="Save Star Sapphire Hoodie" data-save-button data-product-id="star-sapphire-hoodie" data-product-title="Star Sapphire Hoodie" data-product-color="Star Sapphire" data-product-price="$145" data-product-url="Arrive Aruba - Product.dc.html?id=p3" data-product-swatch="#386395">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
         </button>
         <p style="position:absolute;bottom:14px;left:14px;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;color:rgba(240,240,229,0.85);text-transform:uppercase;">Hoodie</p>
@@ -416,7 +589,7 @@
       <p style="font-family:'Geologica',sans-serif;font-size:10px;color:#aaa;font-weight:300;">From $145</p>
     </a>
 
-    <a href="#collections" data-reveal data-delay="0.1" style="display:block;color:#23405e;margin-top:36px;">
+    <a href="Arrive Aruba - Collection.dc.html" data-reveal data-delay="0.1" style="display:block;color:#23405e;margin-top:36px;">
       <div style="aspect-ratio:3/4;background:#F5A169;position:relative;overflow:hidden;margin-bottom:11px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(44,79,120,0.42) 100%);"></div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.16;" /></div>
@@ -461,62 +634,62 @@
       <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.38em;color:#5F8BB8;text-transform:uppercase;margin-bottom:8px;">New In · 2025</p>
       <h2 style="font-family:'ITC Legacy Serif',Georgia,serif;font-weight:400;font-size:clamp(24px,5.5vw,38px);color:#23405e;letter-spacing:-0.01em;line-height:1.1;">New Arrivals</h2>
     </div>
-    <a href="#collections" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;white-space:nowrap;" style-hover="opacity:0.65;">View all</a>
+    <a href="Arrive Aruba - Collection.dc.html" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;white-space:nowrap;" style-hover="opacity:0.65;">View all</a>
   </div>
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 12px;max-width:640px;margin:0 auto;">
 
     <!-- Polo: Fair Green -->
     <div data-reveal data-delay="0">
-      <a href="product-performance-pique-polo.html" style="display:block;aspect-ratio:3/4;background:#5F8BB8;position:relative;overflow:hidden;margin-bottom:12px;">
+      <a href="Arrive Aruba - Product.dc.html?id=p1" style="display:block;aspect-ratio:3/4;background:#5F8BB8;position:relative;overflow:hidden;margin-bottom:12px;">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
         <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
-        <button class="aa-save-button" type="button" aria-label="Save Performance Piqué Polo" data-save-button data-product-id="performance-pique-polo-silver-lake-blue" data-product-title="Performance Piqué Polo" data-product-color="Silver Lake Blue" data-product-price="$85" data-product-url="product-performance-pique-polo.html" data-product-swatch="#5F8BB8">
+        <button class="aa-save-button" type="button" aria-label="Save Performance Piqué Polo" data-save-button data-product-id="performance-pique-polo-silver-lake-blue" data-product-title="Performance Piqué Polo" data-product-color="Silver Lake Blue" data-product-price="$85" data-product-url="Arrive Aruba - Product.dc.html?id=p1" data-product-swatch="#5F8BB8">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
         </button>
       </a>
-      <a href="product-performance-pique-polo.html" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Performance Piqué Polo</a>
+      <a href="Arrive Aruba - Product.dc.html?id=p1" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Performance Piqué Polo</a>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Silver Lake Blue</p>
       <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$85</p>
     </div>
 
     <!-- Tee: Mock Orange -->
     <div data-reveal data-delay="0.08">
-      <a href="product-smooth-performance-tee.html" style="display:block;aspect-ratio:3/4;background:#F5A169;position:relative;overflow:hidden;margin-bottom:12px;">
+      <a href="Arrive Aruba - Product.dc.html?id=p2" style="display:block;aspect-ratio:3/4;background:#F5A169;position:relative;overflow:hidden;margin-bottom:12px;">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
         <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
-        <button class="aa-save-button" type="button" aria-label="Save Smooth Performance Tee" data-save-button data-product-id="smooth-performance-tee-mock-orange" data-product-title="Smooth Performance Tee" data-product-color="Mock Orange" data-product-price="$58" data-product-url="product-smooth-performance-tee.html" data-product-swatch="#F5A169">
+        <button class="aa-save-button" type="button" aria-label="Save Smooth Performance Tee" data-save-button data-product-id="smooth-performance-tee-mock-orange" data-product-title="Smooth Performance Tee" data-product-color="Mock Orange" data-product-price="$58" data-product-url="Arrive Aruba - Product.dc.html?id=p2" data-product-swatch="#F5A169">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
         </button>
       </a>
-      <a href="product-smooth-performance-tee.html" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Smooth Performance Tee</a>
+      <a href="Arrive Aruba - Product.dc.html?id=p2" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Smooth Performance Tee</a>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Mock Orange</p>
       <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$58</p>
     </div>
 
     <!-- Hoodie: Star Sapphire -->
     <div data-reveal data-delay="0.04">
-      <a href="product-star-sapphire-hoodie.html" style="display:block;aspect-ratio:3/4;background:#386395;position:relative;overflow:hidden;margin-bottom:12px;">
+      <a href="Arrive Aruba - Product.dc.html?id=p3" style="display:block;aspect-ratio:3/4;background:#386395;position:relative;overflow:hidden;margin-bottom:12px;">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="" style="width:44%;opacity:0.18;" /></div>
         <span style="position:absolute;top:10px;left:10px;background:rgba(240,240,229,0.92);font-family:'Geologica',sans-serif;font-size:8px;letter-spacing:0.14em;text-transform:uppercase;color:#386395;padding:4px 10px;">New</span>
-        <button class="aa-save-button" type="button" aria-label="Save Star Sapphire Hoodie" data-save-button data-product-id="star-sapphire-hoodie-star-sapphire" data-product-title="Star Sapphire Hoodie" data-product-color="Star Sapphire" data-product-price="$145" data-product-url="product-star-sapphire-hoodie.html" data-product-swatch="#386395">
+        <button class="aa-save-button" type="button" aria-label="Save Star Sapphire Hoodie" data-save-button data-product-id="star-sapphire-hoodie-star-sapphire" data-product-title="Star Sapphire Hoodie" data-product-color="Star Sapphire" data-product-price="$145" data-product-url="Arrive Aruba - Product.dc.html?id=p3" data-product-swatch="#386395">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
         </button>
       </a>
-      <a href="product-star-sapphire-hoodie.html" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Star Sapphire Hoodie</a>
+      <a href="Arrive Aruba - Product.dc.html?id=p3" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Star Sapphire Hoodie</a>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Star Sapphire</p>
       <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$145</p>
     </div>
 
     <!-- Polo: Fair Green variant -->
     <div data-reveal data-delay="0.12">
-      <a href="product-performance-pique-polo.html" style="display:block;aspect-ratio:3/4;background:#92AF88;position:relative;overflow:hidden;margin-bottom:12px;">
+      <a href="Arrive Aruba - Product.dc.html?id=p1" style="display:block;aspect-ratio:3/4;background:#92AF88;position:relative;overflow:hidden;margin-bottom:12px;">
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/divi-divi.svg" alt="" style="width:55%;opacity:0.18;" /></div>
-        <button class="aa-save-button" type="button" aria-label="Save Performance Piqué Polo in Fair Green" data-save-button data-product-id="performance-pique-polo-fair-green" data-product-title="Performance Piqué Polo" data-product-color="Fair Green" data-product-price="$85" data-product-url="product-performance-pique-polo.html" data-product-swatch="#92AF88">
+        <button class="aa-save-button" type="button" aria-label="Save Performance Piqué Polo in Fair Green" data-save-button data-product-id="performance-pique-polo-fair-green" data-product-title="Performance Piqué Polo" data-product-color="Fair Green" data-product-price="$85" data-product-url="Arrive Aruba - Product.dc.html?id=p1" data-product-swatch="#92AF88">
           <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>
         </button>
       </a>
-      <a href="product-performance-pique-polo.html" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Performance Piqué Polo</a>
+      <a href="Arrive Aruba - Product.dc.html?id=p1" style="display:block;font-family:'Geologica',sans-serif;font-size:12px;font-weight:400;color:#23405e;margin-bottom:3px;">Performance Piqué Polo</a>
       <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#9fb0c4;font-weight:300;margin-bottom:4px;">Fair Green</p>
       <p style="font-family:'Geologica',sans-serif;font-size:12px;color:#386395;font-weight:300;">$85</p>
     </div>
@@ -560,7 +733,7 @@
           <p style="font-family:'Geologica',sans-serif;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#23405e;margin-bottom:4px;">Spring Collection 2025</p>
           <p style="font-family:'Geologica',sans-serif;font-size:11px;color:#aaa;font-weight:300;">Polo · Tee · Hoodie — from $58</p>
         </div>
-        <a href="#collections" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;" style-hover="opacity:0.65;">Explore ↗</a>
+        <a href="Arrive Aruba - Collection.dc.html" style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:#386395;border-bottom:1px solid #386395;padding-bottom:2px;" style-hover="opacity:0.65;">Explore ↗</a>
       </div>
     </div>
   </div>
@@ -611,10 +784,10 @@
     <div>
       <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(240,240,229,0.35);margin-bottom:14px;">Shop</p>
       <div style="display:flex;flex-direction:column;gap:9px;">
-        <a href="product-performance-pique-polo.html" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Resort Shirts</a>
-        <a href="product-smooth-performance-tee.html" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Performance Tees</a>
-        <a href="product-star-sapphire-hoodie.html" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Travel Layers</a>
-        <a href="#collections" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Essentials</a>
+        <a href="Arrive Aruba - Product.dc.html?id=p1" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Resort Shirts</a>
+        <a href="Arrive Aruba - Product.dc.html?id=p2" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Performance Tees</a>
+        <a href="Arrive Aruba - Product.dc.html?id=p3" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Travel Layers</a>
+        <a href="Arrive Aruba - Collection.dc.html" style="font-family:'Geologica',sans-serif;font-size:12px;color:rgba(240,240,229,0.5);font-weight:300;" style-hover="color:rgba(240,240,229,0.85);">Essentials</a>
       </div>
     </div>
     <div>
@@ -651,11 +824,19 @@
 class Component extends DCLogic {
   state = {
     navOpen: false,
-    cartCount: 0,
+    cartItems: [],
     email: '',
     emailFocused: false,
     emailSubmitted: false,
+    showCart: false,
+    profileOpen: false,
+    profileView: 'login',
+    loggedIn: false,
+    profile: { displayName:'', email:'', phone:'', dob:'', nationality:'', address:'' },
+    editDraft: { displayName:'', email:'', phone:'', dob:'', nationality:'', address:'' },
   };
+
+  DEFAULT_PROFILE = { displayName:'Patrick Hennessy', email:'patrickhennessy@gmail.com', phone:'+00 111 222 333 444', dob:'10/11/1987', nationality:'American', address:'12/ A Street Name' };
 
   componentDidMount() {
     // ── Hero entrance — transform + CSS animation ONLY. Content is
@@ -901,6 +1082,36 @@ class Component extends DCLogic {
     this._savedHandlers = savedHandlers;
     this._onSavedKeydown = onSavedKeydown;
     renderSaved();
+
+    // ── Cart drawer + shared cart state ──────────────────
+    if (window.AACart) {
+      this.setState({ cartItems: window.AACart.read() });
+      this._unsubCart = window.AACart.onChange(items => this.setState({ cartItems: items }));
+    }
+    const cartDrawer = document.getElementById('aa-cart-drawer');
+    const cartCloseBtn = document.getElementById('aa-cart-close');
+    if (cartCloseBtn) {
+      const handler = () => this.setState({ showCart: false });
+      cartCloseBtn.addEventListener('click', handler);
+      this._cartCloseHandler = handler;
+    }
+    this._cartDrawer = cartDrawer;
+
+    // ── Account: restore session from localStorage ───────
+    try {
+      const loggedIn = localStorage.getItem('arriveAruba.loggedIn.v1') === '1';
+      const savedProfile = JSON.parse(localStorage.getItem('arriveAruba.profile.v1') || 'null');
+      if (loggedIn) {
+        const profile = savedProfile || this.DEFAULT_PROFILE;
+        this.setState({ loggedIn: true, profile, profileView: 'profile' });
+      }
+    } catch (_) {}
+    const profileCloseBtn = document.getElementById('aa-profile-close');
+    if (profileCloseBtn) {
+      const handler = () => this.setState({ profileOpen: false });
+      profileCloseBtn.addEventListener('click', handler);
+      this._profileCloseHandler = handler;
+    }
   }
 
   componentWillUnmount() {
@@ -909,14 +1120,50 @@ class Component extends DCLogic {
     if (this._soundToggle && this._onSoundToggle) this._soundToggle.removeEventListener('click', this._onSoundToggle);
     if (this._savedHandlers) this._savedHandlers.forEach(([target, event, handler]) => target.removeEventListener(event, handler));
     if (this._onSavedKeydown) document.removeEventListener('keydown', this._onSavedKeydown);
+    if (this._unsubCart) this._unsubCart();
+    const cartCloseBtn = document.getElementById('aa-cart-close');
+    if (cartCloseBtn && this._cartCloseHandler) cartCloseBtn.removeEventListener('click', this._cartCloseHandler);
+    const profileCloseBtn = document.getElementById('aa-profile-close');
+    if (profileCloseBtn && this._profileCloseHandler) profileCloseBtn.removeEventListener('click', this._profileCloseHandler);
+  }
+
+  componentDidUpdate() {
+    const cartDrawer = document.getElementById('aa-cart-drawer');
+    if (cartDrawer) {
+      cartDrawer.classList.toggle('is-open', !!this.state.showCart);
+      cartDrawer.setAttribute('aria-hidden', this.state.showCart ? 'false' : 'true');
+    }
+    const profileDrawer = document.getElementById('aa-profile-drawer');
+    if (profileDrawer) {
+      profileDrawer.classList.toggle('is-open', !!this.state.profileOpen);
+      profileDrawer.setAttribute('aria-hidden', this.state.profileOpen ? 'false' : 'true');
+    }
+  }
+
+  slug(name) {
+    return (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
   }
 
   renderVals() {
-    const { navOpen, cartCount, email, emailFocused, emailSubmitted } = this.state;
+    const { navOpen, cartItems, email, emailFocused, emailSubmitted, showCart, profileOpen, profileView, loggedIn, profile, editDraft } = this.state;
+
+    const cartTotal = window.AACart ? window.AACart.total(cartItems) : 0;
+    const cartCount = window.AACart ? window.AACart.count(cartItems) : 0;
+    const cartLines = cartItems.map(it => ({
+      ...it,
+      lineTotal: (parseFloat(it.price || 0) * (it.qty || 1)).toFixed(0),
+      inc: () => window.AACart && window.AACart.updateQty(it.id, it.qty + 1),
+      dec: () => window.AACart && window.AACart.updateQty(it.id, it.qty - 1),
+      remove: () => window.AACart && window.AACart.remove(it.id),
+    }));
 
     return {
       navOpen,
       cartCount,
+      cartTotal,
+      cartLines,
+      hasCartItems: cartItems.length > 0,
+      noCartItems: cartItems.length === 0,
       showCartBadge: cartCount > 0,
       emailSubmitted,
       showEmailForm: !emailSubmitted,
@@ -947,7 +1194,44 @@ class Component extends DCLogic {
 
       toggleNav:  () => this.setState(s => ({ navOpen: !s.navOpen })),
       closeNav:   () => this.setState({ navOpen: false }),
-      toggleCart: () => this.setState(s => ({ cartCount: s.cartCount + 1 })),
+      toggleCart: () => this.setState(s => ({ showCart: !s.showCart })),
+
+      profileName: profile.displayName || this.DEFAULT_PROFILE.displayName,
+      profileHandle: '@' + this.slug(editDraft.displayName || profile.displayName || this.DEFAULT_PROFILE.displayName),
+      isLoginView: profileView === 'login',
+      isSignupView: profileView === 'signup',
+      isProfileView: profileView === 'profile',
+      showEditModal: profileView === 'edit',
+      editDraft,
+      openProfile: () => this.setState(s => ({ profileOpen: true, profileView: s.loggedIn ? 'profile' : 'login' })),
+      goLogin: () => this.setState({ profileView: 'login' }),
+      goSignup: () => this.setState({ profileView: 'signup' }),
+      doLogin: e => {
+        e.preventDefault();
+        const nextProfile = this.state.profile.displayName ? this.state.profile : this.DEFAULT_PROFILE;
+        try {
+          localStorage.setItem('arriveAruba.loggedIn.v1', '1');
+          localStorage.setItem('arriveAruba.profile.v1', JSON.stringify(nextProfile));
+        } catch (_) {}
+        this.setState({ loggedIn: true, profile: nextProfile, profileView: 'profile' });
+      },
+      logout: () => {
+        try { localStorage.setItem('arriveAruba.loggedIn.v1', '0'); } catch (_) {}
+        this.setState({ loggedIn: false, profileOpen: false, profileView: 'login' });
+      },
+      openEdit: () => this.setState(s => ({ profileView: 'edit', editDraft: { ...this.DEFAULT_PROFILE, ...s.profile } })),
+      closeEdit: () => this.setState({ profileView: 'profile' }),
+      setEditField_displayName: e => this.setState(s => ({ editDraft: { ...s.editDraft, displayName: e.target.value } })),
+      setEditField_email: e => this.setState(s => ({ editDraft: { ...s.editDraft, email: e.target.value } })),
+      setEditField_phone: e => this.setState(s => ({ editDraft: { ...s.editDraft, phone: e.target.value } })),
+      setEditField_dob: e => this.setState(s => ({ editDraft: { ...s.editDraft, dob: e.target.value } })),
+      setEditField_nationality: e => this.setState(s => ({ editDraft: { ...s.editDraft, nationality: e.target.value } })),
+      setEditField_address: e => this.setState(s => ({ editDraft: { ...s.editDraft, address: e.target.value } })),
+      saveProfile: e => {
+        e.preventDefault();
+        try { localStorage.setItem('arriveAruba.profile.v1', JSON.stringify(editDraft)); } catch (_) {}
+        this.setState({ profile: editDraft, profileView: 'profile' });
+      },
 
       setEmail:   e  => this.setState({ email: e.target.value }),
       focusEmail: () => this.setState({ emailFocused: true }),

@@ -1,0 +1,243 @@
+{% comment %}
+  ARRIVE ARUBA — Related Products Section
+  Shopify OS 2.0 · Editable via Theme Editor
+{% endcomment %}
+
+{% if section.settings.show_section %}
+  {% assign related_limit = section.settings.products_limit | times: 1 %}
+  {% assign related = recommendations.products %}
+
+  <style>
+    .aa-related {
+      background: {{ section.settings.bg_color }};
+      padding: {{ section.settings.padding_top }}px 24px {{ section.settings.padding_bottom }}px;
+    }
+    .aa-related__header {
+      margin-bottom: 24px;
+    }
+    .aa-related__eyebrow {
+      font-family: 'Geologica', sans-serif;
+      font-size: 9px;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #5F8BB8;
+      margin-bottom: 8px;
+    }
+    .aa-related__title {
+      font-family: 'ITC Legacy Serif Std', 'Georgia', serif;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 500;
+      color: #23405e;
+      line-height: 1.15;
+    }
+    .aa-related__grid {
+      display: grid;
+      grid-template-columns: repeat({{ section.settings.columns }}, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 767px) {
+      .aa-related__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .aa-related-card {
+      display: block;
+      text-decoration: none;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(56,99,149,0.08);
+      transition: transform 0.28s cubic-bezier(0.22,0.61,0.36,1), box-shadow 0.28s ease;
+    }
+    .aa-related-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 36px rgba(56,99,149,0.13);
+    }
+    .aa-related-card__img-wrap {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: #e8eef5;
+    }
+    .aa-related-card__img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.52s cubic-bezier(0.22,0.61,0.36,1);
+    }
+    .aa-related-card:hover .aa-related-card__img { transform: scale(1.04); }
+    .aa-related-card__body {
+      padding: 12px 14px 16px;
+    }
+    .aa-related-card__cat {
+      font-family: 'Geologica', sans-serif;
+      font-size: 8px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #5F8BB8;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .aa-related-card__title {
+      font-family: 'ITC Legacy Serif Std', 'Georgia', serif;
+      font-size: 14px;
+      color: #23405e;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .aa-related-card__price {
+      font-family: 'Geologica', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: #386395;
+    }
+  </style>
+
+  <section class="aa-related">
+    <div class="aa-related__header">
+      <p class="aa-related__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h2 class="aa-related__title">{{ section.settings.title }}</h2>
+    </div>
+
+    {% if recommendations.performed and recommendations.products_count > 0 %}
+      <div class="aa-related__grid">
+        {% for product in recommendations.products limit: related_limit %}
+          <a class="aa-related-card" href="{{ product.url }}">
+            <div class="aa-related-card__img-wrap">
+              {% if product.featured_media %}
+                {{ product.featured_media | image_url: width: 600 | image_tag:
+                  class: 'aa-related-card__img',
+                  loading: 'lazy',
+                  alt: product.featured_media.alt | escape,
+                  widths: '300, 400, 600'
+                }}
+              {% else %}
+                <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#dceaf4;">
+                  <span style="font-size:40px;opacity:0.12;">✦</span>
+                </div>
+              {% endif %}
+            </div>
+            <div class="aa-related-card__body">
+              <span class="aa-related-card__cat">{{ product.type }}</span>
+              <span class="aa-related-card__title">{{ product.title }}</span>
+              <span class="aa-related-card__price">{{ product.price | money }}</span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% comment %}
+        Fallback: show products from the same collection when recommendations aren't loaded.
+        Replace 'all' with a specific collection handle if needed.
+      {% endcomment %}
+      {% assign fallback = collections[section.settings.fallback_collection].products | where: 'id', product.id | first %}
+      <div class="aa-related__grid">
+        {% for prod in collections[section.settings.fallback_collection].products limit: related_limit %}
+          {% unless prod.id == product.id %}
+            <a class="aa-related-card" href="{{ prod.url }}">
+              <div class="aa-related-card__img-wrap">
+                {% if prod.featured_media %}
+                  {{ prod.featured_media | image_url: width: 600 | image_tag:
+                    class: 'aa-related-card__img',
+                    loading: 'lazy',
+                    alt: prod.featured_media.alt | escape
+                  }}
+                {% else %}
+                  <div style="width:100%;height:100%;background:#dceaf4;"></div>
+                {% endif %}
+              </div>
+              <div class="aa-related-card__body">
+                <span class="aa-related-card__cat">{{ prod.type }}</span>
+                <span class="aa-related-card__title">{{ prod.title }}</span>
+                <span class="aa-related-card__price">{{ prod.price | money }}</span>
+              </div>
+            </a>
+          {% endunless %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Related products",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_section",
+      "label": "Show section",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "You may also like"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "More from the island."
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "label": "Number of products",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "collection",
+      "id": "fallback_collection",
+      "label": "Fallback collection (when recommendations not available)"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#F0F0E5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 16,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 16,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Related products"
+    }
+  ]
+}
+{% endschema %}
