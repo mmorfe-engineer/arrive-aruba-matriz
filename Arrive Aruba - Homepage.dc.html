@@ -153,6 +153,31 @@
       aspect-ratio:4/3;
       margin-top:36px;
     }
+    .aa-story-copy {
+      position:relative;
+      z-index:1;
+      max-width:440px;
+    }
+    .aa-story-media {
+      position:relative;
+      z-index:1;
+      width:100vw;
+      margin-left:-24px;
+      margin-right:-24px;
+      height:clamp(320px, 48vw, 640px);
+      overflow:hidden;
+      background:#386395 url('preview-assets/media/arrive-island-stays-banner.jpg') center/cover no-repeat;
+    }
+    .aa-story-media img {
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      object-position:center;
+    }
+    .aa-featured-media {
+      background:#d8dfd2 url('preview-assets/media/arrive-beach-polo-editorial.jpg') center 54%/cover no-repeat;
+    }
     .aa-hero-mark-video {
       display:block;
       width:58%;
@@ -724,14 +749,16 @@
   <div style="position:absolute;top:-100px;right:-80px;width:300px;height:300px;border-radius:50%;background:rgba(56,99,149,0.18);pointer-events:none;"></div>
   <div style="position:absolute;bottom:-60px;left:-50px;width:180px;height:180px;border-radius:50%;background:rgba(146,175,136,0.1);pointer-events:none;"></div>
 
-  <div data-reveal data-delay="0" style="position:relative;z-index:1;max-width:440px;">
+  <div class="aa-story-copy" data-reveal data-delay="0">
     <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.38em;color:rgba(240,240,229,0.38);text-transform:uppercase;margin-bottom:18px;">The Island</p>
     <h2 style="font-family:'ITC Legacy Serif',Georgia,serif;font-weight:300;font-style:italic;font-size:clamp(28px,7vw,48px);color:#F0F0E5;line-height:1.18;margin-bottom:32px;">"A quieter way<br />to remember Aruba."</h2>
+  </div>
 
-    <div class="aa-media-frame aa-media-frame--wide" data-shopify-media-frame="story-banner">
-      <img src="preview-assets/media/arrive-island-stays-banner.jpg" alt="Arrive Aruba island story banner" loading="lazy" decoding="async" width="1600" height="592" style="object-position:center;" />
-    </div>
+  <div class="aa-story-media" data-reveal data-delay="0.05" data-shopify-media-frame="story-banner">
+    <img src="preview-assets/media/arrive-island-stays-banner.jpg" alt="Arrive Aruba island story banner" loading="eager" decoding="async" width="1600" height="592" />
+  </div>
 
+  <div class="aa-story-copy" data-reveal data-delay="0.1" style="margin-top:30px;">
     <p style="font-family:'Geologica',sans-serif;font-weight:300;font-size:13px;line-height:1.88;color:rgba(240,240,229,0.62);margin-bottom:36px;">Every piece in the collection is shaped by the island — the light, the water, the warmth you carry home long after you've left. Resortwear made for sunlit arrivals.</p>
 
     <a href="#about" style="display:inline-block;border:1px solid rgba(240,240,229,0.38);color:#F0F0E5;font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.3em;text-transform:uppercase;padding:14px 34px;transition:background 0.3s ease,border-color 0.3s ease;" style-hover="background:rgba(240,240,229,0.08);border-color:rgba(240,240,229,0.65);">Read the Story</a>
@@ -741,8 +768,8 @@
 <!-- ─── FEATURED EDITORIAL ────────────────────────────── -->
 <section style="padding:0;background:#F0F0E5;overflow:hidden;" data-screen-label="05 Featured">
   <div style="display:grid;grid-template-columns:1fr;max-width:640px;margin:0 auto;">
-    <div class="aa-media-frame aa-media-frame--landscape" data-reveal data-delay="0" data-shopify-media-frame="featured-editorial">
-      <img src="preview-assets/media/arrive-beach-polo-editorial.jpg" alt="Arrive Aruba beach polo editorial" loading="lazy" decoding="async" width="900" height="1124" style="object-position:center 54%;" />
+    <div class="aa-media-frame aa-media-frame--landscape aa-featured-media" data-reveal data-delay="0" data-shopify-media-frame="featured-editorial">
+      <img src="preview-assets/media/arrive-beach-polo-editorial.jpg" alt="Arrive Aruba beach polo editorial" loading="eager" decoding="async" width="900" height="1124" style="object-position:center 54%;" />
       <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(44,79,120,0.65) 100%);"></div>
       <div style="position:absolute;bottom:28px;left:28px;right:28px;">
         <p style="font-family:'Geologica',sans-serif;font-size:9px;letter-spacing:0.3em;color:rgba(240,240,229,0.6);text-transform:uppercase;margin-bottom:8px;">Ss · 2025</p>
