@@ -568,9 +568,7 @@
     <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
 
     <h1 data-hero="title" aria-label="Arrive Aruba" style="position:relative;margin:0 auto 30px;width:100%;max-width:250px;height:clamp(118px,30vw,238px);line-height:0;display:flex;align-items:center;justify-content:center;">
-      <video class="aa-hero-mark-video" data-hero-mark-video aria-hidden="true" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="metadata" poster="preview-assets/media/arrive-a-mark-poster.png">
-        <source src="preview-assets/media/arrive-a-mark-alpha.webm" type="video/webm" />
-      </video>
+      <video class="aa-hero-mark-video" data-hero-mark-video data-hevc-src="preview-assets/media/arrive-a-mark-alpha-hevc.mov" data-webm-src="preview-assets/media/arrive-a-mark-alpha.webm" aria-hidden="true" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="metadata" poster="preview-assets/media/arrive-a-mark-poster.png"></video>
       <span class="aa-hero-mark-static" data-hero-mark-fallback aria-hidden="true"></span>
     </h1>
 
@@ -900,12 +898,19 @@ class Component extends DCLogic {
     const heroMarkVideo = document.querySelector('[data-hero-mark-video]');
     const heroMarkFallback = document.querySelector('[data-hero-mark-fallback]');
     if (heroMarkVideo && heroMarkFallback) {
-      const isAppleTouch = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      const canPlayAlphaMark = !!heroMarkVideo.canPlayType('video/webm; codecs="vp9"');
-      if (reduce || isAppleTouch || !canPlayAlphaMark) {
+      const ua = navigator.userAgent || '';
+      const isAppleTouch = /iP(ad|hone|od)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
+      const canPlayHevcAlpha = !!(heroMarkVideo.canPlayType('video/mp4; codecs="hvc1"') || heroMarkVideo.canPlayType('video/quicktime; codecs="hvc1"'));
+      const canPlayWebmAlpha = !!heroMarkVideo.canPlayType('video/webm; codecs="vp9"');
+      const preferHevcAlpha = isAppleTouch || isSafari;
+      const markSrc = preferHevcAlpha && canPlayHevcAlpha ? heroMarkVideo.dataset.hevcSrc : (canPlayWebmAlpha ? heroMarkVideo.dataset.webmSrc : (canPlayHevcAlpha ? heroMarkVideo.dataset.hevcSrc : ''));
+      if (reduce || !markSrc) {
         heroMarkVideo.classList.remove('is-visible');
         heroMarkFallback.style.display = 'block';
       } else {
+        heroMarkVideo.src = markSrc;
+        heroMarkVideo.load();
         heroMarkVideo.classList.add('is-visible');
         const markPlay = heroMarkVideo.play();
         if (markPlay && markPlay.catch) {
