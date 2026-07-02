@@ -30,6 +30,58 @@
     .aa-nav-ctrl:hover { opacity:0.78; }
     .aa-rel:hover .aa-rel-img { transform:scale(1.045); }
     .aa-rel-img { transition:transform 0.55s cubic-bezier(0.22,0.61,0.36,1); }
+    .aa-product-media-frame {
+      position:relative;
+      width:100%;
+      aspect-ratio:3/4;
+      min-height:min(68svh, 760px);
+      overflow:hidden;
+      background:var(--aa-product-media-bg, #dceaf4);
+      flex-shrink:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .aa-product-media-frame img {
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center;
+      padding:clamp(18px, 4vw, 44px);
+    }
+    .aa-product-media-fallback {
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0.16;
+      pointer-events:none;
+    }
+    .aa-product-media-fallback img {
+      width:40%;
+      height:auto;
+      padding:0;
+    }
+    .aa-rel-card-media {
+      aspect-ratio:3/4;
+      background:var(--aa-rel-bg, #dceaf4);
+      position:relative;
+      overflow:hidden;
+      margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .aa-rel-card-media img {
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:center;
+      padding:18px;
+      display:block;
+    }
     @keyframes aa-fade-up { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
     @keyframes aa-slide-in-right { from{transform:translateX(102%);} to{transform:translateX(0);} }
     @keyframes aa-fade-in { from{opacity:0;} to{opacity:1;} }
@@ -37,7 +89,7 @@
     .aa-desktop-cta { display:none; }
     @media (min-width: 900px) {
       .aa-pdp-shell { max-width:1320px !important; box-shadow:none !important; flex-direction:row !important; align-items:flex-start !important; }
-      .aa-pdp-media { width:50% !important; max-height:100vh !important; position:sticky !important; top:0 !important; aspect-ratio:auto !important; }
+      .aa-pdp-media { width:50% !important; min-height:100vh !important; max-height:none !important; position:sticky !important; top:0 !important; aspect-ratio:3/4 !important; }
       .aa-pdp-detail { width:50% !important; padding:48px 56px 80px !important; }
       .aa-sticky-cta { display:none !important; }
       .aa-desktop-cta { display:block !important; margin-bottom:30px; }
@@ -66,11 +118,12 @@
     </div>
   </header>
 
-  <!-- ─── PRODUCT IMAGE (square, editorial) ────────────── -->
-  <div class="aa-pdp-media" style="position:relative;aspect-ratio:3/4;max-height:68svh;overflow:hidden;background:{{ activeImageBg }};flex-shrink:0;">
-    <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-      <img src="preview-assets/brand/logo-mark.svg" alt="{{ productName }}" style="width:40%;height:auto;opacity:0.15;" />
+  <!-- ─── PRODUCT IMAGE (Shopify-style contain media) ─── -->
+  <div class="aa-pdp-media aa-product-media-frame" style="--aa-product-media-bg:{{ activeImageBg }};">
+    <div class="aa-product-media-fallback" aria-hidden="true">
+      <img src="preview-assets/brand/logo-mark.svg" alt="" />
     </div>
+    <img src="{{ activeImageSrc }}" alt="{{ activeImageAlt }}" loading="eager" decoding="async" width="900" height="1124" />
     <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(44,79,120,0.1) 0%,transparent 30%,transparent 70%,rgba(240,240,229,0.96) 100%);"></div>
     <div style="position:absolute;bottom:18px;left:0;right:0;display:flex;justify-content:center;gap:6px;">
       <sc-for list="{{ imageDots }}" as="dot" hint-placeholder-count="3">
@@ -176,8 +229,8 @@
       <div style="display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;">
         <sc-for list="{{ related }}" as="rel" hint-placeholder-count="3">
           <a class="aa-rel" onClick="{{ rel.open }}" style="flex-shrink:0;width:148px;cursor:pointer;color:#23405e;">
-            <div style="aspect-ratio:3/4;background:{{ rel.bg }};position:relative;overflow:hidden;margin-bottom:10px;">
-              <div class="aa-rel-img" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="preview-assets/brand/logo-mark.svg" alt="{{ rel.name }}" style="width:46%;opacity:0.16;" /></div>
+            <div class="aa-rel-card-media" style="--aa-rel-bg:{{ rel.bg }};">
+              <div class="aa-rel-img" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><img src="{{ rel.image }}" alt="{{ rel.name }}" /></div>
               <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(44,79,120,0.4) 100%);"></div>
             </div>
             <p style="font-family:'Geologica',sans-serif;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:4px;line-height:1.4;">{{ rel.name }}</p>
@@ -214,8 +267,8 @@
       <sc-if value="{{ hasBagItems }}" hint-placeholder-val="{{ false }}">
         <sc-for list="{{ bagItems }}" as="item" hint-placeholder-count="1">
           <div style="display:grid;grid-template-columns:58px 1fr auto;gap:14px;align-items:flex-start;min-height:80px;border-bottom:1px solid rgba(56,99,149,0.12);padding-bottom:14px;margin-bottom:14px;">
-            <div style="width:58px;height:72px;background:{{ item.bg }};display:flex;align-items:center;justify-content:center;">
-              <img src="preview-assets/brand/logo-mark.svg" alt="" style="width:55%;opacity:0.2;" />
+            <div style="width:58px;height:72px;background:{{ item.bg }};display:flex;align-items:center;justify-content:center;overflow:hidden;">
+              <img src="{{ item.image }}" alt="{{ item.name }}" style="width:100%;height:100%;object-fit:contain;object-position:center;padding:6px;display:block;" />
             </div>
             <div>
               <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
@@ -280,41 +333,49 @@ class Component extends DCLogic {
     p1: { name:'Performance Polo', category:'Polo', price:'85',
       desc:'Breathable performance piqué with the subtlest texture — made for warm arrivals and late beach lunches. The polo you\u2019ll wear long after the tan. ✦',
       colors:[{name:'Star Sapphire',hex:'#386395',checkColor:'#F0F0E5'},{name:'Silver Lake Blue',hex:'#5F8BB8',checkColor:'#F0F0E5'},{name:'Fair Green',hex:'#92AF88',checkColor:'#F0F0E5'}],
+      images:['preview-assets/media/arrive-resort-polo-editorial.jpg','preview-assets/media/arrive-beach-polo-editorial.jpg','preview-assets/media/arrive-resort-polo-editorial.jpg'],
       imageBgs:['#386395','#5F8BB8','#92AF88'], sizes:['XS','S','M','L','XL','XXL'],
       related:[{id:'p2',name:'Performance Tee',price:'58',bg:'#92AF88'},{id:'p3',name:'Star Sapphire Hoodie',price:'145',bg:'#2c4f78'},{id:'p4',name:'Island Linen Shirt',price:'95',bg:'#cdbb9a'}] },
     p2: { name:'Performance Tee', category:'Tee', price:'58',
       desc:'A smooth-knit performance tee that moves with the island day. Soft enough for the flight, sharp enough for dinner. ✦',
       colors:[{name:'Mock Orange',hex:'#F5A169',checkColor:'#F0F0E5'},{name:'Cannoli Cream',hex:'#F0F0E5',checkColor:'#386395'},{name:'Star Sapphire',hex:'#386395',checkColor:'#F0F0E5'}],
+      images:['preview-assets/media/arrive-resort-polo-editorial.jpg','preview-assets/media/arrive-beach-polo-editorial.jpg','preview-assets/media/arrive-resort-polo-editorial.jpg'],
       imageBgs:['#F5A169','#dad7c4','#386395'], sizes:['XS','S','M','L','XL','XXL'],
       related:[{id:'p1',name:'Performance Polo',price:'85',bg:'#5F8BB8'},{id:'p6',name:'Sunrise Resort Tee',price:'58',bg:'#F5A169'},{id:'p3',name:'Star Sapphire Hoodie',price:'145',bg:'#2c4f78'}] },
     p3: { name:'Star Sapphire Hoodie', category:'Hoodie', price:'145',
       desc:'A weighted layer in deep Star Sapphire, made for cool island evenings and the air-conditioned flight home. ✦',
       colors:[{name:'Star Sapphire',hex:'#386395',checkColor:'#F0F0E5'},{name:'Deep Sapphire',hex:'#2c4f78',checkColor:'#F0F0E5'}],
+      images:['preview-assets/media/brand-web.webp','preview-assets/media/arrive-resort-polo-editorial.jpg'],
       imageBgs:['#386395','#2c4f78'], sizes:['XS','S','M','L','XL','XXL'],
       related:[{id:'p7',name:'Divi-Divi Windbreaker',price:'165',bg:'#2c4f78'},{id:'p1',name:'Performance Polo',price:'85',bg:'#5F8BB8'},{id:'p5',name:'Aruba Wave Polo',price:'88',bg:'#5F8BB8'}] },
     p4: { name:'Island Linen Shirt', category:'Resort Shirt', price:'95',
       desc:'Pure linen, cut easy and open — the shirt that catches the breeze off the water. Made for sunlit arrivals. ✦',
       colors:[{name:'Cannoli Cream',hex:'#F0F0E5',checkColor:'#386395'},{name:'Sand',hex:'#e8d5b7',checkColor:'#386395'},{name:'Fair Green',hex:'#92AF88',checkColor:'#F0F0E5'}],
+      images:['preview-assets/media/arrive-resort-polo-editorial.jpg','preview-assets/media/arrive-beach-polo-editorial.jpg','preview-assets/media/arrive-resort-polo-editorial.jpg'],
       imageBgs:['#dad7c4','#e8d5b7','#92AF88'], sizes:['XS','S','M','L','XL','XXL'],
       related:[{id:'p1',name:'Performance Polo',price:'85',bg:'#5F8BB8'},{id:'p5',name:'Aruba Wave Polo',price:'88',bg:'#5F8BB8'},{id:'p8',name:'Cannoli Cream Cap',price:'42',bg:'#dad7c4'}] },
     p5: { name:'Aruba Wave Polo', category:'Polo', price:'88',
       desc:'A finer-gauge polo in Silver Lake Blue, shaped to the wave and worn from morning sail to evening table. ✦',
       colors:[{name:'Silver Lake Blue',hex:'#5F8BB8',checkColor:'#F0F0E5'},{name:'Cannoli Cream',hex:'#F0F0E5',checkColor:'#386395'}],
+      images:['preview-assets/media/arrive-beach-polo-editorial.jpg','preview-assets/media/arrive-resort-polo-editorial.jpg'],
       imageBgs:['#5F8BB8','#dad7c4'], sizes:['XS','S','M','L','XL','XXL'],
       related:[{id:'p1',name:'Performance Polo',price:'85',bg:'#386395'},{id:'p4',name:'Island Linen Shirt',price:'95',bg:'#cdbb9a'},{id:'p2',name:'Performance Tee',price:'58',bg:'#92AF88'}] },
     p6: { name:'Sunrise Resort Tee', category:'Tee', price:'58',
       desc:'Warm Mock Orange, the colour of the first light over Eagle Beach. A tee for slow island mornings. ✦',
       colors:[{name:'Mock Orange',hex:'#F5A169',checkColor:'#F0F0E5'},{name:'Cannoli Cream',hex:'#F0F0E5',checkColor:'#386395'},{name:'Star Sapphire',hex:'#386395',checkColor:'#F0F0E5'}],
+      images:['preview-assets/media/arrive-resort-polo-editorial.jpg','preview-assets/media/arrive-beach-polo-editorial.jpg','preview-assets/media/arrive-resort-polo-editorial.jpg'],
       imageBgs:['#F5A169','#dad7c4','#386395'], sizes:['XS','S','M','L','XL','XXL'],
       related:[{id:'p2',name:'Performance Tee',price:'58',bg:'#92AF88'},{id:'p1',name:'Performance Polo',price:'85',bg:'#5F8BB8'},{id:'p8',name:'Cannoli Cream Cap',price:'42',bg:'#dad7c4'}] },
     p7: { name:'Divi-Divi Windbreaker', category:'Outerwear', price:'165',
       desc:'A light shell named for the island\u2019s leaning tree — folds to nothing, shrugs off the trade winds. ✦',
       colors:[{name:'Deep Sapphire',hex:'#23405e',checkColor:'#F0F0E5'},{name:'Fair Green',hex:'#92AF88',checkColor:'#F0F0E5'}],
+      images:['preview-assets/media/brand-web.webp','preview-assets/media/arrive-beach-polo-editorial.jpg'],
       imageBgs:['#23405e','#92AF88'], sizes:['XS','S','M','L','XL','XXL'],
       related:[{id:'p3',name:'Star Sapphire Hoodie',price:'145',bg:'#2c4f78'},{id:'p1',name:'Performance Polo',price:'85',bg:'#5F8BB8'},{id:'p5',name:'Aruba Wave Polo',price:'88',bg:'#5F8BB8'}] },
     p8: { name:'Cannoli Cream Cap', category:'Accessories', price:'42',
       desc:'A clean six-panel cap in Cannoli Cream with the embroidered Arrive mark. The last thing you pack, the first thing you reach for. ✦',
       colors:[{name:'Cannoli Cream',hex:'#F0F0E5',checkColor:'#386395'},{name:'Star Sapphire',hex:'#386395',checkColor:'#F0F0E5'}],
+      images:['preview-assets/media/arrive-resort-polo-editorial.jpg','preview-assets/media/brand-web.webp'],
       imageBgs:['#dad7c4','#386395'], sizes:['One size'],
       related:[{id:'p1',name:'Performance Polo',price:'85',bg:'#5F8BB8'},{id:'p4',name:'Island Linen Shirt',price:'95',bg:'#cdbb9a'},{id:'p2',name:'Performance Tee',price:'58',bg:'#92AF88'}] },
   };
@@ -332,7 +393,8 @@ class Component extends DCLogic {
     const pid = params.get('id') || 'p1';
     const p = this.CATALOG[pid] || this.CATALOG.p1;
     const safeColorIdx = Math.min(activeColorIdx, p.colors.length - 1);
-    const safeImageIdx = Math.min(activeImageIdx, p.imageBgs.length - 1);
+    const productImages = p.images && p.images.length ? p.images : ['preview-assets/media/arrive-resort-polo-editorial.jpg'];
+    const safeImageIdx = Math.min(activeImageIdx, productImages.length - 1);
     const activeColor = p.colors[safeColorIdx];
 
     const colors = p.colors.map((c, i) => ({
@@ -350,7 +412,7 @@ class Component extends DCLogic {
       select: () => this.setState({ activeSize: s, sizeError: false })
     }));
 
-    const imageDots = p.colors.map((_, i) => ({
+    const imageDots = productImages.map((_, i) => ({
       n: i + 1,
       bg: i === activeImageIdx ? '#386395' : 'rgba(56,99,149,0.3)',
       size: i === activeImageIdx ? '20px' : '6px',
@@ -379,6 +441,8 @@ class Component extends DCLogic {
       productCategory: p.category,
       productPrice: p.price,
       productDesc: p.desc,
+      activeImageSrc: productImages[safeImageIdx] || productImages[0],
+      activeImageAlt: p.name + ' in ' + activeColor.name,
       activeImageBg: p.imageBgs[safeImageIdx] || p.imageBgs[0],
       activeColorName: activeColor.name,
       colors,
@@ -397,7 +461,14 @@ class Component extends DCLogic {
       bagItemCount: window.AACart ? window.AACart.count(cartItems) : 0,
       bagTotal,
       ctaLabel: activeSize ? 'Add to Bag — ' + activeSize : 'Select a Size',
-      related: p.related.map(r => ({ ...r, open: () => { window.location.href = 'Arrive Aruba - Product.dc.html?id=' + r.id; } })),
+      related: p.related.map(r => {
+        const rp = this.CATALOG[r.id] || {};
+        return {
+          ...r,
+          image: rp.images && rp.images[0] ? rp.images[0] : 'preview-assets/media/arrive-resort-polo-editorial.jpg',
+          open: () => { window.location.href = 'Arrive Aruba - Product.dc.html?id=' + r.id; }
+        };
+      }),
       toggleWishlist: () => this.setState({ wishlist: !wishlist }),
       openBag: () => this.setState({ showBag: !showBag }),
       addToBag: () => {
@@ -410,6 +481,7 @@ class Component extends DCLogic {
           variant: activeColor.name + ' · ' + activeSize,
           price: parseFloat(p.price),
           bg: p.imageBgs[activeColorIdx],
+          image: productImages[safeImageIdx] || productImages[0],
           url: 'Arrive Aruba - Product.dc.html?id=' + pid,
         };
         window.AACart.add(newItem);
