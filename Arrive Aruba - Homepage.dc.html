@@ -179,7 +179,7 @@
       background:#d8dfd2 url('preview-assets/media/arrive-beach-polo-editorial.jpg') center 54%/cover no-repeat;
     }
     .aa-hero-mark-video {
-      display:block;
+      display:none;
       width:58%;
       aspect-ratio:1;
       object-fit:contain;
@@ -187,8 +187,11 @@
       pointer-events:none;
       transform:translateZ(0);
     }
+    .aa-hero-mark-video.is-visible {
+      display:block;
+    }
     .aa-hero-mark-static {
-      display:none;
+      display:block;
       width:50%;
       aspect-ratio:832.01/791.21;
       background:#F0F0E5;
@@ -897,18 +900,23 @@ class Component extends DCLogic {
     const heroMarkVideo = document.querySelector('[data-hero-mark-video]');
     const heroMarkFallback = document.querySelector('[data-hero-mark-fallback]');
     if (heroMarkVideo && heroMarkFallback) {
+      const isAppleTouch = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       const canPlayAlphaMark = !!heroMarkVideo.canPlayType('video/webm; codecs="vp9"');
-      if (reduce || !canPlayAlphaMark) {
-        heroMarkVideo.style.display = 'none';
+      if (reduce || isAppleTouch || !canPlayAlphaMark) {
+        heroMarkVideo.classList.remove('is-visible');
         heroMarkFallback.style.display = 'block';
       } else {
+        heroMarkVideo.classList.add('is-visible');
         const markPlay = heroMarkVideo.play();
         if (markPlay && markPlay.catch) {
           markPlay.catch(() => {
-            heroMarkVideo.style.display = 'none';
+            heroMarkVideo.classList.remove('is-visible');
             heroMarkFallback.style.display = 'block';
           });
         }
+        heroMarkVideo.addEventListener('playing', () => {
+          heroMarkFallback.style.display = 'none';
+        }, { once: true });
       }
     }
     if (heroVideo) {
