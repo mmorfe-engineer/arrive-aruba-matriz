@@ -56,6 +56,28 @@
     .aa-hero-video.is-ready {
       opacity:1;
     }
+    .aa-hero-curtain {
+      position:absolute;
+      inset:0;
+      z-index:40;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#03070b;
+      opacity:1;
+      pointer-events:auto;
+      transition:opacity 0.7s ease, visibility 0.7s ease;
+    }
+    .aa-hero-curtain.is-hidden {
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .aa-hero-curtain img {
+      width:min(180px, 42vw);
+      height:auto;
+      opacity:0.94;
+    }
 
     @keyframes aa-rise {
       from { transform: translateY(16px); }
@@ -612,6 +634,9 @@
   </div>
 
   <button id="aa-sound-toggle" type="button" aria-label="Turn hero sound on" aria-pressed="false" style="position:absolute;right:22px;bottom:28px;z-index:12;min-height:34px;padding:9px 12px;border:1px solid rgba(240,240,229,0.24);background:rgba(5,12,18,0.14);color:rgba(240,240,229,0.72);font-family:'Geologica',sans-serif;font-size:9px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:color 0.2s ease,border-color 0.2s ease,background 0.2s ease;">Sound off</button>
+  <div class="aa-hero-curtain" data-hero-curtain aria-hidden="true">
+    <img src="preview-assets/brand/logo-negative.webp" alt="" width="500" height="260" decoding="async" />
+  </div>
 </section>
 
 <!-- ─── SHOP BY CATEGORY ──────────────────────────────── -->
@@ -922,6 +947,19 @@ class Component extends DCLogic {
     const soundToggle = document.getElementById('aa-sound-toggle');
     const heroMarkVideo = document.querySelector('[data-hero-mark-video]');
     const heroMarkFallback = document.querySelector('[data-hero-mark-fallback]');
+    const heroCurtain = document.querySelector('[data-hero-curtain]');
+    let heroVideoReady = !heroVideo || reduce;
+    let heroMarkReady = !heroMarkVideo || reduce;
+    const revealHeroCurtain = () => {
+      if (!heroCurtain || heroCurtain.classList.contains('is-hidden')) return;
+      heroCurtain.classList.add('is-hidden');
+    };
+    const maybeRevealHeroCurtain = () => {
+      if (heroVideoReady && heroMarkReady) {
+        window.setTimeout(revealHeroCurtain, reduce ? 120 : 320);
+      }
+    };
+    window.setTimeout(revealHeroCurtain, 4500);
     if (heroMarkVideo && heroMarkFallback) {
       const ua = navigator.userAgent || '';
       const isAppleTouch = /iP(ad|hone|od)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -933,20 +971,30 @@ class Component extends DCLogic {
       if (reduce || !markSrc) {
         heroMarkVideo.classList.remove('is-visible');
         heroMarkFallback.style.display = 'block';
+        heroMarkReady = true;
+        maybeRevealHeroCurtain();
       } else {
         heroMarkVideo.src = markSrc;
         heroMarkVideo.load();
         heroMarkVideo.classList.add('is-visible');
+        const revealHeroMark = () => {
+          heroMarkFallback.style.display = 'none';
+          heroMarkReady = true;
+          maybeRevealHeroCurtain();
+        };
+        heroMarkVideo.addEventListener('loadeddata', revealHeroMark, { once: true });
+        heroMarkVideo.addEventListener('canplay', revealHeroMark, { once: true });
+        heroMarkVideo.addEventListener('playing', revealHeroMark, { once: true });
+        if (heroMarkVideo.readyState >= 2) revealHeroMark();
         const markPlay = heroMarkVideo.play();
         if (markPlay && markPlay.catch) {
           markPlay.catch(() => {
             heroMarkVideo.classList.remove('is-visible');
             heroMarkFallback.style.display = 'block';
+            heroMarkReady = true;
+            maybeRevealHeroCurtain();
           });
         }
-        heroMarkVideo.addEventListener('playing', () => {
-          heroMarkFallback.style.display = 'none';
-        }, { once: true });
       }
     }
     if (heroVideo) {
@@ -954,7 +1002,11 @@ class Component extends DCLogic {
       heroVideo.defaultMuted = true;
       heroVideo.playsInline = true;
       heroVideo.volume = 0.82;
-      const revealHeroVideo = () => heroVideo.classList.add('is-ready');
+      const revealHeroVideo = () => {
+        heroVideo.classList.add('is-ready');
+        heroVideoReady = true;
+        maybeRevealHeroCurtain();
+      };
       heroVideo.addEventListener('loadeddata', revealHeroVideo, { once: true });
       heroVideo.addEventListener('canplay', revealHeroVideo, { once: true });
       if (heroVideo.readyState >= 2) revealHeroVideo();
