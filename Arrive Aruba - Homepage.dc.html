@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preload" as="image" href="preview-assets/media/arrive-aruba-hero-poster.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="preview-assets/media/arrive-a-mark-alpha-animated.png">
 <script src="./support.js" defer></script>
 </head>
 <body>
@@ -23,6 +25,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link rel="preload" as="image" href="preview-assets/media/arrive-aruba-hero-poster.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="preview-assets/media/arrive-a-mark-alpha-animated.png" />
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <script src="cart-store.js"></script>
   <style>
@@ -234,17 +237,22 @@
     .aa-featured-media {
       background:#d8dfd2 url('preview-assets/media/arrive-beach-polo-editorial.jpg') center 54%/cover no-repeat;
     }
-    .aa-hero-mark-video {
-      display:none;
+    .aa-hero-mark-anim {
+      position:absolute;
+      inset:50% auto auto 50%;
       width:58%;
-      aspect-ratio:1;
+      height:auto;
       object-fit:contain;
-      opacity:0.96;
+      opacity:0;
+      visibility:hidden;
       pointer-events:none;
-      transform:translateZ(0);
+      transform:translate(-50%,-50%) translateZ(0);
+      transition:opacity 0.2s ease;
     }
-    .aa-hero-mark-video.is-visible {
+    .aa-hero-mark-anim.is-visible {
       display:block;
+      opacity:0.96;
+      visibility:visible;
     }
     .aa-hero-mark-static {
       display:block;
@@ -625,7 +633,7 @@
     <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
 
     <h1 data-hero="title" aria-label="Arrive Aruba" style="position:relative;margin:0 auto 30px;width:100%;max-width:250px;height:clamp(118px,30vw,238px);line-height:0;display:flex;align-items:center;justify-content:center;">
-      <video class="aa-hero-mark-video" data-hero-mark-video data-hevc-src="preview-assets/media/arrive-a-mark-alpha-hevc.mov" data-webm-src="preview-assets/media/arrive-a-mark-alpha.webm" aria-hidden="true" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="metadata" poster="preview-assets/media/arrive-a-mark-poster.png"></video>
+      <img class="aa-hero-mark-anim" data-hero-mark-anim src="preview-assets/media/arrive-a-mark-alpha-animated.png" alt="" aria-hidden="true" loading="eager" decoding="async" width="320" height="320" />
       <span class="aa-hero-mark-static" data-hero-mark-fallback aria-hidden="true"></span>
     </h1>
 
@@ -954,7 +962,7 @@ class Component extends DCLogic {
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const heroVideo = document.querySelector('[data-screen-label="01 Hero"] video');
     const soundToggle = document.getElementById('aa-sound-toggle');
-    const heroMarkVideo = document.querySelector('[data-hero-mark-video]');
+    const heroMarkAnim = document.querySelector('[data-hero-mark-anim]');
     const heroMarkFallback = document.querySelector('[data-hero-mark-fallback]');
     const heroCurtain = document.querySelector('[data-hero-curtain]');
     const revealHeroCurtain = () => {
@@ -962,35 +970,23 @@ class Component extends DCLogic {
       heroCurtain.classList.add('is-hidden');
     };
     window.setTimeout(revealHeroCurtain, reduce ? 120 : 760);
-    if (heroMarkVideo && heroMarkFallback) {
-      const ua = navigator.userAgent || '';
-      const isAppleTouch = /iP(ad|hone|od)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
-      const canPlayHevcAlpha = !!(heroMarkVideo.canPlayType('video/mp4; codecs="hvc1"') || heroMarkVideo.canPlayType('video/quicktime; codecs="hvc1"'));
-      const canPlayWebmAlpha = !!heroMarkVideo.canPlayType('video/webm; codecs="vp9"');
-      const preferHevcAlpha = isAppleTouch || isSafari;
-      const markSrc = preferHevcAlpha && canPlayHevcAlpha ? heroMarkVideo.dataset.hevcSrc : (canPlayWebmAlpha ? heroMarkVideo.dataset.webmSrc : (canPlayHevcAlpha ? heroMarkVideo.dataset.hevcSrc : ''));
-      if (reduce || !markSrc) {
-        heroMarkVideo.classList.remove('is-visible');
+    if (heroMarkAnim && heroMarkFallback) {
+      const revealHeroMark = () => {
+        heroMarkFallback.style.display = 'none';
+        heroMarkAnim.classList.add('is-visible');
+      };
+      const keepStaticHeroMark = () => {
+        heroMarkAnim.classList.remove('is-visible');
         heroMarkFallback.style.display = 'block';
+      };
+      if (reduce) {
+        keepStaticHeroMark();
+      } else if (heroMarkAnim.complete && heroMarkAnim.naturalWidth > 0) {
+        revealHeroMark();
       } else {
-        heroMarkVideo.src = markSrc;
-        heroMarkVideo.load();
-        heroMarkVideo.classList.add('is-visible');
-        const revealHeroMark = () => {
-          heroMarkFallback.style.display = 'none';
-        };
-        heroMarkVideo.addEventListener('loadeddata', revealHeroMark, { once: true });
-        heroMarkVideo.addEventListener('canplay', revealHeroMark, { once: true });
-        heroMarkVideo.addEventListener('playing', revealHeroMark, { once: true });
-        if (heroMarkVideo.readyState >= 2) revealHeroMark();
-        const markPlay = heroMarkVideo.play();
-        if (markPlay && markPlay.catch) {
-          markPlay.catch(() => {
-            heroMarkVideo.classList.remove('is-visible');
-            heroMarkFallback.style.display = 'block';
-          });
-        }
+        heroMarkAnim.addEventListener('load', revealHeroMark, { once: true });
+        heroMarkAnim.addEventListener('error', keepStaticHeroMark, { once: true });
+        if (heroMarkAnim.decode) heroMarkAnim.decode().then(revealHeroMark).catch(() => {});
       }
     }
     if (heroVideo) {
