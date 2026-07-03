@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preload" as="image" href="preview-assets/media/arrive-aruba-hero-poster.jpg" fetchpriority="high">
-<link rel="preload" as="image" href="preview-assets/media/arrive-a-mark-alpha-animated.png">
+<link rel="preload" as="video" href="preview-assets/media/arrive-aruba-hero-mobile-autoplay.mp4" type="video/mp4" media="(max-width: 767px)">
 <script src="./support.js" defer></script>
 </head>
 <body>
@@ -25,7 +25,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link rel="preload" as="image" href="preview-assets/media/arrive-aruba-hero-poster.jpg" fetchpriority="high" />
-  <link rel="preload" as="image" href="preview-assets/media/arrive-a-mark-alpha-animated.png" />
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <script src="cart-store.js"></script>
   <style>
@@ -623,9 +622,9 @@
 <!-- ─── HERO ──────────────────────────────────────────── -->
 <section data-screen-label="01 Hero" style="position:relative;height:100vh;min-height:100svh;min-height:100dvh;overflow:hidden;display:flex;align-items:center;justify-content:center;">
   <img class="aa-hero-media aa-hero-poster" src="preview-assets/media/arrive-aruba-hero-poster.jpg" alt="" aria-hidden="true" decoding="async" fetchpriority="high" width="1080" height="608" />
-  <video class="aa-hero-media aa-hero-video" aria-label="Arrive Aruba island film" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="auto" poster="preview-assets/media/arrive-aruba-hero-poster.jpg">
-    <source src="preview-assets/media/arrive-aruba-hero-mobile.mp4" type="video/mp4" media="(max-width: 767px)" />
-    <source src="preview-assets/media/arrive-aruba-hero-sound.mp4" type="video/mp4" />
+  <video class="aa-hero-media aa-hero-video" aria-label="Arrive Aruba island film" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="metadata" poster="preview-assets/media/arrive-aruba-hero-poster.jpg" data-mobile-sound-src="preview-assets/media/arrive-aruba-hero-mobile-sound-fast.mp4">
+    <source src="preview-assets/media/arrive-aruba-hero-mobile-autoplay.mp4" type="video/mp4" media="(max-width: 767px)" />
+    <source src="preview-assets/media/arrive-aruba-hero-sound-fast.mp4" type="video/mp4" />
   </video>
   <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,18,30,0.35) 0%,rgba(7,18,30,0.12) 40%,rgba(7,18,30,0.75) 100%);z-index:1;"></div>
 
@@ -1017,6 +1016,16 @@ class Component extends DCLogic {
         };
         const onSoundToggle = () => {
           const turnSoundOn = heroVideo.muted;
+          const mobileSoundSrc = heroVideo.dataset.mobileSoundSrc;
+          const isMobileHero = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+          if (turnSoundOn && isMobileHero && mobileSoundSrc && !heroVideo.currentSrc.includes(mobileSoundSrc)) {
+            const resumeAt = heroVideo.currentTime || 0;
+            heroVideo.src = mobileSoundSrc;
+            heroVideo.load();
+            heroVideo.addEventListener('loadedmetadata', () => {
+              if (Number.isFinite(resumeAt) && resumeAt > 0 && resumeAt < heroVideo.duration) heroVideo.currentTime = resumeAt;
+            }, { once: true });
+          }
           heroVideo.muted = !turnSoundOn;
           heroVideo.defaultMuted = !turnSoundOn;
           if (turnSoundOn && heroVideo.ended) heroVideo.currentTime = 0;
