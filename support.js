@@ -194,6 +194,14 @@
     if (ReactDOM.createRoot)
       ReactDOM.createRoot(hostEl).render(h(StandaloneRoot));
     else ReactDOM.render(h(StandaloneRoot), hostEl);
+    const staticFallback = doc.getElementById("aa-static-hero-fallback");
+    if (staticFallback) {
+      requestAnimationFrame(() => {
+        staticFallback.style.transition = "opacity 0.35s ease";
+        staticFallback.style.opacity = "0";
+        window.setTimeout(() => staticFallback.remove(), 380);
+      });
+    }
     return rootName;
   }
 
