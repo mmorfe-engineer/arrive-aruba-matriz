@@ -939,27 +939,19 @@ class Component extends DCLogic {
   DEFAULT_PROFILE = { displayName:'Patrick Hennessy', email:'patrickhennessy@gmail.com', phone:'+00 111 222 333 444', dob:'10/11/1987', nationality:'American', address:'12/ A Street Name' };
 
   componentDidMount() {
-    // ── Hero entrance — transform + CSS animation ONLY. Content is
-    //    visible by default; we never gate visibility on JS. If reduced
-    //    motion is on, skip the staged drift entirely. ──
+    // ── Hero entrance — the black reveal is intentionally time-boxed.
+    //    Media readiness should improve polish, not block the first view. ──
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const heroVideo = document.querySelector('[data-screen-label="01 Hero"] video');
     const soundToggle = document.getElementById('aa-sound-toggle');
     const heroMarkVideo = document.querySelector('[data-hero-mark-video]');
     const heroMarkFallback = document.querySelector('[data-hero-mark-fallback]');
     const heroCurtain = document.querySelector('[data-hero-curtain]');
-    let heroVideoReady = !heroVideo || reduce;
-    let heroMarkReady = !heroMarkVideo || reduce;
     const revealHeroCurtain = () => {
       if (!heroCurtain || heroCurtain.classList.contains('is-hidden')) return;
       heroCurtain.classList.add('is-hidden');
     };
-    const maybeRevealHeroCurtain = () => {
-      if (heroVideoReady && heroMarkReady) {
-        window.setTimeout(revealHeroCurtain, reduce ? 120 : 320);
-      }
-    };
-    window.setTimeout(revealHeroCurtain, 4500);
+    window.setTimeout(revealHeroCurtain, reduce ? 120 : 760);
     if (heroMarkVideo && heroMarkFallback) {
       const ua = navigator.userAgent || '';
       const isAppleTouch = /iP(ad|hone|od)/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -971,16 +963,12 @@ class Component extends DCLogic {
       if (reduce || !markSrc) {
         heroMarkVideo.classList.remove('is-visible');
         heroMarkFallback.style.display = 'block';
-        heroMarkReady = true;
-        maybeRevealHeroCurtain();
       } else {
         heroMarkVideo.src = markSrc;
         heroMarkVideo.load();
         heroMarkVideo.classList.add('is-visible');
         const revealHeroMark = () => {
           heroMarkFallback.style.display = 'none';
-          heroMarkReady = true;
-          maybeRevealHeroCurtain();
         };
         heroMarkVideo.addEventListener('loadeddata', revealHeroMark, { once: true });
         heroMarkVideo.addEventListener('canplay', revealHeroMark, { once: true });
@@ -991,8 +979,6 @@ class Component extends DCLogic {
           markPlay.catch(() => {
             heroMarkVideo.classList.remove('is-visible');
             heroMarkFallback.style.display = 'block';
-            heroMarkReady = true;
-            maybeRevealHeroCurtain();
           });
         }
       }
@@ -1004,8 +990,6 @@ class Component extends DCLogic {
       heroVideo.volume = 0.82;
       const revealHeroVideo = () => {
         heroVideo.classList.add('is-ready');
-        heroVideoReady = true;
-        maybeRevealHeroCurtain();
       };
       heroVideo.addEventListener('loadeddata', revealHeroVideo, { once: true });
       heroVideo.addEventListener('canplay', revealHeroVideo, { once: true });
