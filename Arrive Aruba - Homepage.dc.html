@@ -4,7 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preload" as="image" href="preview-assets/media/arrive-aruba-hero-poster.jpg" fetchpriority="high">
-<link rel="preload" as="video" href="preview-assets/media/arrive-aruba-hero-mobile-autoplay.mp4" type="video/mp4" media="(max-width: 767px)">
 <script src="./support.js" defer></script>
 </head>
 <body>
@@ -64,9 +63,16 @@
       z-index:0;
       opacity:0;
       transition:opacity 0.55s ease;
+      pointer-events:none;
     }
     .aa-hero-video.is-ready {
       opacity:1;
+    }
+    .aa-hero-video::-webkit-media-controls,
+    .aa-hero-video::-webkit-media-controls-panel,
+    .aa-hero-video::-webkit-media-controls-start-playback-button {
+      display:none !important;
+      -webkit-appearance:none;
     }
     .aa-hero-curtain {
       position:absolute;
@@ -111,6 +117,11 @@
     @keyframes aa-ticker {
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
+    }
+    @keyframes aa-mark-mobile-reveal {
+      0% { opacity:0; transform:translateY(10px) scale(0.96); clip-path:inset(0 100% 0 0); }
+      48% { opacity:0.95; clip-path:inset(0 38% 0 0); }
+      100% { opacity:0.94; transform:translateY(0) scale(1); clip-path:inset(0 0 0 0); }
     }
     .aa-header-action {
       background:none;
@@ -379,6 +390,11 @@
       line-height:1.55;
     }
     @media (max-width: 520px) {
+      .aa-hero-mark-anim { display:none !important; }
+      .aa-hero-mark-static {
+        display:block !important;
+        animation:aa-mark-mobile-reveal 1.15s cubic-bezier(0.22,0.61,0.36,1) 0.12s both;
+      }
       .aa-saved-drawer { width:100vw; padding:82px 20px 26px; }
       .aa-saved-drawer__title { font-size:28px; }
     }
@@ -622,17 +638,14 @@
 <!-- ─── HERO ──────────────────────────────────────────── -->
 <section data-screen-label="01 Hero" style="position:relative;height:100vh;min-height:100svh;min-height:100dvh;overflow:hidden;display:flex;align-items:center;justify-content:center;">
   <img class="aa-hero-media aa-hero-poster" src="preview-assets/media/arrive-aruba-hero-poster.jpg" alt="" aria-hidden="true" decoding="async" fetchpriority="high" width="1080" height="608" />
-  <video class="aa-hero-media aa-hero-video" aria-label="Arrive Aruba island film" autoplay="autoplay" muted="muted" loop="loop" playsinline="playsinline" preload="metadata" poster="preview-assets/media/arrive-aruba-hero-poster.jpg" data-mobile-sound-src="preview-assets/media/arrive-aruba-hero-mobile-sound-fast.mp4">
-    <source src="preview-assets/media/arrive-aruba-hero-mobile-autoplay.mp4" type="video/mp4" media="(max-width: 767px)" />
-    <source src="preview-assets/media/arrive-aruba-hero-sound-fast.mp4" type="video/mp4" />
-  </video>
+  <video class="aa-hero-media aa-hero-video" aria-label="Arrive Aruba island film" muted="muted" loop="loop" playsinline="playsinline" webkit-playsinline="webkit-playsinline" preload="none" data-mobile-src="preview-assets/media/arrive-aruba-hero-mobile-autoplay.mp4" data-desktop-src="preview-assets/media/arrive-aruba-hero-sound-fast.mp4" data-mobile-sound-src="preview-assets/media/arrive-aruba-hero-mobile-sound-fast.mp4"></video>
   <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,18,30,0.35) 0%,rgba(7,18,30,0.12) 40%,rgba(7,18,30,0.75) 100%);z-index:1;"></div>
 
   <div style="position:relative;z-index:10;text-align:center;padding:0 28px;max-width:500px;width:100%;">
     <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
 
     <h1 data-hero="title" aria-label="Arrive Aruba" style="position:relative;margin:0 auto 30px;width:100%;max-width:250px;height:clamp(118px,30vw,238px);line-height:0;display:flex;align-items:center;justify-content:center;">
-      <img class="aa-hero-mark-anim" data-hero-mark-anim src="preview-assets/media/arrive-a-mark-alpha-animated.png" alt="" aria-hidden="true" loading="eager" decoding="async" width="320" height="320" />
+      <img class="aa-hero-mark-anim" data-hero-mark-anim data-src="preview-assets/media/arrive-a-mark-alpha-animated.png" alt="" aria-hidden="true" loading="lazy" decoding="async" width="320" height="320" />
       <span class="aa-hero-mark-static" data-hero-mark-fallback aria-hidden="true"></span>
     </h1>
 
@@ -970,6 +983,7 @@ class Component extends DCLogic {
     };
     window.setTimeout(revealHeroCurtain, reduce ? 120 : 760);
     if (heroMarkAnim && heroMarkFallback) {
+      const isMobileMark = window.matchMedia && window.matchMedia('(max-width: 520px)').matches;
       const revealHeroMark = () => {
         heroMarkFallback.style.display = 'none';
         heroMarkAnim.classList.add('is-visible');
@@ -978,11 +992,12 @@ class Component extends DCLogic {
         heroMarkAnim.classList.remove('is-visible');
         heroMarkFallback.style.display = 'block';
       };
-      if (reduce) {
+      if (reduce || isMobileMark) {
         keepStaticHeroMark();
       } else if (heroMarkAnim.complete && heroMarkAnim.naturalWidth > 0) {
         revealHeroMark();
       } else {
+        if (!heroMarkAnim.src && heroMarkAnim.dataset.src) heroMarkAnim.src = heroMarkAnim.dataset.src;
         heroMarkAnim.addEventListener('load', revealHeroMark, { once: true });
         heroMarkAnim.addEventListener('error', keepStaticHeroMark, { once: true });
         if (heroMarkAnim.decode) heroMarkAnim.decode().then(revealHeroMark).catch(() => {});
@@ -992,20 +1007,39 @@ class Component extends DCLogic {
       heroVideo.muted = true;
       heroVideo.defaultMuted = true;
       heroVideo.playsInline = true;
+      heroVideo.setAttribute('muted', '');
+      heroVideo.setAttribute('playsinline', '');
+      heroVideo.setAttribute('webkit-playsinline', '');
+      heroVideo.removeAttribute('controls');
+      heroVideo.disableRemotePlayback = true;
       heroVideo.volume = 0.82;
+      const isMobileHero = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+      const initialHeroSrc = isMobileHero ? heroVideo.dataset.mobileSrc : heroVideo.dataset.desktopSrc;
       const revealHeroVideo = () => {
         heroVideo.classList.add('is-ready');
       };
-      heroVideo.addEventListener('loadeddata', revealHeroVideo, { once: true });
-      heroVideo.addEventListener('canplay', revealHeroVideo, { once: true });
-      if (heroVideo.readyState >= 2) revealHeroVideo();
       const playHero = () => {
+        if (!heroVideo.src && initialHeroSrc) {
+          heroVideo.src = initialHeroSrc;
+          heroVideo.load();
+        }
         const playPromise = heroVideo.play();
-        if (playPromise && playPromise.catch) playPromise.catch(() => {});
+        if (playPromise && playPromise.then) {
+          playPromise.then(revealHeroVideo).catch(() => {
+            heroVideo.classList.remove('is-ready');
+          });
+        } else if (heroVideo.readyState >= 2) {
+          revealHeroVideo();
+        }
       };
+      heroVideo.addEventListener('playing', revealHeroVideo, { once: true });
+      heroVideo.addEventListener('canplay', () => {
+        if (!heroVideo.paused) revealHeroVideo();
+      }, { once: true });
       if (!reduce) {
-        playHero();
+        window.setTimeout(playHero, isMobileHero ? 120 : 0);
         document.addEventListener('visibilitychange', playHero, { once: true });
+        document.addEventListener('touchstart', playHero, { once: true, passive: true });
       }
       if (soundToggle) {
         const syncSoundToggle = () => {
@@ -1017,7 +1051,6 @@ class Component extends DCLogic {
         const onSoundToggle = () => {
           const turnSoundOn = heroVideo.muted;
           const mobileSoundSrc = heroVideo.dataset.mobileSoundSrc;
-          const isMobileHero = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
           if (turnSoundOn && isMobileHero && mobileSoundSrc && !heroVideo.currentSrc.includes(mobileSoundSrc)) {
             const resumeAt = heroVideo.currentTime || 0;
             heroVideo.src = mobileSoundSrc;
