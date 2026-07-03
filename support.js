@@ -197,9 +197,9 @@
     const staticFallback = doc.getElementById("aa-static-hero-fallback");
     if (staticFallback) {
       requestAnimationFrame(() => {
-        staticFallback.style.transition = "opacity 0.35s ease";
+        staticFallback.style.transition = "opacity 0.08s ease";
         staticFallback.style.opacity = "0";
-        window.setTimeout(() => staticFallback.remove(), 380);
+        window.setTimeout(() => staticFallback.remove(), 90);
       });
     }
     return rootName;
