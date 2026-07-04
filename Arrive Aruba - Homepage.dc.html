@@ -123,6 +123,11 @@
       48% { opacity:0.95; clip-path:inset(0 38% 0 0); }
       100% { opacity:0.94; transform:translateY(0) scale(1); clip-path:inset(0 0 0 0); }
     }
+    @keyframes aa-mark-mobile-absolute-reveal {
+      0% { opacity:0; transform:translate(-50%,-50%) translateY(10px) scale(0.96); clip-path:inset(0 100% 0 0); }
+      48% { opacity:0.95; clip-path:inset(0 38% 0 0); }
+      100% { opacity:0.94; transform:translate(-50%,-50%) translateY(0) scale(1); clip-path:inset(0 0 0 0); }
+    }
     .aa-header-action {
       background:none;
       border:none;
@@ -230,18 +235,19 @@
     .aa-story-media {
       position:relative;
       z-index:1;
-      width:100vw;
-      margin-left:-24px;
-      margin-right:-24px;
-      height:clamp(320px, 48vw, 640px);
+      width:100%;
+      max-width:1120px;
+      margin:0 auto;
+      height:clamp(240px, 42vw, 560px);
       overflow:hidden;
-      background:#386395 url('preview-assets/media/arrive-island-stays-banner.jpg') center/cover no-repeat;
+      background:#386395;
+      border:1px solid rgba(240,240,229,0.14);
     }
     .aa-story-media img {
       display:block;
       width:100%;
       height:100%;
-      object-fit:cover;
+      object-fit:contain;
       object-position:center;
     }
     .aa-featured-media {
@@ -267,12 +273,11 @@
     .aa-hero-mark-static {
       display:block;
       width:50%;
+      height:auto;
       aspect-ratio:832.01/791.21;
-      background:#F0F0E5;
       opacity:0.94;
       transform:translateZ(0);
-      -webkit-mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;
-      mask:url('preview-assets/brand/variable-3.svg') center/contain no-repeat;
+      filter:brightness(0) invert(1);
     }
     .aa-saved-drawer {
       position:fixed;
@@ -390,10 +395,20 @@
       line-height:1.55;
     }
     @media (max-width: 520px) {
-      .aa-hero-mark-anim { display:none !important; }
+      .aa-hero-mark-anim {
+        display:block !important;
+        width:64%;
+      }
+      .aa-hero-mark-anim.is-visible {
+        animation:aa-mark-mobile-absolute-reveal 1.15s cubic-bezier(0.22,0.61,0.36,1) 0.12s both;
+      }
       .aa-hero-mark-static {
         display:block !important;
+        width:64%;
         animation:aa-mark-mobile-reveal 1.15s cubic-bezier(0.22,0.61,0.36,1) 0.12s both;
+      }
+      .aa-story-media {
+        height:clamp(188px, 52vw, 280px);
       }
       .aa-saved-drawer { width:100vw; padding:82px 20px 26px; }
       .aa-saved-drawer__title { font-size:28px; }
@@ -645,8 +660,8 @@
     <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
 
     <h1 data-hero="title" aria-label="Arrive Aruba" style="position:relative;margin:0 auto 30px;width:100%;max-width:250px;height:clamp(118px,30vw,238px);line-height:0;display:flex;align-items:center;justify-content:center;">
-      <img class="aa-hero-mark-anim" data-hero-mark-anim data-src="preview-assets/media/arrive-a-mark-alpha-animated.png" alt="" aria-hidden="true" loading="lazy" decoding="async" width="320" height="320" />
-      <span class="aa-hero-mark-static" data-hero-mark-fallback aria-hidden="true"></span>
+      <img class="aa-hero-mark-anim" data-hero-mark-anim src="preview-assets/media/arrive-a-mark-alpha-animated.png" alt="" aria-hidden="true" loading="eager" decoding="async" fetchpriority="high" width="320" height="320" />
+      <img class="aa-hero-mark-static" data-hero-mark-fallback src="preview-assets/brand/variable-3.svg" alt="" aria-hidden="true" decoding="async" width="832" height="791" />
     </h1>
 
     <p data-hero="tag" style="font-family:'Port Blair Alternate',serif;font-size:clamp(20px,5vw,28px);color:rgba(240,240,229,0.88);letter-spacing:0.03em;line-height:1.4;margin-bottom:52px;">Take home what you felt. ✦</p>
@@ -983,7 +998,6 @@ class Component extends DCLogic {
     };
     window.setTimeout(revealHeroCurtain, reduce ? 120 : 760);
     if (heroMarkAnim && heroMarkFallback) {
-      const isMobileMark = window.matchMedia && window.matchMedia('(max-width: 520px)').matches;
       const revealHeroMark = () => {
         heroMarkFallback.style.display = 'none';
         heroMarkAnim.classList.add('is-visible');
@@ -992,7 +1006,7 @@ class Component extends DCLogic {
         heroMarkAnim.classList.remove('is-visible');
         heroMarkFallback.style.display = 'block';
       };
-      if (reduce || isMobileMark) {
+      if (reduce) {
         keepStaticHeroMark();
       } else if (heroMarkAnim.complete && heroMarkAnim.naturalWidth > 0) {
         revealHeroMark();
