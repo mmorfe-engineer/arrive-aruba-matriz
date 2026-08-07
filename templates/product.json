@@ -1,1 +1,55 @@
-{"sections":{"main-product":{"type":"product","blocks":{"shipping":{"type":"collapsible","settings":{"heading":"Shipping and returns","content":"<p>Add your shipping and returns policy here.</p>"}}},"block_order":["shipping"],"settings":{"show_vendor":false,"show_description":true,"show_dynamic_checkout":true,"show_metafields":true,"show_sticky_mobile":true,"delivery_note":"Free delivery to Aruba","delivery_heading":"Delivered in 24 hours across Aruba","delivery_text":"Free on orders over $150 · Island ease guaranteed","media_fit":"contain"}},"recommendations":{"type":"product-recommendations","settings":{"subheading":"Keep exploring","heading":"More from the island","products_to_show":4,"intent":"related"}}},"order":["main-product","recommendations"]}
+{
+  "sections": {
+    "main-product": {
+      "type": "product",
+      "blocks": {
+        "size-fit": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Size & fit",
+            "content": "<p>Add fit notes and a link to the size guide here.</p>"
+          }
+        },
+        "delivery": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Delivery",
+            "content": "<p>Add delivery timing and service areas here.</p>"
+          }
+        },
+        "returns": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Returns",
+            "content": "<p>Add the returns and exchanges policy here.</p>"
+          }
+        }
+      },
+      "block_order": ["size-fit", "delivery", "returns"],
+      "settings": {
+        "show_vendor": false,
+        "show_description": true,
+        "show_quantity_selector": false,
+        "show_dynamic_checkout": false,
+        "show_metafields": true,
+        "show_sticky_mobile": true,
+        "delivery_note": "Free delivery to Aruba",
+        "delivery_heading": "Delivered in 24 hours across Aruba",
+        "delivery_text": "Free on orders over $150 · Island ease guaranteed",
+        "gallery_background": "#386395",
+        "media_background": "#386395",
+        "media_fit": "contain"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "subheading": "You may also like",
+        "heading": "",
+        "products_to_show": 3,
+        "intent": "related"
+      }
+    }
+  },
+  "order": ["main-product", "recommendations"]
+}

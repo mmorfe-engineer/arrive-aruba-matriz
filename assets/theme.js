@@ -305,6 +305,33 @@ class PredictiveSearch extends HTMLElement {
 
 customElements.define('predictive-search', PredictiveSearch);
 
+class ProductGallery extends HTMLElement {
+  connectedCallback() {
+    this.media = Array.from(this.querySelectorAll('[data-product-media]'));
+    this.controls = Array.from(this.querySelectorAll('[data-media-target]'));
+    this.controls.forEach((control) => {
+      control.addEventListener('click', () => this.showMedia(control.dataset.mediaTarget));
+    });
+  }
+
+  showMedia(mediaId) {
+    const target = this.media.find((media) => String(media.dataset.mediaId) === String(mediaId));
+    if (!target) return;
+    this.media.forEach((media) => {
+      media.hidden = media !== target;
+      if (media !== target) media.querySelector('video')?.pause();
+    });
+    this.controls.forEach((control) => {
+      const active = String(control.dataset.mediaTarget) === String(mediaId);
+      control.classList.toggle('is-active', active);
+      if (active) control.setAttribute('aria-current', 'true');
+      else control.removeAttribute('aria-current');
+    });
+  }
+}
+
+customElements.define('product-gallery', ProductGallery);
+
 class ProductForm extends HTMLElement {
   connectedCallback() {
     this.form = this.querySelector('form');
@@ -348,7 +375,7 @@ class ProductForm extends HTMLElement {
     nextUrl.searchParams.set('variant', variant.id);
     window.history.replaceState({}, '', nextUrl);
     if (variant.featured_media?.id) {
-      document.querySelector(`[data-media-id="${variant.featured_media.id}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+      this.closest('.main-product')?.querySelector('product-gallery')?.showMedia(variant.featured_media.id);
     }
   }
 
