@@ -176,13 +176,20 @@ a {
 }
 
 .aa-journey__canvas {
-  height: min(86dvh, 880px);
+  /* Both dimensions declared explicitly at the source render's ratio (1200x1600 = 3/4).
+     Deliberately NOT `width: auto` + `aspect-ratio`: width:auto would derive from the
+     canvas's OWN width/height attributes, which resizeCanvas() overwrites at runtime —
+     a circular dependency where a single bad read bakes in a wrong ratio that
+     self-reinforces on every later resize. And aspect-ratio + width:auto inside this
+     flex parent (.aa-journey__visual) was observed to collapse to 0x0 in testing.
+     Two explicit min() expressions at matching ratios sidesteps both. */
+  height: min(78dvh, 740px);
+  width: min(58.5dvh, 555px);
   max-width: none;
   opacity: 0;
   transform: scale(var(--aa-canvas-scale));
   transform-origin: center;
   transition: opacity 280ms ease;
-  width: auto;
   will-change: transform;
 }
 
@@ -191,7 +198,7 @@ a {
 }
 
 .aa-journey__poster {
-  height: min(77dvh, 790px);
+  height: min(70dvh, 664px);
   position: absolute;
   transition: opacity 240ms ease;
   width: auto;
@@ -421,11 +428,15 @@ a {
   }
 
   .aa-journey__canvas {
-    height: min(82dvh, 760px);
+    /* Mobile sprite cell is 670px tall; 600px keeps upscaling near 1.8x at DPR 2 —
+       the honest ceiling for this budget, versus the previous ~3.6x. Explicit width
+       at the same 3/4 ratio for the same reason as the base rule above. */
+    height: min(74dvh, 600px);
+    width: min(55.5dvh, 450px);
   }
 
   .aa-journey__poster {
-    height: min(72dvh, 650px);
+    height: min(65dvh, 513px);
   }
 
   .aa-journey__copy {

@@ -16,10 +16,14 @@ from typing import Iterable
 from PIL import Image
 
 
-SOURCE_SIZE = (1920, 1080)
-MAX_SHEET_SIZE = 2048
+SOURCE_SIZE = (1200, 1600)
 DESKTOP_BUDGET = 5 * 1024 * 1024
 MOBILE_BUDGET = int(2.5 * 1024 * 1024)
+
+# Guardrail: fail the build if any source frame is this opaque or more. A frame this
+# full-bleed means the camera has overshot past the window frame into the video plane
+# (see the push-clip regression this caught in the V2 correction pass).
+ALPHA_COVERAGE_LIMIT = 0.98
 
 
 @dataclass(frozen=True)
@@ -36,19 +40,20 @@ class Clip:
 @dataclass(frozen=True)
 class Variant:
     name: str
-    shade_height: int
-    push_width: int
+    cell_height: int
+    max_sheet_size: int
+    sliding_window: int  # informational only; consumed by journey.js at runtime
     budget: int
 
 
 CLIPS = (
-    Clip("shade", 1, 120),
-    Clip("push", 121, 160),
+    Clip("shade", 1, 90),
+    Clip("push", 91, 130),
 )
 
 VARIANTS = (
-    Variant("desktop", shade_height=512, push_width=768, budget=DESKTOP_BUDGET),
-    Variant("mobile", shade_height=384, push_width=512, budget=MOBILE_BUDGET),
+    Variant("desktop", cell_height=1000, max_sheet_size=4096, sliding_window=2, budget=DESKTOP_BUDGET),
+    Variant("mobile", cell_height=670, max_sheet_size=2048, sliding_window=3, budget=MOBILE_BUDGET),
 )
 
 
@@ -56,9 +61,8 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, required=True, help="Directory containing shade/ and push/ PNG frames")
     parser.add_argument("--output", type=Path, required=True, help="Destination for sheets and journey-manifest.json")
-    parser.add_argument("--quality", type=int, default=72, help="WebP RGB quality (default: 72)")
+    parser.add_argument("--quality", type=int, default=80, help="WebP RGB quality (default: 80)")
     parser.add_argument("--alpha-quality", type=int, default=90, help="WebP alpha quality (default: 90)")
-    parser.add_argument("--max-sheet-size", type=int, default=MAX_SHEET_SIZE)
     return parser.parse_args()
 
 
@@ -95,16 +99,38 @@ def union_alpha_bbox(paths: Iterable[Path]) -> tuple[int, int, int, int]:
     return union
 
 
-def cell_size(variant: Variant, clip: Clip, crop: tuple[int, int, int, int]) -> tuple[int, int]:
+def cell_size(variant: Variant, crop: tuple[int, int, int, int]) -> tuple[int, int]:
     crop_width = crop[2] - crop[0]
     crop_height = crop[3] - crop[1]
-    if clip.name == "shade":
-        height = variant.shade_height
-        width = round(crop_width * height / crop_height)
-    else:
-        width = variant.push_width
-        height = round(crop_height * width / crop_width)
+    height = variant.cell_height
+    width = round(crop_width * height / crop_height)
     return width, height
+
+
+def check_alpha_coverage(frame_paths: list[Path], clip_name: str) -> None:
+    """Guardrail: refuse to build if any source frame is near-fully opaque.
+
+    A frame at or above ALPHA_COVERAGE_LIMIT opacity means the alpha silhouette has
+    lost its transparent margin — almost always because the camera has dollied past
+    the window frame into whatever is behind it (see the push-clip camera regression
+    this check was added to catch)."""
+    violations = []
+    for path in frame_paths:
+        with Image.open(path) as image:
+            rgba = image.convert("RGBA")
+            alpha = rgba.getchannel("A")
+            total = rgba.size[0] * rgba.size[1]
+            opaque = sum(alpha.histogram()[250:])
+            coverage = opaque / total
+            if coverage >= ALPHA_COVERAGE_LIMIT:
+                violations.append((path.name, coverage))
+    if violations:
+        details = "\n".join(f"  - {name}: {cov:.3f} opaque" for name, cov in violations[:10])
+        raise SystemExit(
+            f"Alpha coverage guardrail failed for clip '{clip_name}': "
+            f"{len(violations)} frame(s) at or above {ALPHA_COVERAGE_LIMIT:.0%} opaque "
+            f"coverage.\n{details}"
+        )
 
 
 def grid_for(cell: tuple[int, int], max_size: int) -> tuple[int, int]:
@@ -143,12 +169,11 @@ def build_clip(
     clip: Clip,
     frame_paths: list[Path],
     crop: tuple[int, int, int, int],
-    max_size: int,
     quality: int,
     alpha_quality: int,
 ) -> dict:
-    cell_width, cell_height = cell_size(variant, clip, crop)
-    columns, rows = grid_for((cell_width, cell_height), max_size)
+    cell_width, cell_height = cell_size(variant, crop)
+    columns, rows = grid_for((cell_width, cell_height), variant.max_sheet_size)
     frames_per_sheet = columns * rows
     variant_dir = output_root / variant.name
     variant_dir.mkdir(parents=True, exist_ok=True)
@@ -161,7 +186,7 @@ def build_clip(
             used_rows = math.ceil(len(batch) / columns)
             sheet_width = columns * cell_width
             sheet_height = used_rows * cell_height
-            if sheet_width > max_size or sheet_height > max_size:
+            if sheet_width > variant.max_sheet_size or sheet_height > variant.max_sheet_size:
                 raise AssertionError(f"Sheet exceeds limit: {sheet_width}x{sheet_height}")
 
             sheet = Image.new("RGBA", (sheet_width, sheet_height), (0, 0, 0, 0))
@@ -217,8 +242,7 @@ def build_poster(
     quality: int,
     alpha_quality: int,
 ) -> dict:
-    clip = CLIPS[0]
-    width, height = cell_size(variant, clip, crop)
+    width, height = cell_size(variant, crop)
     variant_dir = output_root / variant.name
     webp_name = "poster.webp"
     webp_path = variant_dir / webp_name
@@ -251,16 +275,25 @@ def main() -> int:
 
     input_dir = args.input.expanduser().resolve()
     output_dir = args.output.expanduser().resolve()
+    # Clean slate: stale sheets from a previous run (different frame count, cell size,
+    # or sheet packing) are silently orphaned otherwise, since sheet indices are
+    # positional and a shorter new run won't overwrite every old file.
+    if output_dir.exists():
+        shutil.rmtree(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
 
     frames = {clip.name: expected_frames(input_dir, clip) for clip in CLIPS}
+
+    for clip in CLIPS:
+        check_alpha_coverage(frames[clip.name], clip.name)
+
     crops = {clip.name: union_alpha_bbox(frames[clip.name]) for clip in CLIPS}
 
+    total_frame_count = sum(clip.frame_count for clip in CLIPS)
     manifest = {
         "version": 1,
         "generator": "tools/build_journey_sheets.py",
-        "source": {"width": SOURCE_SIZE[0], "height": SOURCE_SIZE[1], "frameCount": 160},
-        "maxSheetSize": args.max_sheet_size,
+        "source": {"width": SOURCE_SIZE[0], "height": SOURCE_SIZE[1], "frameCount": total_frame_count},
         "encoding": {
             "format": "webp",
             "quality": args.quality,
@@ -279,7 +312,6 @@ def main() -> int:
                 clip=clip,
                 frame_paths=frames[clip.name],
                 crop=crops[clip.name],
-                max_size=args.max_sheet_size,
                 quality=args.quality,
                 alpha_quality=args.alpha_quality,
             )
@@ -299,6 +331,8 @@ def main() -> int:
         manifest["variants"][variant.name] = {
             "budgetBytes": variant.budget,
             "totalBytes": total_bytes,
+            "maxSheetSize": variant.max_sheet_size,
+            "slidingWindow": variant.sliding_window,
             "poster": poster,
             "clips": clip_data,
         }

@@ -2,187 +2,144 @@
   "version": 1,
   "generator": "tools/build_journey_sheets.py",
   "source": {
-    "width": 1920,
-    "height": 1080,
-    "frameCount": 160
+    "width": 1200,
+    "height": 1600,
+    "frameCount": 130
   },
-  "maxSheetSize": 2048,
   "encoding": {
     "format": "webp",
-    "quality": 72,
+    "quality": 80,
     "alphaQuality": 90
   },
   "variants": {
     "desktop": {
       "budgetBytes": 5242880,
-      "totalBytes": 1488412,
+      "totalBytes": 3896296,
+      "maxSheetSize": 4096,
+      "slidingWindow": 2,
       "poster": {
         "src": "desktop/poster.webp",
-        "width": 381,
-        "height": 512,
-        "bytes": 14160,
+        "width": 745,
+        "height": 1000,
+        "bytes": 38480,
         "sourceCrop": {
-          "x": 600,
-          "y": 56,
-          "width": 720,
-          "height": 968
+          "x": 40,
+          "y": 48,
+          "width": 1120,
+          "height": 1504
         }
       },
       "clips": {
         "shade": {
           "frameStart": 1,
-          "frameEnd": 120,
-          "frameCount": 120,
+          "frameEnd": 90,
+          "frameCount": 90,
           "sourceCrop": {
-            "x": 600,
-            "y": 56,
-            "width": 720,
-            "height": 968
+            "x": 40,
+            "y": 48,
+            "width": 1120,
+            "height": 1504
           },
           "cell": {
-            "width": 381,
-            "height": 512
+            "width": 745,
+            "height": 1000
           },
           "framesPerSheet": 20,
           "sheets": [
             {
               "src": "desktop/shade-00.webp",
-              "width": 1905,
-              "height": 2048,
+              "width": 3725,
+              "height": 4000,
               "columns": 5,
               "rows": 4,
               "frameOffset": 0,
               "firstFrame": 1,
               "frameCount": 20,
-              "bytes": 162214
+              "bytes": 447744
             },
             {
               "src": "desktop/shade-01.webp",
-              "width": 1905,
-              "height": 2048,
+              "width": 3725,
+              "height": 4000,
               "columns": 5,
               "rows": 4,
               "frameOffset": 20,
               "firstFrame": 21,
               "frameCount": 20,
-              "bytes": 172276
+              "bytes": 492142
             },
             {
               "src": "desktop/shade-02.webp",
-              "width": 1905,
-              "height": 2048,
+              "width": 3725,
+              "height": 4000,
               "columns": 5,
               "rows": 4,
               "frameOffset": 40,
               "firstFrame": 41,
               "frameCount": 20,
-              "bytes": 180226
+              "bytes": 543398
             },
             {
               "src": "desktop/shade-03.webp",
-              "width": 1905,
-              "height": 2048,
+              "width": 3725,
+              "height": 4000,
               "columns": 5,
               "rows": 4,
               "frameOffset": 60,
               "firstFrame": 61,
               "frameCount": 20,
-              "bytes": 188906
+              "bytes": 570370
             },
             {
               "src": "desktop/shade-04.webp",
-              "width": 1905,
-              "height": 2048,
+              "width": 3725,
+              "height": 2000,
               "columns": 5,
-              "rows": 4,
+              "rows": 2,
               "frameOffset": 80,
               "firstFrame": 81,
-              "frameCount": 20,
-              "bytes": 193440
-            },
-            {
-              "src": "desktop/shade-05.webp",
-              "width": 1905,
-              "height": 2048,
-              "columns": 5,
-              "rows": 4,
-              "frameOffset": 100,
-              "firstFrame": 101,
-              "frameCount": 20,
-              "bytes": 197892
+              "frameCount": 10,
+              "bytes": 290038
             }
           ]
         },
         "push": {
-          "frameStart": 121,
-          "frameEnd": 160,
+          "frameStart": 91,
+          "frameEnd": 130,
           "frameCount": 40,
           "sourceCrop": {
-            "x": 0,
-            "y": 0,
-            "width": 1920,
-            "height": 1080
+            "x": 26,
+            "y": 29,
+            "width": 1148,
+            "height": 1542
           },
           "cell": {
-            "width": 768,
-            "height": 432
+            "width": 744,
+            "height": 1000
           },
-          "framesPerSheet": 8,
+          "framesPerSheet": 20,
           "sheets": [
             {
               "src": "desktop/push-00.webp",
-              "width": 1536,
-              "height": 1728,
-              "columns": 2,
+              "width": 3720,
+              "height": 4000,
+              "columns": 5,
               "rows": 4,
               "frameOffset": 0,
-              "firstFrame": 121,
-              "frameCount": 8,
-              "bytes": 91310
+              "firstFrame": 91,
+              "frameCount": 20,
+              "bytes": 750868
             },
             {
               "src": "desktop/push-01.webp",
-              "width": 1536,
-              "height": 1728,
-              "columns": 2,
+              "width": 3720,
+              "height": 4000,
+              "columns": 5,
               "rows": 4,
-              "frameOffset": 8,
-              "firstFrame": 129,
-              "frameCount": 8,
-              "bytes": 87420
-            },
-            {
-              "src": "desktop/push-02.webp",
-              "width": 1536,
-              "height": 1728,
-              "columns": 2,
-              "rows": 4,
-              "frameOffset": 16,
-              "firstFrame": 137,
-              "frameCount": 8,
-              "bytes": 94550
-            },
-            {
-              "src": "desktop/push-03.webp",
-              "width": 1536,
-              "height": 1728,
-              "columns": 2,
-              "rows": 4,
-              "frameOffset": 24,
-              "firstFrame": 145,
-              "frameCount": 8,
-              "bytes": 62522
-            },
-            {
-              "src": "desktop/push-04.webp",
-              "width": 1536,
-              "height": 1728,
-              "columns": 2,
-              "rows": 4,
-              "frameOffset": 32,
-              "firstFrame": 153,
-              "frameCount": 8,
-              "bytes": 43496
+              "frameOffset": 20,
+              "firstFrame": 111,
+              "frameCount": 20,
+              "bytes": 763256
             }
           ]
         }
@@ -190,119 +147,187 @@
     },
     "mobile": {
       "budgetBytes": 2621440,
-      "totalBytes": 976488,
+      "totalBytes": 2322678,
+      "maxSheetSize": 2048,
+      "slidingWindow": 3,
       "poster": {
         "src": "mobile/poster.webp",
-        "width": 286,
-        "height": 384,
-        "bytes": 10070,
+        "width": 499,
+        "height": 670,
+        "bytes": 22604,
         "sourceCrop": {
-          "x": 600,
-          "y": 56,
-          "width": 720,
-          "height": 968
+          "x": 40,
+          "y": 48,
+          "width": 1120,
+          "height": 1504
         }
       },
       "clips": {
         "shade": {
           "frameStart": 1,
-          "frameEnd": 120,
-          "frameCount": 120,
+          "frameEnd": 90,
+          "frameCount": 90,
           "sourceCrop": {
-            "x": 600,
-            "y": 56,
-            "width": 720,
-            "height": 968
+            "x": 40,
+            "y": 48,
+            "width": 1120,
+            "height": 1504
           },
           "cell": {
-            "width": 286,
-            "height": 384
+            "width": 499,
+            "height": 670
           },
-          "framesPerSheet": 35,
+          "framesPerSheet": 12,
           "sheets": [
             {
               "src": "mobile/shade-00.webp",
-              "width": 2002,
-              "height": 1920,
-              "columns": 7,
-              "rows": 5,
+              "width": 1996,
+              "height": 2010,
+              "columns": 4,
+              "rows": 3,
               "frameOffset": 0,
               "firstFrame": 1,
-              "frameCount": 35,
-              "bytes": 196164
+              "frameCount": 12,
+              "bytes": 162500
             },
             {
               "src": "mobile/shade-01.webp",
-              "width": 2002,
-              "height": 1920,
-              "columns": 7,
-              "rows": 5,
-              "frameOffset": 35,
-              "firstFrame": 36,
-              "frameCount": 35,
-              "bytes": 215350
+              "width": 1996,
+              "height": 2010,
+              "columns": 4,
+              "rows": 3,
+              "frameOffset": 12,
+              "firstFrame": 13,
+              "frameCount": 12,
+              "bytes": 172382
             },
             {
               "src": "mobile/shade-02.webp",
-              "width": 2002,
-              "height": 1920,
-              "columns": 7,
-              "rows": 5,
-              "frameOffset": 70,
-              "firstFrame": 71,
-              "frameCount": 35,
-              "bytes": 227932
+              "width": 1996,
+              "height": 2010,
+              "columns": 4,
+              "rows": 3,
+              "frameOffset": 24,
+              "firstFrame": 25,
+              "frameCount": 12,
+              "bytes": 179532
             },
             {
               "src": "mobile/shade-03.webp",
-              "width": 2002,
-              "height": 1152,
-              "columns": 7,
+              "width": 1996,
+              "height": 2010,
+              "columns": 4,
               "rows": 3,
-              "frameOffset": 105,
-              "firstFrame": 106,
-              "frameCount": 15,
-              "bytes": 102522
+              "frameOffset": 36,
+              "firstFrame": 37,
+              "frameCount": 12,
+              "bytes": 190574
+            },
+            {
+              "src": "mobile/shade-04.webp",
+              "width": 1996,
+              "height": 2010,
+              "columns": 4,
+              "rows": 3,
+              "frameOffset": 48,
+              "firstFrame": 49,
+              "frameCount": 12,
+              "bytes": 198994
+            },
+            {
+              "src": "mobile/shade-05.webp",
+              "width": 1996,
+              "height": 2010,
+              "columns": 4,
+              "rows": 3,
+              "frameOffset": 60,
+              "firstFrame": 61,
+              "frameCount": 12,
+              "bytes": 204380
+            },
+            {
+              "src": "mobile/shade-06.webp",
+              "width": 1996,
+              "height": 2010,
+              "columns": 4,
+              "rows": 3,
+              "frameOffset": 72,
+              "firstFrame": 73,
+              "frameCount": 12,
+              "bytes": 208218
+            },
+            {
+              "src": "mobile/shade-07.webp",
+              "width": 1996,
+              "height": 1340,
+              "columns": 4,
+              "rows": 2,
+              "frameOffset": 84,
+              "firstFrame": 85,
+              "frameCount": 6,
+              "bytes": 108708
             }
           ]
         },
         "push": {
-          "frameStart": 121,
-          "frameEnd": 160,
+          "frameStart": 91,
+          "frameEnd": 130,
           "frameCount": 40,
           "sourceCrop": {
-            "x": 0,
-            "y": 0,
-            "width": 1920,
-            "height": 1080
+            "x": 26,
+            "y": 29,
+            "width": 1148,
+            "height": 1542
           },
           "cell": {
-            "width": 512,
-            "height": 288
+            "width": 499,
+            "height": 670
           },
-          "framesPerSheet": 28,
+          "framesPerSheet": 12,
           "sheets": [
             {
               "src": "mobile/push-00.webp",
-              "width": 2048,
-              "height": 2016,
+              "width": 1996,
+              "height": 2010,
               "columns": 4,
-              "rows": 7,
+              "rows": 3,
               "frameOffset": 0,
-              "firstFrame": 121,
-              "frameCount": 28,
-              "bytes": 184344
+              "firstFrame": 91,
+              "frameCount": 12,
+              "bytes": 261668
             },
             {
               "src": "mobile/push-01.webp",
-              "width": 2048,
-              "height": 864,
+              "width": 1996,
+              "height": 2010,
               "columns": 4,
               "rows": 3,
-              "frameOffset": 28,
-              "firstFrame": 149,
+              "frameOffset": 12,
+              "firstFrame": 103,
               "frameCount": 12,
-              "bytes": 40106
+              "bytes": 264172
+            },
+            {
+              "src": "mobile/push-02.webp",
+              "width": 1996,
+              "height": 2010,
+              "columns": 4,
+              "rows": 3,
+              "frameOffset": 24,
+              "firstFrame": 115,
+              "frameCount": 12,
+              "bytes": 262906
+            },
+            {
+              "src": "mobile/push-03.webp",
+              "width": 1996,
+              "height": 670,
+              "columns": 4,
+              "rows": 1,
+              "frameOffset": 36,
+              "firstFrame": 127,
+              "frameCount": 4,
+              "bytes": 86040
             }
           ]
         }

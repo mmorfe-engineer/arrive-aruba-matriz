@@ -204,13 +204,23 @@
   };
 
   Journey.prototype.ensureAround = async function (flatIndex) {
+    // Window size comes from the manifest per variant: desktop sheets are heavier
+    // (4096px cap) so it keeps fewer resident; mobile sheets are lighter (2048px cap,
+    // the iOS Safari memory ceiling) so it can afford a look-behind sheet too.
+    var windowSize = (this.variant && this.variant.slidingWindow) || 3;
+    var behind = Math.floor((windowSize - 1) / 2);
+    var ahead = Math.ceil((windowSize - 1) / 2);
+
     var keep = new Set();
-    for (var index = flatIndex - 1; index <= flatIndex + 1; index += 1) {
+    for (var index = flatIndex - behind; index <= flatIndex + ahead; index += 1) {
       if (this.orderedSheets[index]) keep.add(this.orderedSheets[index].key);
     }
 
     await this.loadSheet(flatIndex);
-    [flatIndex - 1, flatIndex + 1].forEach(function (index) {
+    var neighbors = [];
+    for (var b = 1; b <= behind; b += 1) neighbors.push(flatIndex - b);
+    for (var a = 1; a <= ahead; a += 1) neighbors.push(flatIndex + a);
+    neighbors.forEach(function (index) {
       if (this.orderedSheets[index]) this.loadSheet(index).catch(this.handleAssetError.bind(this));
     }, this);
 
@@ -302,17 +312,23 @@
   Journey.prototype.renderProgress = function (progress) {
     var shadeEnd = 0.58;
     var pushEnd = 0.84;
+    var shadeLastIndex = (this.variant ? this.variant.clips.shade.frameCount : 90) - 1;
+    var pushLastIndex = (this.variant ? this.variant.clips.push.frameCount : 40) - 1;
     var shadeProgress = clamp((progress - 0.06) / (shadeEnd - 0.06), 0, 1);
     var pushProgress = ease((progress - shadeEnd) / (pushEnd - shadeEnd));
 
     if (progress <= shadeEnd || this.compact) {
-      var shadeFrame = progress <= shadeEnd ? shadeProgress * 119 : 119;
+      var shadeFrame = progress <= shadeEnd ? shadeProgress * shadeLastIndex : shadeLastIndex;
       this.requestFrame("shade", shadeFrame);
     } else {
-      this.requestFrame("push", pushProgress * 39);
+      this.requestFrame("push", pushProgress * pushLastIndex);
     }
 
-    var compactScale = this.compact && progress > shadeEnd ? 1 + pushProgress * 2.4 : 1;
+    // Compact devices never load the push clip; the "entering the window" feel is
+    // faked with a CSS scale on the frozen final shade frame. Capped at 1.6x (not the
+    // 2.4x this used to be) so it doesn't compound with the mobile cell/display ratio
+    // into visible blur — the whiteout below is timed to take over before that matters.
+    var compactScale = this.compact && progress > shadeEnd ? 1 + pushProgress * 0.6 : 1;
     this.root.style.setProperty("--aa-canvas-scale", compactScale.toFixed(4));
     this.root.style.setProperty("--aa-cloud-far-x", (progress * 12).toFixed(2) + "vw");
     this.root.style.setProperty("--aa-cloud-near-x", (-progress * 18).toFixed(2) + "vw");
@@ -320,8 +336,15 @@
     this.updateCopy(this.northCopy, reveal(progress, 0.25, 0.49));
     this.updateCopy(this.feltCopy, reveal(progress, 0.61, 0.79));
 
-    var white = ease((progress - 0.81) / 0.16);
-    var finalOpacity = ease((progress - 0.9) / 0.08);
+    // The whiteout must reach full opacity exactly as the push clip reaches its last
+    // frame (pushEnd) — never after. Letting it lag left the final push frame exposed,
+    // frozen, for a long stretch of scroll (the "rectangle" bug). Compact mode has no
+    // real push footage to hold on, just the faked CSS-scaled shade frame, so it
+    // crosses to white a little earlier to hide that fake zoom sooner.
+    var whiteStart = this.compact ? pushEnd - 0.16 : pushEnd - 0.10;
+    var whiteEnd = this.compact ? pushEnd - 0.04 : pushEnd;
+    var white = ease((progress - whiteStart) / (whiteEnd - whiteStart));
+    var finalOpacity = ease((progress - (pushEnd + 0.02)) / 0.08);
     this.whiteout.style.opacity = white.toFixed(3);
     this.finalCopy.style.opacity = finalOpacity.toFixed(3);
     this.finalCopy.style.transform = "translate3d(-50%,calc(-50% + " + ((1 - finalOpacity) * 18).toFixed(2) + "px),0)";

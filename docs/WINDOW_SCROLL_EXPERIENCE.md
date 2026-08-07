@@ -1,38 +1,49 @@
 # Window Scroll Experience — Plan de desarrollo
 
-Rama: `feat/window-scroll-experience`
-Fecha: 2026-08-07
-Estado: prototipo estatico implementado en `codex/journey-sprite-pipeline`
+Rama: `feat/window-scroll-experience` (assets/runtime en `codex/journey-sprite-pipeline`)
+Fecha: 2026-08-07 (V2 — correcciones sobre el prototipo de Codex)
+Estado: prototipo corregido, gate de iPhone fisico sigue pendiente
 Restriccion base: **debe ser ejecutable como seccion Shopify OS 2.0.** Ver seccion 10.
 
 ## 0. Estado actual del prototipo
 
-La version actual ya no es solamente un plan. El repo incluye un prototipo standalone en
-`journey.html` con `journey.css`, `journey.js` y assets generados en
-`preview-assets/journey/`.
+El prototipo standalone (`journey.html`, `journey.css`, `journey.js`,
+`preview-assets/journey/`) del primer pase de Codex tenia tres defectos reportados por el
+cliente. Diagnostico con datos medidos, dos de los tres eran el mismo bug:
 
-Lo implementado:
+- **La camara del push terminaba dentro del marco** (Y=-0.05 contra geometria que empieza
+  en Y=-0.029): el 92% del clip renderizaba a pantalla completa. Fix: un keyframe,
+  recalculado geometricamente, no ajustado a ojo.
+- **El blanco tardaba ~26vh en cubrir despues de que el push terminaba**, dejando ese
+  frame opaco congelado a la vista. Fix: el timing del whiteout ahora cierra exactamente
+  en `pushEnd`, no despues.
+- **Calidad borrosa**: escalado de 3.4x en desktop y 3.6x en mobile (celda de sprite
+  chica contra un display grande). Fix: re-encuadre vertical en Blender (la ventana
+  ocupaba menos de la mitad del cuadro), celda de sprite mas grande, y el tope de
+  display en CSS bajado. Queda en ~1.5x desktop, ~1.8x mobile (honesto, no llega a 1.5x
+  dentro del presupuesto de 2.5MB + memoria de iOS).
 
-- Blender renderizo la ventana flotante con alpha, fondo transparente y fondo CSS en web.
-- La experiencia usa 160 frames: 120 de persiana y 40 de push.
-- Los PNG finales se empacaron en WebP sprite sheets con `tools/build-journey-sheets.sh`.
-- `journey.js` carga el manifiesto cuando la seccion esta cerca del viewport, dibuja en
-  canvas con `drawImage`, y mantiene una ventana de memoria de hojas cercanas.
-- El scroll se lee con `IntersectionObserver`, `ResizeObserver` y `requestAnimationFrame`.
-  No hay listener directo de `scroll`.
-- Hay fallbacks para `prefers-reduced-motion`, `saveData`, conexiones 2g/3g y viewport
-  menor de 380px.
+Se re-rendero en Blender: encuadre vertical 1200x1600 (antes 1920x1080 con la ventana
+ocupando menos de la mitad del cuadro), shade comprimido de 120 a 90 frames (con **todos**
+los objetos animados de la escena retimeados consistentemente — luces, streaks, paneo del
+video —, no solo camara y persiana). 130 frames totales, verificados con Cycles real.
 
-Presupuesto real de assets:
+Se agrego un guardrail al pipeline de build: **el script falla si algun frame supera 98%
+de cobertura opaca** — el chequeo automatico que habria atajado el bug de camara antes de
+que llegara a produccion.
 
-| Variante | Hojas | Peso total |
-|---|---:|---:|
-| Desktop | 11 | 1.49 MB |
-| Mobile | 6 | 0.98 MB |
+Presupuesto real de assets (post-correccion):
 
-QA automatizada con Chromium paso en desktop 1440x900, mobile 390x844, compact 375x812 y
-reduced motion. El gate pendiente antes de convertir esto en seccion Liquid es probar en
-iPhone fisico Safari, especialmente memoria, suavidad y recuperacion tras scroll rapido.
+| Variante | Hojas | Peso total | Presupuesto |
+|---|---:|---:|---:|
+| Desktop | 7 | 3.90 MB | 5 MB |
+| Mobile | 12 | 2.32 MB | 2.5 MB |
+
+QA: los 130 frames renderizados verificados por script (0 con cobertura >=98%, la prueba
+cuantitativa que falto la primera vez). Verificacion visual en navegador confirmo blanco
+completo exacto en `pushEnd` y push sin rectangulo. El gate pendiente antes de convertir
+esto en seccion Liquid sigue siendo el mismo: **probar en iPhone fisico Safari**, memoria,
+suavidad y recuperacion tras scroll rapido — nunca se ejecuto todavia.
 
 ## 1. La idea
 

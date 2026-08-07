@@ -9,7 +9,7 @@ OUTPUT_DIR="${2:-${REPO_DIR}/preview-assets/journey}"
 
 if [[ -z "${INPUT_DIR}" ]]; then
   echo "Usage: tools/build-journey-sheets.sh /path/to/renders/journey [output-dir]" >&2
-  echo "Expected input subdirectories: shade/ (frames 1-120) and push/ (frames 121-160)." >&2
+  echo "Expected input subdirectories: shade/ (frames 1-90) and push/ (frames 91-130)." >&2
   exit 64
 fi
 
