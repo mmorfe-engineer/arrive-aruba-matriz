@@ -1,0 +1,16 @@
+<section class="main-search section-space">
+  <div class="page-width">
+    <header class="section-header"><div><p class="eyebrow">{{ 'search.title' | t }}</p><h1 class="serif-heading">{% if search.performed %}{{ 'search.results_for' | t: terms: search.terms }}{% else %}{{ section.settings.heading }}{% endif %}</h1></div></header>
+    <form class="search-form" action="{{ routes.search_url }}" method="get" role="search"><input class="field" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}"><button class="button button--primary" type="submit">{{ 'search.submit' | t }}</button></form>
+    {% if search.performed %}
+      {% paginate search.results by section.settings.results_per_page %}
+        <p>{{ 'search.result_count' | t: count: search.results_count }}</p>
+        {% if search.results_count > 0 %}<div class="product-grid search-grid">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item, show_wishlist: true %}{% else %}<article class="search-result"><p class="eyebrow">{{ item.object_type }}</p><h2 class="product-card-title"><a href="{{ item.url }}">{{ item.title }}</a></h2><p>{{ item.content | strip_html | truncatewords: 28 }}</p></article>{% endif %}{% endfor %}</div>{% else %}<div class="empty-state"><p>{{ 'search.no_results' | t }}</p></div>{% endif %}
+        {% render 'pagination', paginate: paginate %}
+      {% endpaginate %}
+    {% endif %}
+  </div>
+</section>
+{% schema %}
+{"name":"t:sections.search.name","settings":[{"type":"text","id":"heading","label":"t:sections.all.heading","default":"Find your next island piece"},{"type":"range","id":"results_per_page","min":8,"max":48,"step":4,"default":24,"label":"t:sections.search.products_per_page"}]}
+{% endschema %}
