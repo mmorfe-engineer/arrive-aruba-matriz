@@ -7,7 +7,7 @@
 <header class="site-header{% if overlay %} site-header--overlay{% endif %}{% if section.settings.sticky %} is-sticky{% endif %}" style="--logo-width:{{ settings.logo_width }}px" data-header>
   <div class="header-inner page-width">
     <div class="header-left">
-      <button class="icon-button menu-toggle" type="button" data-open-drawer="navigation" aria-label="{{ 'header.open_menu' | t }}">{% render 'icon', name: 'menu' %}</button>
+      <button class="icon-button menu-toggle" type="button" data-open-drawer="navigation" aria-expanded="false" aria-label="{{ 'header.open_menu' | t }}">{% render 'icon', name: 'menu' %}</button>
       {% if section.settings.menu != blank %}
         <nav aria-label="{{ 'header.main_menu' | t }}"><ul class="header-menu">{% for link in section.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}</ul></nav>
       {% endif %}
@@ -20,10 +20,10 @@
       {% endif %}
     </a>
     <div class="header-right">
-      {% if section.settings.show_search %}<button class="icon-button" type="button" data-open-drawer="search" aria-label="{{ 'header.search' | t }}">{% render 'icon', name: 'search' %}</button>{% endif %}
-      {% if section.settings.show_wishlist %}<button class="icon-button wishlist-link" type="button" data-open-drawer="wishlist" aria-label="{{ 'wishlist.title' | t }}">{% render 'icon', name: 'heart' %}<span class="cart-count" data-wishlist-count hidden>0</span></button>{% endif %}
+      {% if section.settings.show_search %}<button class="icon-button" type="button" data-open-drawer="search" aria-expanded="false" aria-label="{{ 'header.search' | t }}">{% render 'icon', name: 'search' %}</button>{% endif %}
+      {% if section.settings.show_wishlist %}<button class="icon-button wishlist-link" type="button" data-open-drawer="wishlist" aria-expanded="false" aria-label="{{ 'wishlist.title' | t }}">{% render 'icon', name: 'heart' %}<span class="cart-count" data-wishlist-count hidden>0</span></button>{% endif %}
       {% if section.settings.show_account and shop.customer_accounts_enabled %}<span class="header-account"><shopify-account></shopify-account></span>{% endif %}
-      <button class="icon-button cart-link" type="button" data-open-drawer="cart" aria-label="{{ 'cart.open' | t }}">{% render 'icon', name: 'bag' %}{% if cart.item_count > 0 %}<span class="cart-count">{{ cart.item_count }}</span>{% endif %}</button>
+      <button class="icon-button cart-link" type="button" data-open-drawer="cart" aria-expanded="false" aria-label="{{ 'cart.open' | t }}">{% render 'icon', name: 'bag' %}{% if cart.item_count > 0 %}<span class="cart-count">{{ cart.item_count }}</span>{% endif %}</button>
     </div>
   </div>
 </header>

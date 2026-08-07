@@ -39,8 +39,9 @@ const openDrawer = (name) => {
   if (name === 'cart') drawer.classList.add('is-open');
   else drawer.setAttribute('open', '');
   drawer.setAttribute('aria-hidden', 'false');
+  document.querySelectorAll(`[data-open-drawer="${name}"]`).forEach((button) => button.setAttribute('aria-expanded', 'true'));
   setBodyLock();
-  window.setTimeout(() => drawer.querySelector('button, input, a')?.focus(), 30);
+  window.setTimeout(() => drawer.querySelector('button:not(.drawer-scrim), input, a')?.focus(), 30);
 };
 
 const closeDrawer = (drawer) => {
@@ -48,6 +49,8 @@ const closeDrawer = (drawer) => {
   drawer.removeAttribute('open');
   drawer.classList.remove('is-open');
   drawer.setAttribute('aria-hidden', 'true');
+  const name = drawer.dataset.drawer;
+  document.querySelectorAll(`[data-open-drawer="${name}"]`).forEach((button) => button.setAttribute('aria-expanded', 'false'));
   setBodyLock();
   drawer.returnFocus?.focus();
 };
@@ -98,8 +101,23 @@ document.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape') return;
-  document.querySelectorAll('[data-drawer]').forEach(closeDrawer);
+  const drawer = document.querySelector('.nav-drawer[open], .search-drawer[open], .cart-drawer.is-open');
+  if (event.key === 'Escape') {
+    closeDrawer(drawer);
+    return;
+  }
+  if (event.key !== 'Tab' || !drawer) return;
+  const focusable = Array.from(drawer.querySelectorAll('a[href], button:not(.drawer-scrim):not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'));
+  if (focusable.length === 0) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 });
 
 const savedKey = 'arrive-aruba-wishlist-v1';
@@ -207,17 +225,28 @@ const initializeReveal = () => {
 
 const initializeHero = () => {
   document.querySelectorAll('[data-hero]').forEach((hero) => {
+    if (hero.dataset.initialized === 'true') return;
+    hero.dataset.initialized = 'true';
     const videos = Array.from(hero.querySelectorAll('[data-hero-video]'));
     const getVideo = () => videos.find((video) => getComputedStyle(video).display !== 'none');
-    const video = getVideo();
-    if (video && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      video.muted = true;
-      video.playsInline = true;
-      video.play().catch(() => {});
-    }
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const syncVideo = () => {
+      const active = getVideo();
+      videos.forEach((video) => {
+        video.playsInline = true;
+        if (video !== active || motionQuery.matches) video.pause();
+      });
+      if (active && !motionQuery.matches) {
+        active.muted = true;
+        active.play().catch(() => {});
+      }
+    };
+    syncVideo();
+    motionQuery.addEventListener?.('change', syncVideo);
+    window.addEventListener('resize', syncVideo, { passive: true });
     const mark = hero.querySelector('[data-hero-mark]');
     const animated = mark?.querySelector('[data-animated-mark]');
-    if (mark && animated && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (mark && animated && !motionQuery.matches) {
       const ready = () => mark.classList.add('is-ready');
       if (animated.complete && animated.naturalWidth) ready();
       else animated.addEventListener('load', ready, { once: true });
@@ -300,6 +329,11 @@ class ProductForm extends HTMLElement {
       return;
     }
     this.idInput.value = variant.id;
+    this.querySelectorAll('fieldset').forEach((fieldset) => {
+      const selected = fieldset.querySelector('[data-option-input]:checked');
+      const label = fieldset.querySelector('[data-selected-option]');
+      if (selected && label) label.textContent = selected.value;
+    });
     if (this.price) this.price.textContent = formatMoney(variant.price);
     if (this.compare) {
       this.compare.textContent = variant.compare_at_price > variant.price ? formatMoney(variant.compare_at_price) : '';
