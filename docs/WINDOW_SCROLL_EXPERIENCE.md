@@ -40,6 +40,10 @@ dibujados en un `<canvas>` segun la posicion del scroll.
 
 | Recurso | Ubicacion | Nota |
 |---|---|---|
+| **Escena Blender** | `~/Documents/Aruba animacion/3d-arrive-aruba-ventana/Ventana animacion + Clouds-.blend` | El mas reciente (2026-06-01). Blender 5.1.1 |
+| Handoff de la animacion | `~/Documents/Aruba animacion/PROJECT_HANDOFF.md` | Geometria, materiales y gotchas de Blender 5.1 |
+| Video interno de Aruba | `~/Documents/Aruba animacion/16289285-hd_1920_1080_30fps.mp4` | Es el que va dentro de la ventana |
+| Render actual con nubes | `~/Documents/Aruba animacion/renders/aruba_window_clouds_final_hq.mp4` | 1920x1080, 24 fps, 16 s |
 | Render de la ventana | `preview-assets/media/arrive-aruba-hero-sound.mp4` | 1920x1080, 24 fps, 19.2 s. Ya en el repo, hoy es el hero |
 | Version mobile | `preview-assets/media/arrive-aruba-hero-mobile.mp4` | Ya optimizada |
 | Poster | `preview-assets/media/arrive-aruba-hero-poster.jpg` | Sirve de fallback |
@@ -91,6 +95,59 @@ Puntos de diseno que importan:
 
 ## 5. Assets que hay que producir en Blender
 
+### 5.0 — Cambio de direccion artistica (2026-08-07)
+
+La version actual del render es cabina oscura llenando el cuadro + estallido de luz.
+Se reemplaza por: **la ventana flotando sola sobre un cielo azul en degradado**,
+en la linea de Capsule / drinkit / los templates de Framer que sirvieron de referencia.
+
+Decision base: **Blender renderiza solo la ventana con alpha. El fondo vive en CSS.**
+
+Por que el fondo no va horneado:
+- Un degradado azul grande a 8 bits comprimido hace banding visible. CSS lo dithera limpio
+- La ventana recortada sobre alpha pesa una fraccion de un frame completo
+- El final en blanco pasa a ser interpolar dos colores, no re-renderizar
+- El fondo puede moverse a distinta velocidad que la ventana. Ese parallax es lo que da
+  profundidad en las referencias, y horneado es imposible
+
+Consecuencias que hay que aceptar:
+- **Muere el momento heroe del estallido de luz.** Funcionaba contra negro; sobre cielo
+  claro no hay contraste que lo sostenga. El nuevo climax es persiana + push-in al blanco
+- El glow tiene que quedar discreto y pegado al marco. Un bloom grande no compone bien
+  sobre un fondo arbitrario
+- La sombra de contacto se resuelve con `filter: drop-shadow()` en CSS, no en el render
+- Riesgo a validar temprano: EEVEE con Film Transparent + Glass BSDF puede dar artefactos.
+  Test render antes de comprometer la secuencia completa
+
+### 5.0.1 — Camara bloqueada
+
+**Blender renderiza unicamente la persiana subiendo, con la camara fija.**
+El flotar, el push-in, el parallax y el blanco final se hacen en CSS sobre el canvas.
+
+- El push-in es `transform: scale()`. Retunearlo son segundos; renderizado queda congelado
+- Camara fija = el marco no cambia entre frames = las sheets comprimen mucho mejor
+- Permite recortar el render al bounding box de la ventana. Sin la cabina, es del orden de
+  60-70% menos pixeles
+
+Esto invalida el keyframe de camara del handoff de la animacion
+(`dolly Y=-2.2 → -4.0`, `lens 50 → 35`).
+
+### 5.0.2 — Cambios de escena
+
+Sobre la geometria que ya existe:
+
+- Quitar `Wall_Cabin`. `Window_Frame` pasa a ser el elemento mas externo
+- **Tapar la parte trasera**: la cabina ocultaba el tunel. Sin ella `Window_Tunnel` se lee
+  como un tubo abierto
+- Se conservan `Window_InnerFrame`, `Window_Tunnel`, `Window_Shade`, `Window_ShadeHandle`,
+  cristal y el plano de video. El video interno queda intacto
+- Iluminacion rehecha. La actual esta armada para interior oscuro; flotando sobre cielo
+  necesita luz suave y envolvente, probablemente HDRI
+- Decidir que son las nubes de `Ventana animacion + Clouds-.blend`: si son volumetricas
+  alrededor de la ventana pueden valer como pass alpha aparte; si son fondo, se van a CSS
+
+### 5.1 — Especificacion de render
+
 1. **Re-render de la toma completa** con camara fija, sin corte, 180 frames.
    180 es el punto dulce: por debajo de 120 se ve a saltos al scrollear despacio,
    por encima de 240 solo pesa mas.
@@ -102,8 +159,9 @@ Puntos de diseno que importan:
 4. **Pass de nubes con alpha** (opcional). Si sale caro, se fake con CSS/SVG y nadie lo nota.
 5. **Entrega final NO son frames sueltos: son sprite sheets.** Esto lo impone Shopify (ver 10.1).
    Los frames salen de Blender sueltos, y un script de build los empaqueta en hojas.
-   - Formato: **WebP calidad ~72.** No AVIF: la compatibilidad de AVIF en assets/Files de
-     Shopify no es confiable y el CDN de Shopify ya negocia formato por su cuenta.
+   - Formato: **WebP con alpha, calidad ~72.** No AVIF: la compatibilidad de AVIF en
+     assets/Files de Shopify no es confiable y el CDN de Shopify ya negocia formato solo.
+     WebP soporta alpha, que es requisito por 5.0.
    - Cada hoja **<= 4096 px por lado** por el limite de decodificacion de imagen en iOS Safari.
    - Presupuesto duro: **<= 2.5 MB mobile, <= 5 MB desktop, secuencia completa.**
    - Si no entra, se baja a 120 frames antes que subir compresion.
