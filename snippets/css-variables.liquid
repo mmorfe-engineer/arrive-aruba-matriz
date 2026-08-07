@@ -2,6 +2,34 @@
   Outputs global design tokens from theme settings.
 {% enddoc %}
 {% style %}
+  @font-face {
+    font-family: 'Geologica';
+    src: url('{{ 'geologica-variable.ttf' | asset_url }}') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'ArriveLegacy';
+    src: url('{{ 'arrive-legacy-medium.otf' | asset_url }}') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'ArriveLegacy';
+    src: url('{{ 'arrive-legacy-book-italic.otf' | asset_url }}') format('opentype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'PortBlair';
+    src: url('{{ 'arrive-port-blair.otf' | asset_url }}') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
   :root {
     --aa-sapphire: {{ settings.color_sapphire }};
     --aa-sapphire-dark: {{ settings.color_sapphire_dark }};
@@ -13,7 +41,8 @@
     --aa-page-width: {{ settings.page_width }}px;
     --aa-side-space: clamp(1rem, 3.5vw, 3.5rem);
     --aa-radius: {{ settings.control_radius }}px;
-    --aa-body-font: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --aa-configured-font: {{ settings.type_body_font.family | json }}, {{ settings.type_body_font.fallback_families }};
+    --aa-body-font: {% if settings.use_brand_body_font %}'Geologica', system-ui, sans-serif{% else %}var(--aa-configured-font){% endif %};
   }
   {{ settings.type_body_font | font_face: font_display: 'swap' }}
 {% endstyle %}

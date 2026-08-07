@@ -30,6 +30,8 @@ Crea una página llamada `Island Story`, selecciona el template `page.island` y 
 
 ## 3. Catálogo y colecciones
 
+Para validar inmediatamente la plantilla de producto, importa `docs/arrive-aruba-demo-product.csv` desde `Products > Import`. El archivo crea un polo de prueba con dos colores, tres tallas, inventario y precio. No incluye fotografías para comprobar también el placeholder de marca. El producto se puede eliminar al terminar el QA.
+
 1. Crea productos con variantes reales de talla y color.
 2. Carga media en cada producto; el tema acepta imágenes, video, video externo y modelos 3D.
 3. Configura precio, compare-at price, SKU, inventario y disponibilidad.

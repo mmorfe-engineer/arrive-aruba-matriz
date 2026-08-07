@@ -32,6 +32,7 @@
   {
     "name": "t:settings_schema.typography.name",
     "settings": [
+      { "type": "checkbox", "id": "use_brand_body_font", "default": true, "label": "t:settings_schema.typography.use_brand_body" },
       { "type": "font_picker", "id": "type_body_font", "default": "work_sans_n4", "label": "t:settings_schema.typography.body" }
     ]
   },

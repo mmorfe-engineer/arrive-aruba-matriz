@@ -310,7 +310,8 @@ class ProductForm extends HTMLElement {
     this.form = this.querySelector('form');
     this.variants = JSON.parse(this.querySelector('[data-variants]')?.textContent || '[]');
     this.idInput = this.querySelector('[name="id"]');
-    this.submit = this.querySelector('[type="submit"]');
+    this.submits = Array.from(this.querySelectorAll('[data-product-submit]'));
+    this.submit = this.submits[0];
     this.price = this.closest('.product-layout')?.querySelector('[data-product-price]');
     this.compare = this.closest('.product-layout')?.querySelector('[data-product-compare]');
     this.querySelectorAll('[data-option-input]').forEach((input) => input.addEventListener('change', () => this.updateVariant()));
@@ -325,7 +326,7 @@ class ProductForm extends HTMLElement {
     const selected = this.selectedOptions();
     const variant = this.variants.find((item) => item.options.every((option, index) => option === selected[index]));
     if (!variant) {
-      if (this.submit) this.submit.disabled = true;
+      this.submits.forEach((submit) => { submit.disabled = true; });
       return;
     }
     this.idInput.value = variant.id;
@@ -339,10 +340,10 @@ class ProductForm extends HTMLElement {
       this.compare.textContent = variant.compare_at_price > variant.price ? formatMoney(variant.compare_at_price) : '';
       this.compare.hidden = !(variant.compare_at_price > variant.price);
     }
-    if (this.submit) {
-      this.submit.disabled = !variant.available;
-      this.submit.textContent = variant.available ? this.submit.dataset.availableLabel : this.submit.dataset.soldLabel;
-    }
+    this.submits.forEach((submit) => {
+      submit.disabled = !variant.available;
+      submit.textContent = variant.available ? submit.dataset.availableLabel : submit.dataset.soldLabel;
+    });
     const nextUrl = new URL(window.location.href);
     nextUrl.searchParams.set('variant', variant.id);
     window.history.replaceState({}, '', nextUrl);
@@ -357,18 +358,18 @@ class ProductForm extends HTMLElement {
     const data = new FormData(this.form);
     data.append('sections', 'cart-drawer,header');
     data.append('sections_url', window.location.pathname);
-    this.submit.setAttribute('aria-busy', 'true');
+    this.submits.forEach((submit) => submit.setAttribute('aria-busy', 'true'));
     try {
       const response = await fetch(`${rootUrl}cart/add.js`, { method: 'POST', headers: { Accept: 'application/json' }, body: data });
       const result = await response.json();
       if (!response.ok) throw new Error(result.description || result.message);
       refreshSections(result.sections);
       openDrawer('cart');
-      announce(this.submit.dataset.addedLabel);
+      announce(this.submit?.dataset.addedLabel);
     } catch (error) {
       announce(error.message);
     } finally {
-      this.submit.removeAttribute('aria-busy');
+      this.submits.forEach((submit) => submit.removeAttribute('aria-busy'));
     }
   }
 }

@@ -1,10 +1,11 @@
 {%- liquid
   assign overlay = false
+  assign logo_width = settings.logo_width | default: 156
   if section.settings.overlay_home and request.page_type == 'index'
     assign overlay = true
   endif
 -%}
-<header class="site-header{% if overlay %} site-header--overlay{% endif %}{% if section.settings.sticky %} is-sticky{% endif %}" style="--logo-width:{{ settings.logo_width }}px" data-header>
+<header class="site-header{% if overlay %} site-header--overlay{% endif %}{% if section.settings.sticky %} is-sticky{% endif %}" style="--logo-width:{{ logo_width }}px" data-header>
   <div class="header-inner page-width">
     <div class="header-left">
       <button class="icon-button menu-toggle" type="button" data-open-drawer="navigation" aria-expanded="false" aria-label="{{ 'header.open_menu' | t }}">{% render 'icon', name: 'menu' %}</button>

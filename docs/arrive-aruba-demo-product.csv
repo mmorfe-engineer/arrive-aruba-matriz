@@ -1,0 +1,7 @@
+Title,URL handle,Description,Vendor,Product category,Type,Tags,Published on online store,Status,SKU,Option1 name,Option1 value,Option2 name,Option2 value,Price,Compare-at price,Charge tax,Inventory tracker,Inventory quantity,Continue selling when out of stock,Weight value (grams),Weight unit for display,Requires shipping,Fulfillment service,Collection
+TEST - Performance Pique Polo,arrive-aruba-test-performance-pique-polo,"<p>A lightweight performance polo created to validate the Arrive Aruba product template before campaign photography is available.</p>",Arrive Aruba,Apparel & Accessories > Clothing > Shirts & Tops,Polo,"test, new, resortwear",true,active,AA-TEST-SB-S,Color,Silver Lake Blue,Size,S,85.00,,true,shopify,25,deny,280,g,true,manual,New Arrivals
+,arrive-aruba-test-performance-pique-polo,,,,,,,,AA-TEST-SB-M,Color,Silver Lake Blue,Size,M,85.00,,true,shopify,25,deny,290,g,true,manual,
+,arrive-aruba-test-performance-pique-polo,,,,,,,,AA-TEST-SB-L,Color,Silver Lake Blue,Size,L,85.00,,true,shopify,25,deny,300,g,true,manual,
+,arrive-aruba-test-performance-pique-polo,,,,,,,,AA-TEST-MO-S,Color,Mock Orange,Size,S,85.00,,true,shopify,25,deny,280,g,true,manual,
+,arrive-aruba-test-performance-pique-polo,,,,,,,,AA-TEST-MO-M,Color,Mock Orange,Size,M,85.00,,true,shopify,25,deny,290,g,true,manual,
+,arrive-aruba-test-performance-pique-polo,,,,,,,,AA-TEST-MO-L,Color,Mock Orange,Size,L,85.00,,true,shopify,25,deny,300,g,true,manual,
