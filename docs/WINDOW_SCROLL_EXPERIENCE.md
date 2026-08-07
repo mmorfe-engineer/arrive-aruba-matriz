@@ -3,6 +3,7 @@
 Rama: `feat/window-scroll-experience`
 Fecha: 2026-08-07
 Estado: planificacion (sin codigo aun)
+Restriccion base: **debe ser ejecutable como seccion Shopify OS 2.0.** Ver seccion 10.
 
 ## 1. La idea
 
@@ -81,10 +82,12 @@ Puntos de diseno que importan:
   que la ventana (parallax) y se pueden apagar en mobile sin retocar el video.
 - **El blanco final es un overlay CSS, no frames.** Ahorra el 30% de la secuencia y da
   control fino del timing.
-- **No hay navegacion a otra pagina.** La transicion al blanco entrega directamente la
-  seccion de productos en la misma pagina. Navegar de verdad rompe el efecto: el usuario
-  ve un flash de carga justo en el clímax. Si mas adelante productos tiene que ser una URL
-  propia (Shopify), se resuelve con View Transitions API y el blanco como estado compartido.
+- **No hay navegacion a otra pagina en la version por defecto.** La transicion al blanco
+  entrega directamente la seccion de productos en la misma pagina. Navegar de verdad rompe
+  el efecto: el usuario ve un flash de carga justo en el climax.
+  En Shopify esto se resuelve poniendo la seccion `journey` y una `featured-collection`
+  consecutivas en `templates/index.json`. Si el negocio exige que productos sea
+  `/collections/all` con URL propia, ver 10.5 — es posible pero es trabajo extra.
 
 ## 5. Assets que hay que producir en Blender
 
@@ -97,26 +100,38 @@ Puntos de diseno que importan:
    - Desktop: 1600x900
    - Mobile: 1080x1440 (4:5) o 1080x1620. Recortar el 16:9 a vertical mata el encuadre de la ventana.
 4. **Pass de nubes con alpha** (opcional). Si sale caro, se fake con CSS/SVG y nadie lo nota.
-5. **Export a AVIF calidad ~60, con fallback WebP ~70.**
-   Presupuesto duro: **<= 2.5 MB mobile, <= 5 MB desktop, secuencia completa.**
-   Si no entra, se baja a 120 frames antes que subir compresion.
+5. **Entrega final NO son frames sueltos: son sprite sheets.** Esto lo impone Shopify (ver 10.1).
+   Los frames salen de Blender sueltos, y un script de build los empaqueta en hojas.
+   - Formato: **WebP calidad ~72.** No AVIF: la compatibilidad de AVIF en assets/Files de
+     Shopify no es confiable y el CDN de Shopify ya negocia formato por su cuenta.
+   - Cada hoja **<= 4096 px por lado** por el limite de decodificacion de imagen en iOS Safari.
+   - Presupuesto duro: **<= 2.5 MB mobile, <= 5 MB desktop, secuencia completa.**
+   - Si no entra, se baja a 120 frames antes que subir compresion.
 
 ## 6. Trabajo de frontend
 
-Un modulo autonomo, sin dependencias externas:
+Un modulo autonomo, sin dependencias externas. **Un solo `journey.js` sirve a los dos
+destinos** (sitio estatico y tema Shopify); lo unico que cambia es de donde salen las URLs
+de las hojas y quien pinta el markup.
 
-- `journey.js` — precarga, scroll listener, dibujo en canvas
+- `journey.js` — precarga, scroll listener, dibujo en canvas. Se configura leyendo
+  `data-*` del contenedor, no con constantes hardcodeadas
 - `journey.css` — sticky, capas, tipografia de los textos
-- Punto de montaje en la home: un solo `<div id="aa-journey">`
+- Punto de montaje: un solo `<div class="aa-journey" data-sheets='[...]' data-frames="180">`
+  que en estatico escribe el HTML y en Shopify lo escribe Liquid
 
 Tecnica:
 
-- `<canvas>` + array de `Image` precargadas.
+- `<canvas>` + sprite sheets dibujadas con `drawImage(sheet, sx, sy, sw, sh, 0, 0, w, h)`.
 - Scroll leido con `IntersectionObserver` + `requestAnimationFrame`. Nunca dibujar
   dentro del evento `scroll` directo.
-- **Precarga progresiva en dos pasadas:** primero 1 de cada 8 frames (la seccion ya es
-  scrolleable, solo se ve a saltos), despues se rellenan los intermedios. Evita el
-  bloqueo de 4 segundos antes de poder interactuar.
+- **Precarga progresiva por hoja:** se carga primero la hoja 1, la seccion ya es scrolleable
+  con lo que haya, y el resto entra en orden. Evita el bloqueo de varios segundos antes de
+  poder interactuar. Mientras una hoja no llego, se dibuja el ultimo frame disponible.
+- **Ventana deslizante de memoria en mobile.** Cada hoja de 4096x2560 decodificada ocupa
+  ~40 MB en RAM; seis a la vez revientan el presupuesto de Safari iOS y el sistema las
+  purga en medio del scroll. Se mantienen como maximo 2-3 hojas vivas via
+  `createImageBitmap` + `close()` sobre las que quedan fuera de rango.
 - **Nada de scroll-jacking.** Sticky + scroll nativo. Sin `preventDefault` en wheel/touch.
   Secuestrar el scroll es lo que hace que estas experiencias se sientan hostiles en mobile.
 
@@ -157,20 +172,100 @@ no como peaje de entrada.
 **7.5 — Scrubbing de video en iOS.** Existe la tentacion de hacerlo mas simple moviendo
 `video.currentTime`. En iOS Safari eso da saltos y frames congelados. Por eso canvas.
 
+**7.6 — Online Store speed score.** Shopify publica un score de velocidad en el Admin y el
+merchant lo va a ver. Una seccion pesada en la home lo baja aunque cargue lazy. Hay que
+medirlo antes y despues y dejar el numero por escrito, no descubrirlo despues del launch.
+
 ## 8. Fases
+
+Con Shopify como destino obligatorio, Liquid deja de ser el ultimo paso y pasa a ser el
+formato nativo desde la fase 2. El sitio estatico se vuelve el entorno de prueba, no el
+producto final.
 
 | Fase | Que se hace | Salida |
 |---|---|---|
-| 0 | Prototipo aislado en `journey.html`, frames extraidos con ffmpeg del MP4 que ya existe | Se prueba en iPhone real antes de tocar la home |
-| 1 | Render definitivo en Blender (final en blanco, encuadre vertical, 180 frames) | Assets en `preview-assets/journey/` |
-| 2 | Integracion en la homepage + transicion a productos | Home funcionando |
-| 3 | QA: Lighthouse, iOS Safari, Android Chrome, reduced-motion, 3G lento | Checklist verde |
-| 4 | Empaquetado como seccion Liquid para la migracion Shopify | `shopify/sections/journey.liquid` |
+| 0 | Prototipo aislado en `journey.html`, sprite sheets generadas con ffmpeg del MP4 que ya existe | Se prueba en iPhone real antes de gastar un render |
+| 1 | Render definitivo en Blender + script de empaquetado a sheets WebP | `tools/build-journey-sheets.sh` + assets |
+| 2 | **`shopify/sections/journey.liquid`** con schema completo. Se desarrolla directo en un tema de desarrollo Shopify | Seccion instalable |
+| 3 | Backport a la home estatica reusando el mismo `journey.js` | Paridad entre los dos destinos |
+| 4 | QA: Lighthouse + speed score, iOS Safari, Android Chrome, reduced-motion, 3G lento, Theme Editor | Checklist verde |
 
 La fase 0 es la que decide. Si en un iPhone de verdad no se siente bien, se corta ahi
 y no se gasto un render.
 
 ## 9. Decision pendiente
 
-Confirmar si productos queda en la misma pagina (recomendado) o si debe ser una URL propia
-desde el arranque por SEO / Shopify. Eso cambia la fase 2.
+Confirmar si productos queda en la misma pagina (recomendado, ver 4) o si debe ser
+`/collections/all` con URL propia. Eso cambia la fase 2 y agrega el trabajo de 10.5.
+
+## 10. Ejecucion en Shopify
+
+Restricciones reales de la plataforma que cambian el diseno tecnico.
+
+### 10.1 — La carpeta `assets/` del tema es plana y no quiere 180 archivos
+
+No admite subcarpetas, y subir 180 frames por breakpoint (360 archivos) hace que cada push
+del tema sea lento y que el codigo del tema quede inmanejable. **Por eso sprite sheets.**
+
+Con frames mobile de 512x683 en hojas de 4096x2732 entran 8x4 = 32 frames por hoja.
+180 frames = 6 hojas. De 360 archivos se pasa a 12 (6 mobile + 6 desktop).
+
+### 10.2 — Las hojas van por Shopify Files, no por `assets/`
+
+Se suben en Settings → Files y se seleccionan desde el Theme Editor con settings de tipo
+`image_picker`. Ventajas sobre meterlas en `assets/`:
+
+- Pasan por el CDN de imagenes de Shopify, que negocia formato y tamano solo
+- No inflan el repositorio del tema ni cada `shopify theme push`
+- Se pueden reemplazar sin tocar codigo
+
+En Liquid las URLs se construyen con `image_url` y se inyectan como JSON en el `data-sheets`
+del contenedor. Verificar en la implementacion el tope de dimension del CDN de Shopify
+(del orden de 5760 px por lado) — nuestras hojas de 4096 quedan debajo, pero hay que
+confirmarlo antes de fijar el tamano de hoja.
+
+### 10.3 — Schema de la seccion
+
+Lo que el merchant si puede tocar desde el Theme Editor:
+
+- Las hojas mobile y desktop (`image_picker`), el poster de fallback
+- Los textos de cada fase y el texto final sobre blanco
+- Label y destino del CTA, y el label del "Skip to shop"
+- Largo del scroll (`range`, 200-400vh, default 300)
+- Numero de frames y grilla de la hoja, para que cambiar el render no exija tocar Liquid
+
+Lo que **no** se expone: nada que permita romper el performance sin darse cuenta.
+
+### 10.4 — Formato y carga del JS
+
+`journey.js` y `journey.css` van como assets del tema y se cargan con `asset_url`, con
+`defer`. El CSS se deja inline en la seccion siguiendo la convencion que ya usan las
+cuatro secciones existentes del repo. El JS **no** se duplica inline: si la seccion se
+inserta dos veces en una pagina, debe montar dos instancias sin recargar el script.
+
+La seccion tiene que sobrevivir a que el Theme Editor la re-renderice sin recargar la
+pagina. Eso significa escuchar `shopify:section:load` y `shopify:section:unload` para
+montar y desmontar limpio, liberando las `ImageBitmap`. Si no, editar un texto en el
+editor deja canvases huerfanos comiendo memoria.
+
+### 10.5 — Si productos tiene que ser una URL propia
+
+Ruta de dos capas, ambas necesarias porque el soporte de la primera no es universal:
+
+1. **View Transitions cross-document**, activadas con `@view-transition { navigation: auto }`
+   en el CSS del tema. Da la transicion nativa donde el navegador la soporta.
+2. **Fallback universal:** al llegar al final de la seccion se deja el overlay blanco
+   opaco, se marca una bandera en `sessionStorage` y se navega. El template de coleccion
+   arranca con un overlay blanco que se desvanece si encuentra esa bandera. Funciona en
+   todos lados y es poco codigo.
+
+Trabajo extra estimado: la seccion `journey` mas un fragmento compartido de overlay que
+hay que insertar tambien en `templates/collection.json`.
+
+### 10.6 — Lo que NO cambia por Shopify
+
+- Canvas + sprite sheets sigue siendo la tecnica correcta
+- Sigue sin haber WebGL. `<model-viewer>` de Shopify es para 3D de producto, no aplica aqui
+- Los fallbacks de la seccion 6 son identicos
+- El riesgo 7.1 (regeneracion de los `.dc.html`) sigue vigente mientras exista el sitio
+  estatico en paralelo
