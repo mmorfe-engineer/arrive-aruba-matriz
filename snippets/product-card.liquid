@@ -1,0 +1,26 @@
+{% doc %}
+  Renders a storefront product card with image, price and local wishlist control.
+  @param {product} product - Product to render.
+  @param {boolean} [show_vendor] - Whether to show the vendor.
+  @param {boolean} [show_wishlist] - Whether to show the wishlist button.
+{% enddoc %}
+<article class="product-card" data-reveal>
+  <a class="product-card-media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+    {% if product.featured_media %}
+      {{ product.featured_media.preview_image | image_url: width: 900 | image_tag: widths: '320, 480, 640, 900', sizes: '(min-width: 750px) 25vw, 50vw', loading: 'lazy', alt: product.featured_media.alt | default: product.title | escape }}
+    {% else %}
+      <span class="product-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420"></span>
+    {% endif %}
+    {% if product.compare_at_price_max > product.price %}<span class="badge">{{ 'products.product.sale' | t }}</span>{% elsif product.tags contains 'new' %}<span class="badge">{{ 'products.product.new' | t }}</span>{% endif %}
+  </a>
+  {% if show_wishlist %}
+    <button class="wishlist-button" type="button" data-wishlist="{{ product.id }}" data-wishlist-title="{{ product.title | escape }}" data-wishlist-url="{{ product.url }}" data-wishlist-price="{{ product.price | money | escape }}"{% if product.featured_media %} data-wishlist-image="{{ product.featured_media.preview_image | image_url: width: 240 }}"{% endif %} data-wishlist-message="{{ 'wishlist.updated' | t | escape }}" aria-label="{{ 'wishlist.toggle' | t: product: product.title | escape }}" aria-pressed="false">
+      {% render 'icon', name: 'heart' %}
+    </button>
+  {% endif %}
+  <div class="product-card-info">
+    {% if show_vendor and product.vendor != blank %}<p class="product-card-vendor">{{ product.vendor }}</p>{% elsif product.type != blank %}<p class="product-card-vendor">{{ product.type }}</p>{% endif %}
+    <h3 class="product-card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    {% render 'price', product: product %}
+  </div>
+</article>

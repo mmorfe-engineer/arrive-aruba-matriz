@@ -1,0 +1,12 @@
+{% doc %}
+  Renders a product or variant price.
+  @param {product} product - Product whose price is displayed.
+  @param {variant} [variant] - Optional selected variant.
+{% enddoc %}
+{%- assign target = variant | default: product.selected_or_first_available_variant -%}
+<div class="price" data-price>
+  <span data-product-price>{{ target.price | money }}</span>
+  <span class="price-compare" data-product-compare{% unless target.compare_at_price > target.price %} hidden{% endunless %}>
+    {% if target.compare_at_price > target.price %}{{ target.compare_at_price | money }}{% endif %}
+  </span>
+</div>

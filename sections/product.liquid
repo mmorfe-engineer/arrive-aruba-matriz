@@ -1,0 +1,79 @@
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+<section class="main-product">
+  <div class="product-layout" data-section-id="{{ section.id }}">
+    <div class="product-gallery" aria-label="{{ product.title | escape }}" style="--product-media-fit:{{ section.settings.media_fit }}">
+      {% if product.media.size > 0 %}
+        {% for media in product.media %}<div class="product-media" data-media-id="{{ media.id }}">{% render 'product-media', media: media, eager: forloop.first %}</div>{% endfor %}
+      {% else %}
+        <div class="product-media product-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420"></div>
+      {% endif %}
+    </div>
+    <div class="product-info">
+      <div class="product-info-inner">
+        {% if section.settings.show_vendor and product.vendor != blank %}<p class="eyebrow">{{ product.vendor }}</p>{% endif %}
+        <h1 class="product-title">{{ product.title }}</h1>
+        <div class="product-price">{% render 'price', product: product, variant: current_variant %}</div>
+        {% if cart.taxes_included %}<p class="cart-line-meta">{{ 'products.product.tax_included' | t }}</p>{% else %}<p class="cart-line-meta">{{ 'products.product.tax_at_checkout' | t }}</p>{% endif %}
+        {% if section.settings.show_description and product.description != blank %}<div class="product-description rte">{{ product.description }}</div>{% endif %}
+
+        <product-form>
+          {% form 'product', product, id: 'ProductForm-' | append: section.id %}
+            <input type="hidden" name="id" value="{{ current_variant.id }}">
+            {% unless product.has_only_default_variant %}
+              {% for option in product.options_with_values %}
+                <fieldset class="product-option">
+                  <legend>{{ option.name }}: <span data-selected-option>{{ option.selected_value }}</span></legend>
+                  <div class="option-values">
+                    {% for option_value in option.values %}
+                      <input class="option-input" id="Option-{{ section.id }}-{{ option.position }}-{{ forloop.index }}" type="radio" name="options[{{ option.name | escape }}]" value="{{ option_value | escape }}" data-option-input{% if option.selected_value == option_value %} checked{% endif %}{% unless option_value.available %} disabled{% endunless %}>
+                      <label class="option-label" for="Option-{{ section.id }}-{{ option.position }}-{{ forloop.index }}">{{ option_value }}</label>
+                    {% endfor %}
+                  </div>
+                </fieldset>
+              {% endfor %}
+            {% endunless %}
+            <label class="eyebrow" for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
+            <div class="quantity">
+              <button type="button" data-quantity-change="-1" aria-label="Decrease quantity">−</button>
+              <input id="Quantity-{{ section.id }}" type="number" name="quantity" value="1" min="1" inputmode="numeric">
+              <button type="button" data-quantity-change="1" aria-label="Increase quantity">+</button>
+            </div>
+            <button class="button button--primary product-submit" type="submit" data-available-label="{{ 'products.product.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.product.sold_out' | t | escape }}" data-added-label="{{ 'products.product.added_to_cart' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button>
+            {% if section.settings.show_dynamic_checkout %}{{ form | payment_button }}{% endif %}
+          {% endform %}
+          <script type="application/json" data-variants>{{ product.variants | json }}</script>
+        </product-form>
+
+        <div class="product-details">
+          {% if product.description != blank and section.settings.show_description == false %}<details open><summary>{{ 'products.product.details' | t }}</summary><div class="product-details-content rte">{{ product.description }}</div></details>{% endif %}
+          {% if section.settings.show_metafields %}
+            {% assign fields = 'materials,care,fit,size_guide' | split: ',' %}
+            {% for field in fields %}{% assign detail = product.metafields.custom[field] %}{% if detail != blank %}<details><summary>{% case field %}{% when 'materials' %}{{ 'products.product.materials' | t }}{% when 'care' %}{{ 'products.product.care' | t }}{% when 'fit' %}{{ 'products.product.fit' | t }}{% when 'size_guide' %}{{ 'products.product.size_guide' | t }}{% endcase %}</summary><div class="product-details-content rte">{{ detail | metafield_tag }}</div></details>{% endif %}{% endfor %}
+          {% endif %}
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'collapsible' %}{% if block.settings.heading != blank %}<details {{ block.shopify_attributes }}><summary>{{ block.settings.heading }}</summary><div class="product-details-content rte">{{ block.settings.content }}</div></details>{% endif %}
+              {% when '@app' %}{% render block %}
+            {% endcase %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "t:sections.product.name",
+  "settings": [
+    { "type": "checkbox", "id": "show_vendor", "label": "t:sections.product.show_vendor", "default": false },
+    { "type": "checkbox", "id": "show_description", "label": "t:sections.product.show_description", "default": true },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "t:sections.product.show_dynamic_checkout", "default": true },
+    { "type": "checkbox", "id": "show_metafields", "label": "t:sections.product.show_metafields", "default": true },
+    { "type": "select", "id": "media_fit", "label": "t:sections.product.media_fit", "default": "contain", "options": [{ "value": "cover", "label": "t:options.cover" }, { "value": "contain", "label": "t:options.contain" }] }
+  ],
+  "blocks": [
+    { "type": "collapsible", "name": "t:sections.product.collapsible", "settings": [{ "type": "text", "id": "heading", "label": "t:sections.all.heading", "default": "Shipping and returns" }, { "type": "richtext", "id": "content", "label": "t:sections.all.text", "default": "<p>Add shipping and returns information here.</p>" }] },
+    { "type": "@app" }
+  ]
+}
+{% endschema %}
