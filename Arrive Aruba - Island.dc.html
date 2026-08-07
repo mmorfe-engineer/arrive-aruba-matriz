@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Discover the Island - Arrive Aruba</title>
+  <meta name="description" content="The island story behind Arrive Aruba resortwear.">
+  <link rel="icon" href="preview-assets/brand/logo-mark.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Medium.otf') format('opentype'); font-weight:500; font-style:normal; font-display:swap; }
+    @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Book-Italic.otf') format('opentype'); font-weight:400; font-style:italic; font-display:swap; }
+    @font-face { font-family:'Port Blair Alternate'; src:url('preview-assets/fonts/Port-Blair-Alternate.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { min-height:100vh; background:#F0F0E5; color:#23405e; font-family:'Geologica',system-ui,sans-serif; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+    a { color:inherit; text-decoration:none; }
+    .aa-shell { min-height:100vh; background:#F0F0E5; }
+    .aa-nav { position:fixed; top:0; left:0; right:0; z-index:20; height:74px; padding:0 22px; display:flex; align-items:center; justify-content:space-between; color:#F0F0E5; mix-blend-mode:normal; }
+    .aa-nav a { font-size:9px; letter-spacing:0.26em; text-transform:uppercase; transition:opacity 0.2s ease; }
+    .aa-nav a:hover { opacity:0.68; }
+    .aa-nav img { height:34px; width:auto; display:block; }
+    .aa-hero { position:relative; min-height:100svh; min-height:100dvh; display:grid; align-items:end; overflow:hidden; background:#386395; }
+    .aa-hero-media { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 40%; transform:scale(1.02); }
+    .aa-hero::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom,rgba(7,18,30,0.4),rgba(34,64,94,0.24) 42%,rgba(35,64,94,0.88)); }
+    .aa-hero-inner { position:relative; z-index:2; width:min(1120px,100%); margin:0 auto; padding:118px 24px 72px; color:#F0F0E5; }
+    .aa-kicker { font-size:9px; letter-spacing:0.38em; text-transform:uppercase; color:rgba(240,240,229,0.58); margin-bottom:20px; }
+    .aa-title { max-width:760px; font-family:'ITC Legacy Serif',Georgia,serif; font-style:italic; font-weight:400; font-size:clamp(48px,9vw,116px); line-height:0.96; letter-spacing:0; margin-bottom:24px; }
+    .aa-standfirst { max-width:470px; font-size:14px; line-height:1.9; font-weight:300; color:rgba(240,240,229,0.76); }
+    .aa-story { display:grid; grid-template-columns:minmax(0,0.92fr) minmax(280px,0.58fr); gap:clamp(34px,6vw,86px); width:min(1120px,100%); margin:0 auto; padding:86px 24px 92px; }
+    .aa-story h2 { font-family:'ITC Legacy Serif',Georgia,serif; font-weight:500; font-size:clamp(34px,5vw,64px); line-height:1.02; color:#23405e; margin-bottom:26px; }
+    .aa-copy { display:grid; gap:20px; max-width:640px; }
+    .aa-copy p { font-size:15px; line-height:1.9; font-weight:300; color:#647c96; }
+    .aa-aside { align-self:start; border-top:1px solid rgba(56,99,149,0.2); padding-top:22px; }
+    .aa-aside p { font-size:12px; line-height:1.8; font-weight:300; color:#6d8298; margin-bottom:24px; }
+    .aa-button { display:inline-block; color:#386395; border:1px solid rgba(56,99,149,0.34); padding:15px 28px; font-size:9px; font-weight:500; letter-spacing:0.24em; text-transform:uppercase; transition:background 0.25s ease,color 0.25s ease,border-color 0.25s ease; }
+    .aa-button:hover { background:#386395; border-color:#386395; color:#F0F0E5; }
+    .aa-panel { background:#386395; color:#F0F0E5; padding:72px 24px; }
+    .aa-panel-inner { width:min(1120px,100%); margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:34px; align-items:center; }
+    .aa-panel figure { overflow:hidden; min-height:360px; }
+    .aa-panel img { width:100%; height:100%; min-height:360px; object-fit:cover; object-position:center 58%; display:block; }
+    .aa-panel h2 { font-family:'ITC Legacy Serif',Georgia,serif; font-style:italic; font-weight:400; font-size:clamp(34px,6vw,72px); line-height:1.02; margin-bottom:24px; }
+    .aa-panel p { max-width:440px; font-size:14px; line-height:1.9; font-weight:300; color:rgba(240,240,229,0.76); }
+    .aa-footer { padding:34px 24px; display:flex; justify-content:space-between; gap:22px; align-items:center; color:#386395; }
+    .aa-footer img { height:30px; width:auto; display:block; }
+    .aa-footer a { font-size:9px; letter-spacing:0.22em; text-transform:uppercase; border-bottom:1px solid currentColor; padding-bottom:3px; }
+    @media (max-width:760px) {
+      .aa-nav { height:68px; padding:0 18px; }
+      .aa-nav img { height:30px; }
+      .aa-hero-inner { padding:102px 22px 58px; }
+      .aa-story { grid-template-columns:1fr; padding:64px 22px 70px; }
+      .aa-panel { padding:58px 22px; }
+      .aa-panel-inner { grid-template-columns:1fr; }
+      .aa-panel figure, .aa-panel img { min-height:300px; }
+      .aa-footer { flex-direction:column; align-items:flex-start; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *, *::before, *::after { animation-duration:0.01ms !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="aa-shell">
+    <nav class="aa-nav" aria-label="Island page navigation">
+      <a href="Arrive Aruba - Homepage.dc.html">Home</a>
+      <a href="Arrive Aruba - Homepage.dc.html" aria-label="Arrive Aruba home">
+        <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
+      </a>
+      <a href="Arrive Aruba - Collection.dc.html">Shop</a>
+    </nav>
+
+    <header class="aa-hero">
+      <img class="aa-hero-media" src="preview-assets/media/arrive-island-stays-banner.jpg" alt="Divi divi tree on an Aruba beach">
+      <div class="aa-hero-inner">
+        <p class="aa-kicker">Discover the Island</p>
+        <h1 class="aa-title">The island stays with you.</h1>
+        <p class="aa-standfirst">Arrive Aruba begins with the feeling of leaving the shore and realizing the light, water and warmth came with you.</p>
+      </div>
+    </header>
+
+    <main>
+      <section class="aa-story" aria-labelledby="island-story-title">
+        <div>
+          <p class="aa-kicker" style="color:#5F8BB8;">Island Story</p>
+          <h2 id="island-story-title">A quieter way to remember Aruba.</h2>
+          <div class="aa-copy">
+            <p>Every piece in the collection is shaped by the island: the light, the water and the easy pace that stays in your body after you leave.</p>
+            <p>The story lives in the small details: an open collar after the beach, a clean layer at dinner and the kind of color that feels borrowed from the coast.</p>
+            <p>As the collection grows, this page will carry the people, places and quiet rituals behind each release.</p>
+          </div>
+        </div>
+        <aside class="aa-aside">
+          <p>A dedicated home for the island narrative, ready for founder notes, material details and photography from the first full campaign.</p>
+          <a class="aa-button" href="Arrive Aruba - Homepage.dc.html">Back to Home</a>
+        </aside>
+      </section>
+
+      <section class="aa-panel" aria-labelledby="memory-title">
+        <div class="aa-panel-inner">
+          <figure>
+            <img src="preview-assets/media/arrive-resort-polo-editorial.jpg" alt="Arrive Aruba resortwear editorial detail">
+          </figure>
+          <div>
+            <p class="aa-kicker">Resortwear</p>
+            <h2 id="memory-title">Made for sunlit arrivals.</h2>
+            <p>The first collection keeps the mood simple: polished pieces for travel, warm evenings and the moments that make a place feel close again.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="aa-footer">
+      <img src="preview-assets/brand/logo-blue.webp" alt="Arrive Aruba">
+      <a href="Arrive Aruba - Collection.dc.html">Shop the Collection</a>
+    </footer>
+  </div>
+</body>
+</html>
