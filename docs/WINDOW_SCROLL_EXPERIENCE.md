@@ -2,8 +2,37 @@
 
 Rama: `feat/window-scroll-experience`
 Fecha: 2026-08-07
-Estado: planificacion (sin codigo aun)
+Estado: prototipo estatico implementado en `codex/journey-sprite-pipeline`
 Restriccion base: **debe ser ejecutable como seccion Shopify OS 2.0.** Ver seccion 10.
+
+## 0. Estado actual del prototipo
+
+La version actual ya no es solamente un plan. El repo incluye un prototipo standalone en
+`journey.html` con `journey.css`, `journey.js` y assets generados en
+`preview-assets/journey/`.
+
+Lo implementado:
+
+- Blender renderizo la ventana flotante con alpha, fondo transparente y fondo CSS en web.
+- La experiencia usa 160 frames: 120 de persiana y 40 de push.
+- Los PNG finales se empacaron en WebP sprite sheets con `tools/build-journey-sheets.sh`.
+- `journey.js` carga el manifiesto cuando la seccion esta cerca del viewport, dibuja en
+  canvas con `drawImage`, y mantiene una ventana de memoria de hojas cercanas.
+- El scroll se lee con `IntersectionObserver`, `ResizeObserver` y `requestAnimationFrame`.
+  No hay listener directo de `scroll`.
+- Hay fallbacks para `prefers-reduced-motion`, `saveData`, conexiones 2g/3g y viewport
+  menor de 380px.
+
+Presupuesto real de assets:
+
+| Variante | Hojas | Peso total |
+|---|---:|---:|
+| Desktop | 11 | 1.49 MB |
+| Mobile | 6 | 0.98 MB |
+
+QA automatizada con Chromium paso en desktop 1440x900, mobile 390x844, compact 375x812 y
+reduced motion. El gate pendiente antes de convertir esto en seccion Liquid es probar en
+iPhone fisico Safari, especialmente memoria, suavidad y recuperacion tras scroll rapido.
 
 ## 1. La idea
 

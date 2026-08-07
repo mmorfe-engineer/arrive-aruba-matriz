@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#5f9ed0">
+  <title>Journey | Arrive Aruba</title>
+  <meta name="description" content="An airplane window opens to Aruba as you move through the Arrive journey.">
+  <link rel="icon" href="preview-assets/brand/logo-mark.svg">
+  <link rel="preload" href="preview-assets/fonts/ITC-Legacy-Serif-Medium.otf" as="font" type="font/otf" crossorigin>
+  <link rel="stylesheet" href="journey.css">
+</head>
+<body>
+  <header class="aa-lab-header">
+    <img class="aa-lab-header__logo" src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba">
+    <a class="aa-lab-header__home" href="index.html">Arrive home</a>
+  </header>
+
+  <main>
+    <section
+      class="aa-journey"
+      data-manifest="preview-assets/journey/journey-manifest.json"
+      aria-label="The journey to Aruba"
+    >
+      <div class="aa-journey__stage">
+        <div class="aa-journey__cloud aa-journey__cloud--far" aria-hidden="true"></div>
+        <div class="aa-journey__cloud aa-journey__cloud--near" aria-hidden="true"></div>
+
+        <div class="aa-journey__visual">
+          <picture class="aa-journey__poster">
+            <source media="(max-width: 767px)" srcset="preview-assets/journey/mobile/poster.webp">
+            <img src="preview-assets/journey/desktop/poster.webp" alt="Airplane window open to the turquoise coast of Aruba">
+          </picture>
+          <canvas
+            class="aa-journey__canvas"
+            width="1920"
+            height="1080"
+            role="img"
+            aria-label="Airplane shade opening before a view of Aruba"
+          ></canvas>
+        </div>
+
+        <p class="aa-journey__copy aa-journey__copy--north">Nine degrees north.</p>
+        <p class="aa-journey__copy aa-journey__copy--felt">You already know how it felt.</p>
+        <div class="aa-journey__whiteout" aria-hidden="true"></div>
+        <p class="aa-journey__final">Take home what you felt.</p>
+        <p class="aa-journey__status" aria-live="polite">Loading Aruba</p>
+        <a class="aa-journey__skip" href="#shop">Skip to shop</a>
+      </div>
+    </section>
+
+    <section class="aa-shop" id="shop" aria-labelledby="shop-title">
+      <div class="aa-shop__inner">
+        <h2 id="shop-title">The island, carried home.</h2>
+        <div class="aa-shop__grid">
+          <a class="aa-shop-card" href="Arrive%20Aruba%20-%20Collection.dc.html">
+            <div class="aa-shop-card__media">
+              <img src="preview-assets/media/arrive-beach-polo-editorial.jpg" alt="Arrive beach polo styled by the water" loading="lazy">
+            </div>
+            <p>Beach Polo</p>
+          </a>
+          <a class="aa-shop-card aa-shop-card--secondary" href="Arrive%20Aruba%20-%20Collection.dc.html">
+            <div class="aa-shop-card__media">
+              <img src="preview-assets/media/arrive-resort-polo-editorial.jpg" alt="Arrive resort polo in Aruba" loading="lazy">
+            </div>
+            <p>Resort Polo</p>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="journey.js" defer></script>
+</body>
+</html>

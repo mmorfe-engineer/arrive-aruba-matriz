@@ -11,10 +11,39 @@ This repository contains the Arrive Aruba digital flagship, built on the officia
 | `index.html` | Landing launcher (entry point for GitHub Pages) |
 | `Arrive Aruba - Homepage.dc.html` | Editorial marketing homepage (mobile-first) |
 | `Arrive Aruba - App.dc.html` | Full mobile-app prototype — the complete App Flow (login → home → search → product → cart → checkout → profile → settings) |
+| `journey.html` | Standalone scroll-driven airplane-window journey prototype |
+| `journey.css` / `journey.js` | Canvas sprite runtime, layout, fallbacks, and motion for the Journey prototype |
+| `preview-assets/journey/` | Generated WebP sprite sheets and manifest for the Journey prototype |
+| `tools/build-journey-sheets.sh` | Rebuilds the Journey sprite sheets from Blender PNG renders |
 | `assets/` | Brand logos + fonts (ITC Legacy Serif, Port Blair) |
 | `support.js` | Runtime that powers the interactive pages |
 
 All pages open directly in a browser — no build step.
+
+## Journey prototype
+
+The Journey prototype lives at `journey.html` and runs without a bundler. It uses CSS for
+the sky, clouds, white fade, and editorial sections, while `journey.js` draws the Blender
+window render as progressive WebP sprite sheets on a `<canvas>`.
+
+Rebuild the sheets from the Blender render output:
+
+```bash
+bash tools/build-journey-sheets.sh "/path/to/renders/journey" preview-assets/journey
+```
+
+Current generated asset sizes:
+
+| Variant | Sheets | Total |
+|---------|--------|-------|
+| Desktop | 11 | 1.49 MB |
+| Mobile | 6 | 0.98 MB |
+
+The runtime lazy-loads when the section is near the viewport, uses `IntersectionObserver`
++ `requestAnimationFrame` instead of a direct scroll listener, keeps only nearby decoded
+sheets alive, and falls back to a static poster for reduced motion, save-data, and slow
+connections. Viewports below 380px use the shade sequence with CSS scale instead of loading
+the push sheets.
 
 ## Publish on GitHub Pages
 
