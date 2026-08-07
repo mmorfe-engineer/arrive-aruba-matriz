@@ -1,0 +1,18 @@
+@font-face{font-family:ArriveLegacy;src:url('./arrive-legacy-medium.otf') format('opentype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:ArriveLegacy;src:url('./arrive-legacy-book-italic.otf') format('opentype');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:PortBlair;src:url('./arrive-port-blair.otf') format('opentype');font-weight:400;font-style:normal;font-display:swap}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--aa-cream);color:var(--aa-ink);font-family:var(--aa-body-font),Arial,sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.no-scroll{overflow:hidden}
+img,svg,video,model-viewer{display:block;max-width:100%}
+button,input,select,textarea{font:inherit}
+button,a{color:inherit}
+a{text-decoration:none}
+h1,h2,h3,p{margin-block-start:0}
+button{cursor:pointer}
+.site-main{min-height:60vh}
+.skip-link{position:fixed;left:1rem;top:1rem;z-index:1000;padding:.75rem 1rem;background:#fff;color:#000;transform:translateY(-180%)}
+.skip-link:focus{transform:translateY(0)}
+.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+:focus-visible{outline:2px solid var(--aa-orange);outline-offset:3px}

@@ -1,0 +1,5 @@
+{% if predictive_search.performed %}
+  {% assign results = predictive_search.resources.products %}
+  {% if results.size > 0 %}<ul class="predictive-list" role="listbox">{% for product in results limit: 4 %}<li><a class="predictive-card" href="{{ product.url }}">{% if product.featured_media %}{{ product.featured_media.preview_image | image_url: width: 240 | image_tag: loading: 'lazy', alt: product.title | escape }}{% else %}<span class="product-placeholder"></span>{% endif %}<span><strong>{{ product.title }}</strong><br>{{ product.price | money }}</span></a></li>{% endfor %}</ul>{% else %}<p>{{ 'search.no_results' | t }}</p>{% endif %}
+{% endif %}
+{% schema %}{"name":"t:sections.predictive_search.name"}{% endschema %}

@@ -1,0 +1,19 @@
+{% doc %}
+  Outputs global design tokens from theme settings.
+{% enddoc %}
+{% style %}
+  :root {
+    --aa-sapphire: {{ settings.color_sapphire }};
+    --aa-sapphire-dark: {{ settings.color_sapphire_dark }};
+    --aa-lake: {{ settings.color_lake }};
+    --aa-cream: {{ settings.color_cream }};
+    --aa-orange: {{ settings.color_orange }};
+    --aa-green: {{ settings.color_green }};
+    --aa-ink: {{ settings.color_ink }};
+    --aa-page-width: {{ settings.page_width }}px;
+    --aa-side-space: clamp(1rem, 3.5vw, 3.5rem);
+    --aa-radius: {{ settings.control_radius }}px;
+    --aa-body-font: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+  }
+  {{ settings.type_body_font | font_face: font_display: 'swap' }}
+{% endstyle %}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="{{ settings.color_sapphire }}">
+    {% render 'meta-tags' %}
+    {% render 'css-variables' %}
+    {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'theme.css' | asset_url | stylesheet_tag }}
+    {{ content_for_header }}
+    <script>
+      window.ArriveTheme = {
+        root: {{ routes.root_url | json }},
+        cartUrl: {{ routes.cart_url | json }},
+        predictiveSearchUrl: {{ routes.predictive_search_url | json }},
+        currency: {{ cart.currency.iso_code | default: localization.country.currency.iso_code | json }},
+        locale: {{ request.locale.iso_code | json }}
+      };
+    </script>
+    <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+  </head>
+  <body class="template-{{ template.name | handle }}{% if settings.enable_motion %} motion-enabled{% endif %}">
+    <a class="skip-link" href="#MainContent">{{ 'accessibility.skip_to_content' | t }}</a>
+    {% sections 'header-group' %}
+    <main id="MainContent" class="site-main" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+    {% sections 'footer-group' %}
+    <div class="sr-only" aria-live="polite" aria-atomic="true" data-live-region></div>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "settings_schema": {
+    "brand": { "name": "Brand", "logo": "Logo", "logo_inverse": "Inverse logo", "favicon": "Favicon", "social_image": "Social sharing image", "logo_width": "Logo width" },
+    "colors": { "name": "Colors", "sapphire": "Star Sapphire", "sapphire_dark": "Deep Sapphire", "lake": "Silver Lake Blue", "cream": "Cannoli Cream", "orange": "Mock Orange", "green": "Fair Green", "ink": "Ink" },
+    "typography": { "name": "Typography", "body": "Body font" },
+    "layout": { "name": "Layout and motion", "page_width": "Maximum page width", "control_radius": "Control corner radius", "motion": "Enable motion" },
+    "social": { "name": "Social media", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook" }
+  },
+  "section_groups": { "header": "Header group", "footer": "Footer group" },
+  "sections": {
+    "all": { "heading": "Heading", "subheading": "Subheading", "text": "Text", "image": "Image", "image_2": "Second image", "menu": "Menu", "button_label": "Button label", "button_link": "Button link", "color": "Color", "collection": "Collection", "product": "Product", "alignment": "Alignment", "desktop_height": "Desktop height", "mobile_height": "Mobile height", "show": "Show section", "layout": "Layout", "reverse": "Reverse layout", "products_to_show": "Products to show" },
+    "header": { "name": "Header", "menu": "Main menu", "overlay_home": "Overlay the home hero", "sticky": "Sticky header", "show_search": "Show search", "show_account": "Show account", "show_wishlist": "Show saved pieces" },
+    "footer": { "name": "Footer", "tagline": "Tagline", "menu_block": "Menu column" },
+    "cart_drawer": { "name": "Cart drawer" },
+    "predictive_search": { "name": "Predictive search" },
+    "hero": { "name": "Arrive hero", "desktop_video": "Desktop video", "mobile_video": "Mobile video", "poster": "Poster image", "eyebrow": "Eyebrow", "tagline": "Tagline", "primary_label": "Primary button label", "primary_link": "Primary button link", "secondary_label": "Secondary button label", "secondary_link": "Secondary button link", "show_sound": "Show sound control", "sound_on": "Sound on label", "sound_off": "Sound off label", "focus": "Media focal position" },
+    "category_grid": { "name": "Category grid", "card": "Category card", "background": "Fallback background", "columns": "Desktop columns" },
+    "featured_collection": { "name": "Featured collection", "show_vendor": "Show vendor", "show_wishlist": "Show saved button" },
+    "story_banner": { "name": "Island story banner", "kicker": "Kicker", "overlay": "Overlay strength" },
+    "editorial": { "name": "Editorial image with text" },
+    "ticker": { "name": "Ticker", "item": "Ticker item", "speed": "Speed" },
+    "newsletter": { "name": "Newsletter" },
+    "main_page": { "name": "Page" },
+    "island_hero": { "name": "Island hero" },
+    "contact": { "name": "Contact form" },
+    "collection": { "name": "Main collection", "show_description": "Show collection description", "show_filters": "Show filters", "show_sort": "Show sorting", "columns": "Desktop columns", "mobile_columns": "Mobile columns", "products_per_page": "Products per page", "show_vendor": "Show vendor", "show_wishlist": "Show saved button" },
+    "product": { "name": "Main product", "show_vendor": "Show vendor", "show_description": "Show description", "show_dynamic_checkout": "Show dynamic checkout", "show_metafields": "Show product custom data", "media_fit": "Media fit", "collapsible": "Collapsible row" },
+    "recommendations": { "name": "Product recommendations", "intent": "Recommendation intent" },
+    "search": { "name": "Main search", "products_per_page": "Results per page" },
+    "cart": { "name": "Main cart" },
+    "list_collections": { "name": "Collection list" },
+    "blog": { "name": "Blog", "articles_per_page": "Articles per page" },
+    "article": { "name": "Article" },
+    "password": { "name": "Password page" },
+    "not_found": { "name": "404 page" },
+    "rich_text": { "name": "Rich text" },
+    "custom_section": { "name": "Custom section" },
+    "text_block": { "name": "Text" },
+    "group_block": { "name": "Group" }
+  },
+  "options": { "left": "Left", "center": "Center", "right": "Right", "related": "Related", "complementary": "Complementary", "cover": "Cover", "contain": "Contain" }
+}

@@ -1,0 +1,13 @@
+<div class="cart-drawer" data-drawer="cart" aria-hidden="true">
+  <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
+  <div class="cart-drawer-panel" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}">
+    <header class="cart-drawer-header"><h2>{{ 'cart.title' | t }}</h2><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></header>
+    {% if cart.empty? %}
+      <div class="cart-empty"><div><p class="serif-heading">{{ 'cart.empty' | t }}</p><a class="button button--primary" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue_shopping' | t }}</a></div></div>
+    {% else %}
+      <div class="cart-lines">{% for item in cart.items %}<article class="cart-line">{% if item.image %}{{ item.image | image_url: width: 240 | image_tag: class: 'cart-line-media', loading: 'lazy', alt: item.image.alt | default: item.product.title | escape }}{% else %}<span class="cart-line-media product-placeholder"></span>{% endif %}<div><a class="cart-line-title" href="{{ item.url }}">{{ item.product.title }}</a>{% unless item.product.has_only_default_variant %}<p class="cart-line-meta">{{ item.variant.title }}</p>{% endunless %}<p>{{ item.final_line_price | money }}</p><div class="cart-line-actions"><input type="number" min="0" value="{{ item.quantity }}" data-cart-line-input data-line="{{ forloop.index }}" aria-label="{{ 'cart.quantity' | t: product: item.product.title | escape }}"><button class="link-button" type="button" data-cart-remove data-line="{{ forloop.index }}">{{ 'cart.remove' | t }}</button></div></div></article>{% endfor %}</div>
+      <footer class="cart-drawer-footer"><div class="cart-subtotal"><span>{{ 'cart.subtotal' | t }}</span><strong>{{ cart.total_price | money_with_currency }}</strong></div><a class="button button--primary" href="{{ routes.cart_url }}">{{ 'cart.view_cart' | t }}</a><form action="{{ routes.cart_url }}" method="post"><button class="button" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button></form></footer>
+    {% endif %}
+  </div>
+</div>
+{% schema %}{"name":"t:sections.cart_drawer.name"}{% endschema %}

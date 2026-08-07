@@ -1,0 +1,23 @@
+{% doc %}
+  Renders canonical, SEO and social metadata for the current resource.
+{% enddoc %}
+{%- liquid
+  assign social_title = page_title | default: shop.name
+  assign social_description = page_description | default: shop.description | default: shop.name
+  assign social_image = page_image | default: settings.social_image
+-%}
+<title>{{ page_title }}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
+{% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+<link rel="canonical" href="{{ canonical_url }}">
+{% if settings.favicon != blank %}<link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">{% else %}<link rel="icon" href="{{ 'arrive-logo-mark.svg' | asset_url }}">{% endif %}
+<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:title" content="{{ social_title | escape }}">
+<meta property="og:type" content="{% if request.page_type == 'product' %}product{% elsif request.page_type == 'article' %}article{% else %}website{% endif %}">
+<meta property="og:description" content="{{ social_description | escape }}">
+{% if social_image %}<meta property="og:image" content="https:{{ social_image | image_url: width: 1200 }}">{% endif %}
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ social_title | escape }}">
+<meta name="twitter:description" content="{{ social_description | escape }}">
+{% if social_image %}<meta name="twitter:image" content="https:{{ social_image | image_url: width: 1200 }}">{% endif %}
+{% if request.page_type == 'product' %}<script type="application/ld+json">{{ product | structured_data }}</script>{% elsif request.page_type == 'article' %}<script type="application/ld+json">{{ article | structured_data }}</script>{% endif %}

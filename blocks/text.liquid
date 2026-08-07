@@ -1,0 +1,4 @@
+<div class="rte" style="text-align:{{ block.settings.alignment }}" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+{% schema %}
+{"name":"t:sections.text_block.name","settings":[{"type":"richtext","id":"text","label":"t:sections.all.text","default":"<p>Add editorial content.</p>"},{"type":"select","id":"alignment","label":"t:sections.all.alignment","default":"left","options":[{"value":"left","label":"t:options.left"},{"value":"center","label":"t:options.center"},{"value":"right","label":"t:options.right"}]}],"presets":[{"name":"t:sections.text_block.name"}]}
+{% endschema %}

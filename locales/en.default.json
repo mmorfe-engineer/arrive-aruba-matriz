@@ -1,0 +1,59 @@
+{
+  "accessibility": { "skip_to_content": "Skip to content" },
+  "general": {
+    "close": "Close",
+    "view_all": "View all",
+    "learn_more": "Learn more",
+    "pagination": { "label": "Pagination", "previous": "Previous page", "next": "Next page" },
+    "404": { "eyebrow": "404", "title": "This shore could not be found.", "text": "The page may have moved or no longer exists.", "button": "Return home" }
+  },
+  "header": { "open_menu": "Open menu", "main_menu": "Main menu", "search": "Search" },
+  "footer": { "rights": "All rights reserved." },
+  "customer": { "account": "Account" },
+  "localization": { "country": "Country and currency", "language": "Language" },
+  "wishlist": { "title": "Saved pieces", "toggle": "Save {{ product }}", "updated": "Saved pieces updated", "empty": "No saved pieces yet.", "explore": "Explore the collection", "remove": "Remove {{ product }}" },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search pieces, collections and stories",
+    "submit": "Search",
+    "results_for": "Results for “{{ terms }}”",
+    "no_results": "No results found.",
+    "result_count": "{{ count }} results"
+  },
+  "cart": {
+    "title": "Your bag",
+    "open": "Open cart",
+    "empty": "Your bag is waiting.",
+    "continue_shopping": "Explore the collection",
+    "quantity": "Quantity for {{ product }}",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "view_cart": "View bag",
+    "checkout": "Checkout",
+    "note": "Taxes and shipping calculated at checkout"
+  },
+  "products": {
+    "product": {
+      "new": "New",
+      "sale": "Sale",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "add_to_cart": "Add to bag",
+      "added_to_cart": "Added to your bag",
+      "quantity": "Quantity",
+      "details": "Details",
+      "materials": "Materials",
+      "care": "Care",
+      "fit": "Fit",
+      "size_guide": "Size guide",
+      "tax_included": "Tax included.",
+      "tax_at_checkout": "Tax calculated at checkout."
+    }
+  },
+  "collections": { "product_count": "{{ count }} pieces", "filter": "Filter", "sort": "Sort", "apply": "Apply filters", "clear": "Clear", "clear_all": "Clear all", "empty": "No pieces match these filters.", "from": "From", "to": "To" },
+  "newsletter": { "email": "Email address", "submit": "Join the list", "success": "Welcome to the island." },
+  "contact": { "name": "Name", "email": "Email", "phone": "Phone", "message": "Message", "send": "Send message", "success": "Thank you. We will be in touch soon." },
+  "password": { "title": "The island is almost here.", "text": "Enter your email for first access.", "admin": "Enter using password", "password": "Store password", "submit": "Enter" },
+  "blogs": { "read_more": "Read story", "back": "Back to island notes" },
+  "gift_card": { "expired": "This gift card has expired", "expires_on": "Expires on {{ expires_on }}", "card": "Gift card", "use_at_checkout": "Use this code at checkout", "add_to_apple_wallet": "Add to Apple Wallet" }
+}

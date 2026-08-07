@@ -1,0 +1,13 @@
+{% doc %}
+  Renders an interface icon.
+  @param {string} name - Icon name.
+{% enddoc %}
+{%- case name -%}
+  {%- when 'menu' -%}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7h18M3 17h18" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'close' -%}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'search' -%}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.5"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'heart' -%}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.8 4.7a5.4 5.4 0 0 0-7.7 0L12 5.8l-1.1-1.1a5.4 5.4 0 0 0-7.7 7.7l1.1 1.1L12 21l7.7-7.5 1.1-1.1a5.4 5.4 0 0 0 0-7.7Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  {%- when 'bag' -%}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z" stroke="currentColor" stroke-width="1.5"/><path d="M9 9V6a3 3 0 0 1 6 0v3" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'account' -%}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 20c.6-4 2.7-6 6.5-6s5.9 2 6.5 6" stroke="currentColor" stroke-width="1.5"/></svg>
+  {%- when 'arrow' -%}<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+{%- endcase -%}

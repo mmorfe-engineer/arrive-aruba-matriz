@@ -1,0 +1,57 @@
+{%- liquid
+  assign overlay = false
+  if section.settings.overlay_home and request.page_type == 'index'
+    assign overlay = true
+  endif
+-%}
+<header class="site-header{% if overlay %} site-header--overlay{% endif %}{% if section.settings.sticky %} is-sticky{% endif %}" style="--logo-width:{{ settings.logo_width }}px" data-header>
+  <div class="header-inner page-width">
+    <div class="header-left">
+      <button class="icon-button menu-toggle" type="button" data-open-drawer="navigation" aria-label="{{ 'header.open_menu' | t }}">{% render 'icon', name: 'menu' %}</button>
+      {% if section.settings.menu != blank %}
+        <nav aria-label="{{ 'header.main_menu' | t }}"><ul class="header-menu">{% for link in section.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}</ul></nav>
+      {% endif %}
+    </div>
+    <a class="header-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {% if overlay %}
+        {% if settings.logo_inverse != blank %}{{ settings.logo_inverse | image_url: width: 480 | image_tag: widths: '120, 180, 240, 360, 480', loading: 'eager', alt: shop.name }}{% else %}<img src="{{ 'arrive-logo-negative.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="500" height="260">{% endif %}
+      {% else %}
+        {% if settings.logo != blank %}{{ settings.logo | image_url: width: 480 | image_tag: widths: '120, 180, 240, 360, 480', loading: 'eager', alt: shop.name }}{% else %}<img src="{{ 'arrive-logo-blue.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="500" height="260">{% endif %}
+      {% endif %}
+    </a>
+    <div class="header-right">
+      {% if section.settings.show_search %}<button class="icon-button" type="button" data-open-drawer="search" aria-label="{{ 'header.search' | t }}">{% render 'icon', name: 'search' %}</button>{% endif %}
+      {% if section.settings.show_wishlist %}<button class="icon-button wishlist-link" type="button" data-open-drawer="wishlist" aria-label="{{ 'wishlist.title' | t }}">{% render 'icon', name: 'heart' %}<span class="cart-count" data-wishlist-count hidden>0</span></button>{% endif %}
+      {% if section.settings.show_account and shop.customer_accounts_enabled %}<span class="header-account"><shopify-account></shopify-account></span>{% endif %}
+      <button class="icon-button cart-link" type="button" data-open-drawer="cart" aria-label="{{ 'cart.open' | t }}">{% render 'icon', name: 'bag' %}{% if cart.item_count > 0 %}<span class="cart-count">{{ cart.item_count }}</span>{% endif %}</button>
+    </div>
+  </div>
+</header>
+<div class="nav-drawer" data-drawer="navigation" aria-hidden="true">
+  <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
+  <div class="nav-drawer-panel" role="dialog" aria-modal="true" aria-label="{{ 'header.main_menu' | t }}">
+    <div class="drawer-top"><span class="eyebrow">{{ shop.name }}</span><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
+    {% if section.settings.menu != blank %}<nav><ul class="drawer-menu">{% for link in section.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}</ul></nav>{% endif %}
+    <div class="drawer-utilities"><a href="{{ routes.search_url }}">{{ 'header.search' | t }}</a>{% if shop.customer_accounts_enabled %}<a href="{{ routes.account_url }}">{{ 'customer.account' | t }}</a>{% endif %}</div>
+  </div>
+</div>
+{% if section.settings.show_wishlist %}
+  <div class="nav-drawer wishlist-drawer" data-drawer="wishlist" aria-hidden="true">
+    <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
+    <div class="wishlist-panel" role="dialog" aria-modal="true" aria-label="{{ 'wishlist.title' | t }}">
+      <div class="drawer-top"><h2>{{ 'wishlist.title' | t }}</h2><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
+      <div class="wishlist-items" data-wishlist-items></div>
+      <div class="cart-empty" data-wishlist-empty><div><p class="serif-heading">{{ 'wishlist.empty' | t }}</p><a class="button button--primary" href="{{ routes.all_products_collection_url }}">{{ 'wishlist.explore' | t }}</a></div></div>
+    </div>
+  </div>
+{% endif %}
+<div class="search-drawer" data-drawer="search" aria-hidden="true">
+  <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="{{ 'header.search' | t }}">
+    <div class="drawer-top"><span class="eyebrow">{{ 'search.title' | t }}</span><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
+    <predictive-search><form class="search-form" action="{{ routes.search_url }}" method="get" role="search"><input class="field" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}" autocomplete="off"><button class="button button--primary" type="submit">{{ 'search.submit' | t }}</button></form><div class="predictive-results" data-predictive-results></div></predictive-search>
+  </div>
+</div>
+{% schema %}
+{"name":"t:sections.header.name","settings":[{"type":"link_list","id":"menu","label":"t:sections.header.menu","default":"main-menu"},{"type":"checkbox","id":"overlay_home","label":"t:sections.header.overlay_home","default":true},{"type":"checkbox","id":"sticky","label":"t:sections.header.sticky","default":false},{"type":"checkbox","id":"show_search","label":"t:sections.header.show_search","default":true},{"type":"checkbox","id":"show_account","label":"t:sections.header.show_account","default":true},{"type":"checkbox","id":"show_wishlist","label":"t:sections.header.show_wishlist","default":true}]}
+{% endschema %}
