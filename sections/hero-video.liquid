@@ -1,0 +1,68 @@
+{%- liquid
+  assign poster = section.settings.poster
+  assign desktop_video = section.settings.desktop_video
+  assign mobile_video = section.settings.mobile_video
+-%}
+<section class="hero" data-hero style="--hero-focus:{{ section.settings.focus }}%">
+  {% if poster != blank %}
+    {{ poster | image_url: width: 2400 | image_tag: class: 'hero-media', widths: '750, 1100, 1500, 2000, 2400', sizes: '100vw', loading: 'eager', fetchpriority: 'high', alt: poster.alt | default: section.settings.tagline | escape }}
+  {% else %}
+    <img class="hero-media" src="{{ 'arrive-hero-poster.jpg' | asset_url }}" alt="" width="1920" height="1080" fetchpriority="high">
+  {% endif %}
+
+  {% if desktop_video != blank %}
+    {{ desktop_video | video_tag: class: 'hero-video hero-video--desktop', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', data-hero-video: '' }}
+  {% else %}
+    <video class="hero-video hero-video--desktop" data-hero-video autoplay muted loop playsinline preload="metadata" poster="{{ 'arrive-hero-poster.jpg' | asset_url }}">
+      <source src="{{ 'arrive-hero-desktop.mp4' | asset_url }}" type="video/mp4">
+    </video>
+  {% endif %}
+
+  {% if mobile_video != blank %}
+    {{ mobile_video | video_tag: class: 'hero-video hero-video--mobile', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', data-hero-video: '' }}
+  {% else %}
+    <video class="hero-video hero-video--mobile" data-hero-video data-sound-src="{{ 'arrive-hero-mobile-sound.mp4' | asset_url }}" autoplay muted loop playsinline preload="metadata" poster="{{ 'arrive-hero-poster.jpg' | asset_url }}">
+      <source src="{{ 'arrive-hero-mobile-muted.mp4' | asset_url }}" type="video/mp4">
+    </video>
+  {% endif %}
+
+  <div class="hero-overlay"></div>
+  <div class="hero-content" data-reveal>
+    {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+    <div class="hero-mark" data-hero-mark aria-hidden="true">
+      <img class="hero-mark-static" src="{{ 'arrive-a-mark.svg' | asset_url }}" alt="" width="420" height="420">
+      <img class="hero-mark-animated" data-animated-mark src="{{ 'arrive-a-mark-animated.png' | asset_url }}" alt="" width="420" height="420">
+    </div>
+    {% if section.settings.tagline != blank %}<h1 class="hero-tagline">{{ section.settings.tagline }}</h1>{% endif %}
+    <div class="hero-actions">
+      {% if section.settings.primary_label != blank %}<a class="button button--light" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">{{ section.settings.primary_label }}</a>{% endif %}
+      {% if section.settings.secondary_label != blank %}<a class="button button--ghost-light" href="{{ section.settings.secondary_link | default: routes.root_url }}">{{ section.settings.secondary_label }}</a>{% endif %}
+    </div>
+  </div>
+  {% if section.settings.show_sound %}
+    <button class="hero-sound" type="button" data-sound-toggle data-on-label="{{ section.settings.sound_on | escape }}" data-off-label="{{ section.settings.sound_off | escape }}" aria-pressed="false">{{ section.settings.sound_off }}</button>
+  {% endif %}
+</section>
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "tag": "section",
+  "class": "section-hero",
+  "settings": [
+    { "type": "video", "id": "desktop_video", "label": "t:sections.hero.desktop_video" },
+    { "type": "video", "id": "mobile_video", "label": "t:sections.hero.mobile_video" },
+    { "type": "image_picker", "id": "poster", "label": "t:sections.hero.poster" },
+    { "type": "range", "id": "focus", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 35, "label": "t:sections.hero.focus" },
+    { "type": "text", "id": "eyebrow", "label": "t:sections.hero.eyebrow", "default": "Aruba · Resortwear" },
+    { "type": "text", "id": "tagline", "label": "t:sections.hero.tagline", "default": "The island stays with you" },
+    { "type": "text", "id": "primary_label", "label": "t:sections.hero.primary_label", "default": "Shop the collection" },
+    { "type": "url", "id": "primary_link", "label": "t:sections.hero.primary_link" },
+    { "type": "text", "id": "secondary_label", "label": "t:sections.hero.secondary_label", "default": "Discover the island" },
+    { "type": "url", "id": "secondary_link", "label": "t:sections.hero.secondary_link" },
+    { "type": "checkbox", "id": "show_sound", "label": "t:sections.hero.show_sound", "default": true },
+    { "type": "text", "id": "sound_on", "label": "t:sections.hero.sound_on", "default": "Sound on" },
+    { "type": "text", "id": "sound_off", "label": "t:sections.hero.sound_off", "default": "Sound off" }
+  ],
+  "presets": [{ "name": "t:sections.hero.name" }]
+}
+{% endschema %}

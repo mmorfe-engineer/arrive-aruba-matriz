@@ -1,0 +1,22 @@
+{%- assign story_image = section.settings.image -%}
+<section class="story-banner">
+  {% if story_image != blank %}{{ story_image | image_url: width: 2400 | image_tag: widths: '750, 1100, 1500, 2000, 2400', sizes: '100vw', loading: 'lazy', alt: story_image.alt | default: section.settings.heading | escape }}{% else %}<img src="{{ 'arrive-island-banner.jpg' | asset_url }}" alt="" width="1920" height="1080" loading="lazy">{% endif %}
+  <div class="story-content" data-reveal>
+    <div>{% if section.settings.kicker != blank %}<p class="eyebrow">{{ section.settings.kicker }}</p>{% endif %}<h2>{{ section.settings.heading }}</h2></div>
+    <div class="story-bottom">{{ section.settings.text }}{% if section.settings.button_label != blank %}<a class="button button--ghost-light" href="{{ section.settings.button_link | default: routes.root_url }}">{{ section.settings.button_label }}</a>{% endif %}</div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "t:sections.story_banner.name",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "t:sections.all.image" },
+    { "type": "text", "id": "kicker", "label": "t:sections.story_banner.kicker", "default": "The island" },
+    { "type": "text", "id": "heading", "label": "t:sections.all.heading", "default": "A quieter way to remember Aruba." },
+    { "type": "richtext", "id": "text", "label": "t:sections.all.text", "default": "<p>Every piece is shaped by the light, the water and the warmth you carry home long after you leave.</p>" },
+    { "type": "text", "id": "button_label", "label": "t:sections.all.button_label", "default": "Read the story" },
+    { "type": "url", "id": "button_link", "label": "t:sections.all.button_link" }
+  ],
+  "presets": [{ "name": "t:sections.story_banner.name" }]
+}
+{% endschema %}

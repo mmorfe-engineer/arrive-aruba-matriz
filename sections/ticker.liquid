@@ -1,0 +1,16 @@
+<section class="ticker" aria-label="{{ section.settings.heading | escape }}">
+  <div class="ticker-track" style="animation-duration:{{ section.settings.speed }}s">
+    {% for repeat in (1..2) %}{% for block in section.blocks %}<span class="ticker-item" {{ block.shopify_attributes }}>{{ block.settings.text }} &nbsp; ✦</span>{% endfor %}{% endfor %}
+  </div>
+</section>
+{% schema %}
+{
+  "name": "t:sections.ticker.name",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:sections.all.heading", "default": "Arrive Aruba highlights" },
+    { "type": "range", "id": "speed", "min": 15, "max": 60, "step": 1, "unit": "s", "default": 28, "label": "t:sections.ticker.speed" }
+  ],
+  "blocks": [{ "type": "item", "name": "t:sections.ticker.item", "settings": [{ "type": "text", "id": "text", "label": "t:sections.all.text", "default": "The island stays with you" }] }],
+  "presets": [{ "name": "t:sections.ticker.name", "blocks": [{ "type": "item" }, { "type": "item", "settings": { "text": "Aruba resortwear" } }, { "type": "item", "settings": { "text": "Made for sunlit arrivals" } }] }]
+}
+{% endschema %}
