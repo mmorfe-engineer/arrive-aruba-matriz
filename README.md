@@ -41,7 +41,7 @@ shopify theme package --path .
 
 ## Shopify Setup
 
-See [docs/SHOPIFY_SETUP.md](docs/SHOPIFY_SETUP.md) for installation, navigation, custom product data, catalog, and launch instructions.
+See [docs/SHOPIFY_SETUP.md](docs/SHOPIFY_SETUP.md) for store configuration and [docs/MIGRACION_SHOPIFY.md](docs/MIGRACION_SHOPIFY.md) for the complete migration, QA, launch, and rollback procedure.
 
 ## Quality and Security
 
