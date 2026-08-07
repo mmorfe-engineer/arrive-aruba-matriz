@@ -1,39 +1,54 @@
-# Arrive Aruba — Premium Web & App
+# Arrive Aruba Shopify Theme
 
-Resortwear shaped by the island. *Take home what you felt. ✦*
+Custom Shopify Online Store 2.0 theme for Arrive Aruba. The theme translates the published prototype into a responsive, merchant-editable storefront connected to Shopify products, collections, inventory, search, cart, customer accounts, forms, and checkout.
 
-This repository contains the Arrive Aruba digital flagship, built on the official brand system (Star Sapphire palette, Cannoli Cream surfaces, ITC Legacy Serif + Geologica, the ✦ star).
+## Branches
 
-## Contents
+- `gh-pages`: published static design reference.
+- `codex/shopify-theme-v1`: Shopify theme development and review.
+- `main`: production Shopify theme after the pull request is approved and merged.
 
-| File | What it is |
-|------|------------|
-| `index.html` | Landing launcher (entry point for GitHub Pages) |
-| `Arrive Aruba - Homepage.dc.html` | Editorial marketing homepage (mobile-first) |
-| `Arrive Aruba - App.dc.html` | Full mobile-app prototype — the complete App Flow (login → home → search → product → cart → checkout → profile → settings) |
-| `assets/` | Brand logos + fonts (ITC Legacy Serif, Port Blair) |
-| `support.js` | Runtime that powers the interactive pages |
+The static React prototype and its simulated commerce runtime are intentionally excluded from the Shopify branch.
 
-All pages open directly in a browser — no build step.
+## Features
 
-## Publish on GitHub Pages
+- Editable video hero with desktop/mobile sources, poster, animated A fallback, sound control, and reduced-motion support.
+- Modular home and Island Story JSON templates.
+- Native product media, variants, inventory state, prices, dynamic checkout, and product recommendations.
+- Collection filters powered by Shopify Search & Discovery, sorting, and pagination.
+- Predictive search and full search results.
+- Ajax cart drawer and cart page using Shopify's Cart and Section Rendering APIs.
+- Native customer account component, newsletter, contact form, localization, and checkout routes.
+- Device-local Saved Pieces drawer.
+- Branded placeholders until campaign photography is available.
 
-1. **Create a repo** at https://github.com/new (e.g. `arrive-aruba`), public.
-2. **Upload these files** — drag the whole folder into the repo's "uploading an existing file" page, or push with git:
-   ```bash
-   git init
-   git add .
-   git commit -m "Arrive Aruba — web & app"
-   git branch -M main
-   git remote add origin https://github.com/<your-user>/arrive-aruba.git
-   git push -u origin main
-   ```
-3. **Enable Pages:** repo **Settings → Pages → Build and deployment → Source: "Deploy from a branch" → Branch: `main` / `(root)` → Save.**
-4. After ~1 minute your site is live at:
-   `https://<your-user>.github.io/arrive-aruba/`
+## Local Development
 
-That URL loads `index.html`, which links to the website and the app.
+Requirements: Node.js, Shopify CLI, and theme permissions for the target store.
 
-## Notes
-- Geologica loads from Google Fonts; ITC Legacy Serif and the logos are bundled in `assets/`.
-- Fully responsive and mobile-first. Respects `prefers-reduced-motion`.
+```bash
+npm install -g @shopify/cli@latest
+shopify version
+shopify theme dev --store store-name.myshopify.com
+```
+
+Run validation before every pull request:
+
+```bash
+shopify theme check --path .
+shopify theme package --path .
+```
+
+## Shopify Setup
+
+See [docs/SHOPIFY_SETUP.md](docs/SHOPIFY_SETUP.md) for installation, navigation, custom product data, catalog, and launch instructions.
+
+## Quality and Security
+
+- No API credentials, store tokens, `.env` files, or private keys belong in this repository.
+- Theme changes are validated with Shopify Theme Check in CI.
+- Checkout, payments, taxes, discounts, shipping, and orders remain managed by Shopify.
+
+## Author
+
+Built for Arrive Aruba by [Martin Morfe](https://github.com/morfemartin).
