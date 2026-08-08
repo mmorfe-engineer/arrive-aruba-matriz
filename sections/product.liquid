@@ -2,8 +2,11 @@
   assign current_variant = product.selected_or_first_available_variant
   assign product_form_id = 'ProductForm-' | append: section.id
   assign back_url = routes.all_products_collection_url
-  if product.collections.first != blank
-    assign back_url = product.collections.first.url
+  if section.settings.default_back_collection != blank
+    assign back_url = section.settings.default_back_collection.url
+  endif
+  if collection != blank
+    assign back_url = collection.url
   endif
   assign product_rating = product.metafields.reviews.rating.value
   assign rating_count = product.metafields.reviews.rating_count.value
@@ -138,6 +141,7 @@
 {
   "name": "t:sections.product.name",
   "settings": [
+    { "type": "collection", "id": "default_back_collection", "label": "t:sections.product.default_back_collection" },
     { "type": "checkbox", "id": "show_vendor", "label": "t:sections.product.show_vendor", "default": false },
     { "type": "checkbox", "id": "show_description", "label": "t:sections.product.show_description", "default": true },
     { "type": "checkbox", "id": "show_quantity_selector", "label": "t:sections.product.show_quantity_selector", "default": false },

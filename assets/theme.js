@@ -55,6 +55,8 @@ const closeDrawer = (drawer) => {
   drawer.returnFocus?.focus();
 };
 
+const sectionId = (selector) => document.querySelector(selector)?.dataset.sectionId;
+
 const replaceSection = (key, html) => {
   if (!html) return;
   const parsed = new DOMParser().parseFromString(html, 'text/html');
@@ -67,6 +69,7 @@ const refreshSections = (sections) => {
   if (!sections) return;
   Object.entries(sections).forEach(([key, html]) => replaceSection(key, html));
   initializeWishlist();
+  initializeReveal();
 };
 
 document.addEventListener('click', (event) => {
@@ -383,7 +386,8 @@ class ProductForm extends HTMLElement {
     event.preventDefault();
     if (!this.form || this.submit?.disabled) return;
     const data = new FormData(this.form);
-    data.append('sections', 'cart-drawer,header');
+    const sections = [sectionId('[data-drawer="cart"]'), sectionId('[data-header]')].filter(Boolean).join(',');
+    if (sections) data.append('sections', sections);
     data.append('sections_url', window.location.pathname);
     this.submits.forEach((submit) => submit.setAttribute('aria-busy', 'true'));
     try {
@@ -422,10 +426,11 @@ customElements.define('product-recommendations', ProductRecommendations);
 document.addEventListener('change', async (event) => {
   const input = event.target.closest('[data-cart-line-input]');
   if (!input) return;
+  const sections = [sectionId('[data-drawer="cart"]'), sectionId('[data-header]'), sectionId('.main-cart')].filter(Boolean).join(',');
   const payload = {
     line: Number(input.dataset.line),
     quantity: Math.max(0, Number(input.value)),
-    sections: 'cart-drawer,header,main-cart',
+    sections,
     sections_url: window.location.pathname,
   };
   try {

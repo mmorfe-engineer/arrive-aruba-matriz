@@ -1,4 +1,4 @@
-<div class="cart-drawer" data-drawer="cart" aria-hidden="true">
+<div class="cart-drawer" data-drawer="cart" data-section-id="{{ section.id }}" aria-hidden="true">
   <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
   <div class="cart-drawer-panel" role="dialog" aria-modal="true" aria-label="{{ 'cart.title' | t }}">
     <header class="cart-drawer-header"><h2>{{ 'cart.title' | t }}</h2><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></header>
