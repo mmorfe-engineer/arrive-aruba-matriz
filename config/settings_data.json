@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "color_sapphire": "#386395",
@@ -12,7 +21,8 @@
     "type_body_font": "work_sans_n4",
     "page_width": 1440,
     "control_radius": 0,
-    "enable_motion": true
+    "enable_motion": true,
+    "content_for_index": []
   },
   "presets": {
     "Arrive Aruba": {}

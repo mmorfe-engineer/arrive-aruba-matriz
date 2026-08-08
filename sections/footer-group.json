@@ -1,1 +1,45 @@
-{"type":"footer","name":"t:section_groups.footer","sections":{"footer":{"type":"footer","blocks":{"shop":{"type":"menu","settings":{"heading":"Shop","menu":"footer"}},"help":{"type":"menu","settings":{"heading":"Help","menu":"footer"}}},"block_order":["shop","help"],"settings":{}}},"order":["footer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "t:section_groups.footer",
+  "sections": {
+    "footer_3KDjeT": {
+      "type": "footer",
+      "blocks": {
+        "menu_gxYFtp": {
+          "type": "menu",
+          "settings": {
+            "heading": "Explore",
+            "menu": ""
+          }
+        },
+        "menu_8x946f": {
+          "type": "menu",
+          "settings": {
+            "heading": "Explore",
+            "menu": ""
+          }
+        }
+      },
+      "block_order": [
+        "menu_gxYFtp",
+        "menu_8x946f"
+      ],
+      "name": "t:sections.footer.name",
+      "settings": {
+        "tagline": "Resortwear shaped by the island."
+      }
+    }
+  },
+  "order": [
+    "footer_3KDjeT"
+  ]
+}

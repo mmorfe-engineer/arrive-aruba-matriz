@@ -1,12 +1,154 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "hero": { "type": "hero-video", "settings": { "eyebrow": "Aruba · Resortwear", "tagline": "The island stays with you", "primary_label": "Shop the collection", "secondary_label": "Discover the island", "show_sound": true, "sound_on": "Sound on", "sound_off": "Sound off", "focus": 35 } },
-    "categories": { "type": "category-grid", "blocks": { "swim": { "type": "category", "settings": { "eyebrow": "Sea", "heading": "Swim", "background": "#5F8BB8" } }, "resort": { "type": "category", "settings": { "eyebrow": "Shore", "heading": "Resort", "background": "#92AF88" } }, "after_sun": { "type": "category", "settings": { "eyebrow": "Golden hour", "heading": "After sun", "background": "#F5A169" } } }, "block_order": ["swim", "resort", "after_sun"], "settings": { "subheading": "Made for island days", "heading": "Find your way to the water", "columns": 3 } },
-    "featured": { "type": "featured-collection", "settings": { "subheading": "New arrivals", "heading": "The first tide", "products_to_show": 4, "show_vendor": false, "show_wishlist": true } },
-    "story": { "type": "island-story-banner", "settings": { "kicker": "The island", "heading": "A quieter way to remember Aruba.", "text": "<p>Every piece is shaped by the light, the water and the warmth you carry home long after you leave.</p>", "button_label": "Read the story" } },
-    "editorial": { "type": "editorial-image-text", "settings": { "reverse": false, "subheading": "Island uniform", "heading": "Easy pieces, made for sunlit arrivals.", "text": "<p>Relaxed resortwear designed to move from salt water to late lunch, with color and texture drawn from Aruba.</p>", "button_label": "Explore the collection" } },
-    "ticker": { "type": "ticker", "blocks": { "one": { "type": "item", "settings": { "text": "The island stays with you" } }, "two": { "type": "item", "settings": { "text": "Aruba resortwear" } }, "three": { "type": "item", "settings": { "text": "Made for sunlit arrivals" } } }, "block_order": ["one", "two", "three"], "settings": { "heading": "Arrive Aruba highlights", "speed": 28 } },
-    "newsletter": { "type": "newsletter", "settings": { "subheading": "Postcards from Aruba", "heading": "Stay close to the island.", "text": "<p>New pieces, island notes and first access, sent occasionally.</p>" } }
+    "hero": {
+      "type": "hero-video",
+      "settings": {
+        "focus": 35,
+        "eyebrow": "Aruba · Resortwear",
+        "tagline": "The island stays with you",
+        "primary_label": "Shop the collection",
+        "primary_link": "",
+        "secondary_label": "Discover the island",
+        "secondary_link": "",
+        "show_sound": true,
+        "sound_on": "Sound on",
+        "sound_off": "Sound off"
+      }
+    },
+    "categories": {
+      "type": "category-grid",
+      "blocks": {
+        "swim": {
+          "type": "category",
+          "settings": {
+            "collection": "",
+            "eyebrow": "Sea",
+            "heading": "Swim",
+            "link": "",
+            "background": "#5f8bb8"
+          }
+        },
+        "resort": {
+          "type": "category",
+          "settings": {
+            "collection": "",
+            "eyebrow": "Shore",
+            "heading": "Resort",
+            "link": "",
+            "background": "#92af88"
+          }
+        },
+        "after_sun": {
+          "type": "category",
+          "settings": {
+            "collection": "",
+            "eyebrow": "Golden hour",
+            "heading": "After sun",
+            "link": "",
+            "background": "#f5a169"
+          }
+        }
+      },
+      "block_order": [
+        "swim",
+        "resort",
+        "after_sun"
+      ],
+      "settings": {
+        "subheading": "Made for island days",
+        "heading": "Find your way to the water",
+        "columns": 3
+      }
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "subheading": "New arrivals",
+        "heading": "The first tide",
+        "collection": "frontpage",
+        "products_to_show": 4,
+        "show_vendor": false,
+        "show_wishlist": true
+      }
+    },
+    "story": {
+      "type": "island-story-banner",
+      "settings": {
+        "kicker": "The island",
+        "heading": "A quieter way to remember Aruba.",
+        "text": "<p>Every piece is shaped by the light, the water and the warmth you carry home long after you leave.</p>",
+        "button_label": "Read the story",
+        "button_link": ""
+      }
+    },
+    "editorial": {
+      "type": "editorial-image-text",
+      "settings": {
+        "reverse": false,
+        "subheading": "Island uniform",
+        "heading": "Easy pieces, made for sunlit arrivals.",
+        "text": "<p>Relaxed resortwear designed to move from salt water to late lunch, with color and texture drawn from Aruba.</p>",
+        "button_label": "Explore the collection",
+        "button_link": ""
+      }
+    },
+    "ticker": {
+      "type": "ticker",
+      "blocks": {
+        "one": {
+          "type": "item",
+          "settings": {
+            "text": "The island stays with you"
+          }
+        },
+        "two": {
+          "type": "item",
+          "settings": {
+            "text": "Aruba resortwear"
+          }
+        },
+        "three": {
+          "type": "item",
+          "settings": {
+            "text": "Made for sunlit arrivals"
+          }
+        }
+      },
+      "block_order": [
+        "one",
+        "two",
+        "three"
+      ],
+      "settings": {
+        "heading": "Arrive Aruba highlights",
+        "speed": 28
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "subheading": "Postcards from Aruba",
+        "heading": "Stay close to the island.",
+        "text": "<p>New pieces, island notes and first access, sent occasionally.</p>"
+      }
+    }
   },
-  "order": ["hero", "categories", "featured", "story", "editorial", "ticker", "newsletter"]
+  "order": [
+    "hero",
+    "categories",
+    "featured",
+    "story",
+    "editorial",
+    "ticker",
+    "newsletter"
+  ]
 }
