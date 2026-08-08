@@ -81,7 +81,7 @@
       "settings": {
         "subheading": "Browse",
         "heading": "Shop the Island",
-        "columns": 4,
+        "columns": 2,
         "stagger": true
       }
     },
