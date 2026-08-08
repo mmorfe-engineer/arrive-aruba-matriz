@@ -1,6 +1,6 @@
 <product-recommendations class="product-recommendations-section" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent={{ section.settings.intent }}">
   {% if recommendations.performed? and recommendations.products_count > 0 %}
-    <div class="product-recommendations-inner"><div class="section-header"><div>{% if section.settings.subheading != blank %}<p class="eyebrow">{{ section.settings.subheading }}</p>{% endif %}{% if section.settings.heading != blank %}<h2 class="serif-heading">{{ section.settings.heading }}</h2>{% endif %}</div></div><div class="product-grid">{% for product in recommendations.products %}{% render 'product-card', product: product, show_wishlist: false %}{% endfor %}</div></div>
+    <div class="product-recommendations-inner"><div class="section-header"><div>{% if section.settings.subheading != blank %}<p class="eyebrow">{{ section.settings.subheading }}</p>{% endif %}{% if section.settings.heading != blank %}<h2 class="serif-heading">{{ section.settings.heading }}</h2>{% endif %}</div></div><div class="product-grid">{% for product in recommendations.products %}{% render 'product-card', product: product, show_wishlist: false, delay: forloop.index0 %}{% endfor %}</div></div>
   {% endif %}
 </product-recommendations>
 {% schema %}

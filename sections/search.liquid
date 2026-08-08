@@ -5,7 +5,7 @@
     {% if search.performed %}
       {% paginate search.results by section.settings.results_per_page %}
         <p>{{ 'search.result_count' | t: count: search.results_count }}</p>
-        {% if search.results_count > 0 %}<div class="product-grid search-grid">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item, show_wishlist: true %}{% else %}<article class="search-result"><p class="eyebrow">{{ item.object_type }}</p><h2 class="product-card-title"><a href="{{ item.url }}">{{ item.title }}</a></h2><p>{{ item.content | strip_html | truncatewords: 28 }}</p></article>{% endif %}{% endfor %}</div>{% else %}<div class="empty-state"><p>{{ 'search.no_results' | t }}</p></div>{% endif %}
+        {% if search.results_count > 0 %}<div class="product-grid search-grid">{% for item in search.results %}{% if item.object_type == 'product' %}{% render 'product-card', product: item, show_wishlist: true, delay: forloop.index0 %}{% else %}<article class="search-result"><p class="eyebrow">{{ item.object_type }}</p><h2 class="product-card-title"><a href="{{ item.url }}">{{ item.title }}</a></h2><p>{{ item.content | strip_html | truncatewords: 28 }}</p></article>{% endif %}{% endfor %}</div>{% else %}<div class="empty-state"><p>{{ 'search.no_results' | t }}</p></div>{% endif %}
         {% render 'pagination', paginate: paginate %}
       {% endpaginate %}
     {% endif %}

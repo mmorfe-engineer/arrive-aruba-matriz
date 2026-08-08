@@ -11,7 +11,8 @@
         {%- assign card_title = block.settings.heading | default: block.settings.collection.title -%}
         {%- assign desktop_column = forloop.index0 | modulo: columns -%}
         {%- assign desktop_offset = desktop_column | modulo: 2 -%}
-        <a class="category-card" href="{{ card_link | default: routes.all_products_collection_url }}" style="--category-color:{{ block.settings.background }}" data-desktop-offset="{{ desktop_offset }}" {{ block.shopify_attributes }} data-reveal>
+        {%- assign reveal_delay = forloop.index0 | times: 0.06 | at_most: 0.24 -%}
+        <a class="category-card" href="{{ card_link | default: routes.all_products_collection_url }}" style="--category-color:{{ block.settings.background }};--reveal-delay:{{ reveal_delay }}s" data-desktop-offset="{{ desktop_offset }}" {{ block.shopify_attributes }} data-reveal>
           <span class="category-card-media">
             {% if card_image != blank %}{{ card_image | image_url: width: 1400 | image_tag: widths: '400, 600, 900, 1200, 1400', sizes: '(min-width: 750px) 33vw, 50vw', loading: 'lazy', alt: card_image.alt | default: card_title | escape }}{% else %}{%- assign mark = 'arrive-logo-mark.svg' -%}{%- if desktop_offset == 1 -%}{%- assign mark = 'arrive-divi-divi.svg' -%}{%- endif -%}<span class="category-card-placeholder"><img src="{{ mark | asset_url }}" alt="" width="420" height="420" loading="lazy"></span>{% endif %}
             {% if block.settings.eyebrow != blank %}<span class="category-card-tag">{{ block.settings.eyebrow }}</span>{% endif %}

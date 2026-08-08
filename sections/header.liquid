@@ -15,7 +15,8 @@
     </div>
     <a class="header-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
       {% if overlay %}
-        {% if settings.logo_inverse != blank %}{{ settings.logo_inverse | image_url: width: 480 | image_tag: widths: '120, 180, 240, 360, 480', loading: 'eager', alt: shop.name }}{% else %}<img src="{{ 'arrive-logo-negative.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="500" height="260">{% endif %}
+        <span class="header-logo-negative">{% if settings.logo_inverse != blank %}{{ settings.logo_inverse | image_url: width: 480 | image_tag: widths: '120, 180, 240, 360, 480', loading: 'eager', alt: shop.name }}{% else %}<img src="{{ 'arrive-logo-negative.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="500" height="260">{% endif %}</span>
+        <span class="header-logo-blue">{% if settings.logo != blank %}{{ settings.logo | image_url: width: 480 | image_tag: widths: '120, 180, 240, 360, 480', loading: 'eager', alt: shop.name }}{% else %}<img src="{{ 'arrive-logo-blue.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="500" height="260">{% endif %}</span>
       {% else %}
         {% if settings.logo != blank %}{{ settings.logo | image_url: width: 480 | image_tag: widths: '120, 180, 240, 360, 480', loading: 'eager', alt: shop.name }}{% else %}<img src="{{ 'arrive-logo-blue.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="500" height="260">{% endif %}
       {% endif %}

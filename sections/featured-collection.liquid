@@ -6,10 +6,10 @@
     </div>
     <div class="product-grid">
       {% if section.settings.collection != blank %}
-        {% for product in section.settings.collection.products limit: section.settings.products_to_show %}{% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_wishlist: section.settings.show_wishlist %}{% endfor %}
+        {% for product in section.settings.collection.products limit: section.settings.products_to_show %}{% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_wishlist: section.settings.show_wishlist, delay: forloop.index0 %}{% endfor %}
       {% else %}
         {% for item in (1..4) %}
-          <article class="product-card" data-reveal><div class="product-card-media"><span class="product-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420"></span></div><div class="product-card-info"><p class="product-card-vendor">Arrive Aruba</p><h3 class="product-card-title">Island piece {{ item }}</h3><div class="price"><span>{{ 12000 | money }}</span></div></div></article>
+          <article class="product-card" style="--reveal-delay:{{ forloop.index0 | times: 0.08 | at_most: 0.32 }}s" data-reveal><div class="product-card-media"><span class="product-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420"></span></div><div class="product-card-info"><p class="product-card-vendor">Arrive Aruba</p><h3 class="product-card-title">Island piece {{ item }}</h3><div class="price"><span>{{ 12000 | money }}</span></div></div></article>
         {% endfor %}
       {% endif %}
     </div>

@@ -226,6 +226,18 @@ const initializeReveal = () => {
   elements.forEach((element) => observer.observe(element));
 };
 
+const initializeHeaderScroll = () => {
+  const header = document.querySelector('[data-header].site-header--overlay');
+  const hero = document.querySelector('.hero');
+  if (!header || !hero || header.dataset.scrollInitialized === 'true') return;
+  header.dataset.scrollInitialized = 'true';
+  const observer = new IntersectionObserver(
+    ([entry]) => header.classList.toggle('is-scrolled', !entry.isIntersecting),
+    { rootMargin: '-76px 0px 0px 0px', threshold: 0 }
+  );
+  observer.observe(hero);
+};
+
 const initializeHero = () => {
   document.querySelectorAll('[data-hero]').forEach((hero) => {
     if (hero.dataset.initialized === 'true') return;
@@ -272,6 +284,15 @@ const initializeHero = () => {
         sound.setAttribute('aria-pressed', turningOn ? 'true' : 'false');
         sound.textContent = turningOn ? sound.dataset.onLabel : sound.dataset.offLabel;
       });
+    }
+    const curtain = hero.querySelector('[data-hero-curtain]');
+    if (curtain) {
+      const dismiss = () => {
+        curtain.classList.add('is-hidden');
+        curtain.addEventListener('transitionend', () => curtain.remove(), { once: true });
+      };
+      if (motionQuery.matches) dismiss();
+      else window.setTimeout(dismiss, 760);
     }
   });
 };
@@ -452,8 +473,10 @@ document.addEventListener('shopify:section:load', () => {
   initializeReveal();
   initializeWishlist();
   initializeHero();
+  initializeHeaderScroll();
 });
 
 initializeReveal();
 initializeWishlist();
+initializeHeaderScroll();
 initializeHero();
