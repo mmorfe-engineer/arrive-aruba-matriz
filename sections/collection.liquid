@@ -39,7 +39,7 @@
         </div>
         {% if collection.filters.size > 0 %}<div class="active-filters">{% for filter in collection.filters %}{% for value in filter.active_values %}<a class="filter-pill" href="{{ value.url_to_remove }}">{{ value.label }} ×</a>{% endfor %}{% if filter.type == 'price_range' and filter.min_value.value or filter.max_value.value %}<a class="filter-pill" href="{{ filter.url_to_remove }}">{{ filter.min_value.value | default: 0 | money }}–{{ filter.max_value.value | default: filter.range_max | money }} ×</a>{% endif %}{% endfor %}</div>{% endif %}
         {% if collection.products.size > 0 %}<div class="product-grid">{% for product in collection.products %}{% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_wishlist: section.settings.show_wishlist, delay: forloop.index0 %}{% endfor %}</div>{% else %}<div class="empty-state"><h2 class="serif-heading">{{ 'collections.empty' | t }}</h2><a class="button button--primary" href="{{ collection.url }}">{{ 'collections.clear_all' | t }}</a></div>{% endif %}
-        {% render 'pagination', paginate: paginate %}
+        {% if paginate.next %}<div class="collection-load-more"><a class="button button--primary" href="{{ paginate.next.url }}" data-load-more data-section-id="{{ section.id }}">{{ 'collections.load_more' | t }}</a></div>{% endif %}
       </div>
     {% endpaginate %}
   </div>

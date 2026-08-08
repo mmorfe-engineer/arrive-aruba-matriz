@@ -5,7 +5,16 @@
   @param {boolean} [show_wishlist] - Whether to show the wishlist button.
   @param {number} [delay] - Reveal stagger step (0, 1, 2…) when rendered inside a grid loop.
 {% enddoc %}
-{%- assign reveal_delay = delay | default: 0 | times: 0.08 | at_most: 0.32 -%}
+{%- liquid
+  assign reveal_delay = delay | default: 0 | times: 0.08 | at_most: 0.32
+  assign color_option = null
+  for option in product.options_with_values
+    assign option_name_down = option.name | downcase
+    if option_name_down contains 'color' or option_name_down contains 'colour'
+      assign color_option = option
+    endif
+  endfor
+-%}
 <article class="product-card" style="--reveal-delay:{{ reveal_delay }}s" data-reveal>
   <a class="product-card-media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
     {% if product.featured_media %}
@@ -23,6 +32,14 @@
   <div class="product-card-info">
     {% if show_vendor and product.vendor != blank %}<p class="product-card-vendor">{{ product.vendor }}</p>{% elsif product.type != blank %}<p class="product-card-vendor">{{ product.type }}</p>{% endif %}
     <h3 class="product-card-title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    {% if color_option %}
+      <div class="product-card-swatches" aria-hidden="true">
+        {% for value in color_option.values limit: 5 %}
+          <span class="product-card-swatch"{% if value.swatch.color %} style="--swatch-color:rgb({{ value.swatch.color.rgb }})"{% elsif value.swatch.image %} style="--swatch-image:url('{{ value.swatch.image | image_url: width: 48 }}')"{% endif %} title="{{ value | escape }}"></span>
+        {% endfor %}
+        {% if color_option.values.size > 5 %}<span class="product-card-swatch-more">+{{ color_option.values.size | minus: 5 }}</span>{% endif %}
+      </div>
+    {% endif %}
     {% render 'price', product: product %}
   </div>
 </article>

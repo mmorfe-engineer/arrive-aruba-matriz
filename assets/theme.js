@@ -365,6 +365,7 @@ class ProductForm extends HTMLElement {
     this.submit = this.submits[0];
     this.price = this.closest('.product-layout')?.querySelector('[data-product-price]');
     this.compare = this.closest('.product-layout')?.querySelector('[data-product-compare]');
+    this.unavailableNote = this.querySelector('[data-unavailable-note]');
     this.querySelectorAll('[data-option-input]').forEach((input) => input.addEventListener('change', () => this.updateVariant()));
     this.form?.addEventListener('submit', (event) => this.addToCart(event));
   }
@@ -378,8 +379,11 @@ class ProductForm extends HTMLElement {
     const variant = this.variants.find((item) => item.options.every((option, index) => option === selected[index]));
     if (!variant) {
       this.submits.forEach((submit) => { submit.disabled = true; });
+      if (this.unavailableNote) this.unavailableNote.hidden = false;
+      announce(this.unavailableNote?.textContent);
       return;
     }
+    if (this.unavailableNote) this.unavailableNote.hidden = true;
     this.idInput.value = variant.id;
     this.querySelectorAll('fieldset').forEach((fieldset) => {
       const selected = fieldset.querySelector('[data-option-input]:checked');
@@ -466,6 +470,34 @@ document.addEventListener('change', async (event) => {
     if (document.querySelector('[data-drawer="cart"]')) openDrawer('cart');
   } catch (error) {
     announce(error.message);
+  }
+});
+
+document.addEventListener('click', async (event) => {
+  const button = event.target.closest('[data-load-more]');
+  if (!button || button.dataset.loading === 'true') return;
+  event.preventDefault();
+  button.dataset.loading = 'true';
+  button.setAttribute('aria-busy', 'true');
+  try {
+    const url = new URL(button.href);
+    url.searchParams.set('section_id', button.dataset.sectionId);
+    const response = await fetch(url);
+    const html = await response.text();
+    const parsed = new DOMParser().parseFromString(html, 'text/html');
+    const newGrid = parsed.querySelector('.product-grid');
+    const currentGrid = document.querySelector('.main-collection .product-grid');
+    if (newGrid && currentGrid) currentGrid.append(...Array.from(newGrid.children));
+    const nextButton = parsed.querySelector('[data-load-more]');
+    if (nextButton) button.href = nextButton.href;
+    else button.closest('.collection-load-more')?.remove();
+    initializeReveal();
+    initializeWishlist();
+  } catch (error) {
+    announce(error.message);
+  } finally {
+    button.dataset.loading = 'false';
+    button.removeAttribute('aria-busy');
   }
 });
 
