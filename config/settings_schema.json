@@ -22,6 +22,7 @@
     "settings": [
       { "type": "color", "id": "color_sapphire", "default": "#386395", "label": "t:settings_schema.colors.sapphire" },
       { "type": "color", "id": "color_sapphire_dark", "default": "#23405E", "label": "t:settings_schema.colors.sapphire_dark" },
+      { "type": "color", "id": "color_navy", "default": "#2C4F78", "label": "t:settings_schema.colors.navy" },
       { "type": "color", "id": "color_lake", "default": "#5F8BB8", "label": "t:settings_schema.colors.lake" },
       { "type": "color", "id": "color_cream", "default": "#F0F0E5", "label": "t:settings_schema.colors.cream" },
       { "type": "color", "id": "color_orange", "default": "#F5A169", "label": "t:settings_schema.colors.orange" },

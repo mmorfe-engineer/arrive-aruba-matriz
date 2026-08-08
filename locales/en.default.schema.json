@@ -1,7 +1,7 @@
 {
   "settings_schema": {
     "brand": { "name": "Brand", "logo": "Logo", "logo_inverse": "Inverse logo", "favicon": "Favicon", "social_image": "Social sharing image", "logo_width": "Logo width" },
-    "colors": { "name": "Colors", "sapphire": "Star Sapphire", "sapphire_dark": "Deep Sapphire", "lake": "Silver Lake Blue", "cream": "Cannoli Cream", "orange": "Mock Orange", "green": "Fair Green", "ink": "Ink" },
+    "colors": { "name": "Colors", "sapphire": "Star Sapphire", "sapphire_dark": "Deep Sapphire", "navy": "Harbour Navy", "lake": "Silver Lake Blue", "cream": "Cannoli Cream", "orange": "Mock Orange", "green": "Fair Green", "ink": "Ink" },
     "typography": { "name": "Typography", "body": "Alternative body font", "use_brand_body": "Use Arrive Aruba brand typography" },
     "layout": { "name": "Layout and motion", "page_width": "Maximum page width", "control_radius": "Control corner radius", "motion": "Enable motion" },
     "social": { "name": "Social media", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook" }
@@ -14,7 +14,7 @@
     "cart_drawer": { "name": "Cart drawer" },
     "predictive_search": { "name": "Predictive search" },
     "hero": { "name": "Arrive hero", "desktop_video": "Desktop video", "mobile_video": "Mobile video", "poster": "Poster image", "eyebrow": "Eyebrow", "tagline": "Tagline", "primary_label": "Primary button label", "primary_link": "Primary button link", "secondary_label": "Secondary button label", "secondary_link": "Secondary button link", "show_sound": "Show sound control", "sound_on": "Sound on label", "sound_off": "Sound off label", "focus": "Media focal position" },
-    "category_grid": { "name": "Category grid", "card": "Category card", "background": "Fallback background", "columns": "Desktop columns" },
+    "category_grid": { "name": "Category grid", "card": "Category card", "background": "Fallback background", "columns": "Desktop columns", "tag": "Image tag", "caption": "Caption", "stagger": "Staggered layout", "stagger_info": "Offsets alternating columns so the grid reads as a stepped composition." },
     "featured_collection": { "name": "Featured collection", "show_vendor": "Show vendor", "show_wishlist": "Show saved button" },
     "story_banner": { "name": "Island story banner", "kicker": "Kicker", "overlay": "Overlay strength" },
     "editorial": { "name": "Editorial image with text" },

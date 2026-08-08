@@ -27,46 +27,62 @@
     "categories": {
       "type": "category-grid",
       "blocks": {
-        "swim": {
+        "resort_shirts": {
           "type": "category",
           "settings": {
             "collection": "",
-            "eyebrow": "Sea",
-            "heading": "Swim",
+            "eyebrow": "Polo",
+            "heading": "Resort Shirts",
+            "caption": "",
             "link": "",
             "background": "#5f8bb8"
           }
         },
-        "resort": {
+        "performance_tees": {
           "type": "category",
           "settings": {
             "collection": "",
-            "eyebrow": "Shore",
-            "heading": "Resort",
+            "eyebrow": "Tee",
+            "heading": "Performance Tees",
+            "caption": "",
             "link": "",
             "background": "#92af88"
           }
         },
-        "after_sun": {
+        "travel_layers": {
           "type": "category",
           "settings": {
             "collection": "",
-            "eyebrow": "Golden hour",
-            "heading": "After sun",
+            "eyebrow": "Layer",
+            "heading": "Travel Layers",
+            "caption": "",
+            "link": "",
+            "background": "#386395"
+          }
+        },
+        "new_arrivals": {
+          "type": "category",
+          "settings": {
+            "collection": "",
+            "eyebrow": "All",
+            "heading": "New Arrivals",
+            "caption": "",
             "link": "",
             "background": "#f5a169"
           }
         }
       },
       "block_order": [
-        "swim",
-        "resort",
-        "after_sun"
+        "resort_shirts",
+        "performance_tees",
+        "travel_layers",
+        "new_arrivals"
       ],
       "settings": {
-        "subheading": "Made for island days",
-        "heading": "Find your way to the water",
-        "columns": 3
+        "subheading": "Browse",
+        "heading": "Shop the Island",
+        "columns": 4,
+        "stagger": true
       }
     },
     "featured": {
