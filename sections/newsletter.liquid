@@ -7,7 +7,7 @@
       <input type="hidden" name="contact[tags]" value="newsletter">
       <label class="sr-only" for="NewsletterEmail-{{ section.id }}">{{ 'newsletter.email' | t }}</label>
       <input class="field" id="NewsletterEmail-{{ section.id }}" type="email" name="contact[email]" value="{{ form.email }}" autocomplete="email" autocapitalize="off" placeholder="{{ 'newsletter.email' | t }}" required>
-      <button class="button button--light" type="submit">{{ 'newsletter.submit' | t }}</button>
+      <button class="button button--primary" type="submit">{{ 'newsletter.submit' | t }}</button>
       {% if form.posted_successfully? %}<p class="form-message" tabindex="-1" autofocus>{{ 'newsletter.success' | t }}</p>{% endif %}
       {% if form.errors %}<div class="form-message">{{ form.errors | default_errors }}</div>{% endif %}
     {% endform %}
