@@ -6,14 +6,16 @@ Estas son las secciones Shopify OS 2.0 para el tema Arrive Aruba.
 
 ```
 shopify/
-├── templates/
-│   ├── collection.json       ← Template de colección
-│   └── product.json          ← Template de producto
-└── sections/
-    ├── collection-hero.liquid     ← Hero de colección (título + filtros)
-    ├── collection-grid.liquid     ← Grid de productos con paginación
-    ├── product-main.liquid        ← PDP completo (galería + variantes + ATC)
-    └── product-related.liquid     ← Productos relacionados
+├──── templates/
+│   ├──── collection.json       → Template de colección
+│   └──── product.json          → Template de producto
+└──── sections/
+    ├──── collection-hero.liquid         → Hero de colección (título + filtros)
+    ├──── collection-grid.liquid         → Grid de productos con paginación
+    ├──── featured-products-staggered.liquid → Productos destacados escalonados
+    ├──── product-main.liquid            → PDP completo (galería + variantes + ATC)
+    ├──── product-related.liquid         → Productos relacionados
+    └──── site-footer.liquid             → Footer mejorado del sitio
 ```
 
 ## Cómo instalar en Shopify
@@ -50,8 +52,10 @@ Una vez instaladas las secciones, el merchant puede:
 
 - **Collection hero**: cambiar eyebrow, título, descripción, colores, padding
 - **Collection grid**: cambiar columnas (desktop/mobile), ratio de imagen, gap, productos por página, radio de tarjeta
+- **Featured Products Staggered**: productos destacados con diseño escalonado, ideal para homepage
 - **Product main**: cambiar ratio de imagen, label del botón, badge de entrega, bloques de acordeón
 - **Related products**: cambiar eyebrow, título, cantidad y colección de fallback
+- **Site Footer**: configurar logo, enlaces de Shop/Help, redes sociales, copyright y newsletter
 
 ### 4. Palette de colores (variables globales sugeridas)
 
@@ -77,12 +81,44 @@ Para la función `recommendations`:
 
 ---
 
+## Cambios Recientes
+
+### Diseño Escalonado (Staggered Layout)
+La sección **Featured Products Staggered** implementa el diseño escalonado original de la homepage:
+- Grid de 2 columnas en desktop
+- Cada 2do producto tiene un `margin-top: 36px` para crear el efecto escalonado
+- En mobile se muestra en 1 columna sin escalonamiento
+- Ideal para la primera sección de productos en la homepage
+
+### Footer Mejorado
+La sección **Site Footer** incluye:
+- Logo y tagline de la marca
+- Columnas organizadas: Shop, Help, Info (opcional)
+- Enlaces de redes sociales
+- Copyright
+- Opcional: formulario de newsletter
+- Diseño responsive que se adapta a mobile
+
+---
+
 ## Notas de performance
 
 - Las imágenes usan `image_url` + `image_tag` con `widths` y `sizes` → Shopify sirve el tamaño correcto automáticamente
 - `loading: 'lazy'` en imágenes secundarias, `loading: 'eager'` solo en la imagen principal del PDP
 - El CSS está inline en cada sección para evitar render-blocking
 - El JS es mínimo, vanilla, sin dependencias externas
+
+---
+
+## Implementación Recomendada para Homepage
+
+Para replicar el diseño original de GitHub Pages en Shopify:
+
+1. **Hero Section**: Usa una sección personalizada o el theme editor para el video hero
+2. **Shop by Category**: Usa **Featured Products Staggered** con 4 productos
+3. **Ticker Bar**: Crea una sección HTML personalizada con el texto animado
+4. **New Arrivals**: Usa **Collection Grid** o **Featured Products Staggered**
+5. **Footer**: Usa **Site Footer** con todas las opciones habilitadas
 
 ---
 
