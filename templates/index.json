@@ -24,6 +24,38 @@
         "sound_off": "Sound off"
       }
     },
+    "ticker": {
+      "type": "ticker",
+      "blocks": {
+        "one": {
+          "type": "item",
+          "settings": {
+            "text": "The island stays with you"
+          }
+        },
+        "two": {
+          "type": "item",
+          "settings": {
+            "text": "Aruba resortwear"
+          }
+        },
+        "three": {
+          "type": "item",
+          "settings": {
+            "text": "Made for sunlit arrivals"
+          }
+        }
+      },
+      "block_order": [
+        "one",
+        "two",
+        "three"
+      ],
+      "settings": {
+        "heading": "Arrive Aruba highlights",
+        "speed": 28
+      }
+    },
     "categories": {
       "type": "category-grid",
       "blocks": {
@@ -117,38 +149,6 @@
         "button_link": ""
       }
     },
-    "ticker": {
-      "type": "ticker",
-      "blocks": {
-        "one": {
-          "type": "item",
-          "settings": {
-            "text": "The island stays with you"
-          }
-        },
-        "two": {
-          "type": "item",
-          "settings": {
-            "text": "Aruba resortwear"
-          }
-        },
-        "three": {
-          "type": "item",
-          "settings": {
-            "text": "Made for sunlit arrivals"
-          }
-        }
-      },
-      "block_order": [
-        "one",
-        "two",
-        "three"
-      ],
-      "settings": {
-        "heading": "Arrive Aruba highlights",
-        "speed": 28
-      }
-    },
     "newsletter": {
       "type": "newsletter",
       "settings": {
@@ -160,11 +160,11 @@
   },
   "order": [
     "hero",
+    "ticker",
     "categories",
     "featured",
     "story",
     "editorial",
-    "ticker",
     "newsletter"
   ]
 }
