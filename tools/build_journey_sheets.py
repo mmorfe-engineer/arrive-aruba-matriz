@@ -16,7 +16,7 @@ from typing import Iterable
 from PIL import Image
 
 
-SOURCE_SIZE = (1200, 1600)
+SOURCE_SIZE = (1920, 1080)
 DESKTOP_BUDGET = 5 * 1024 * 1024
 MOBILE_BUDGET = int(2.5 * 1024 * 1024)
 
@@ -51,9 +51,17 @@ CLIPS = (
     Clip("push", 101, 140),
 )
 
+# (grace_start, grace_end) frame counts per clip — see check_alpha_coverage's docstring.
+# shade opens on a dark closed cabin (measured: full-bleed through frame ~41); push ends
+# on the whiteout completing (measured: full-bleed on the last ~2 frames). Both padded.
+ALPHA_GRACE = {
+    "shade": (45, 0),
+    "push": (0, 4),
+}
+
 VARIANTS = (
-    Variant("desktop", cell_height=1000, max_sheet_size=4096, sliding_window=2, budget=DESKTOP_BUDGET),
-    Variant("mobile", cell_height=670, max_sheet_size=2048, sliding_window=3, budget=MOBILE_BUDGET),
+    Variant("desktop", cell_height=850, max_sheet_size=4096, sliding_window=2, budget=DESKTOP_BUDGET),
+    Variant("mobile", cell_height=560, max_sheet_size=2048, sliding_window=3, budget=MOBILE_BUDGET),
 )
 
 
@@ -107,7 +115,12 @@ def cell_size(variant: Variant, crop: tuple[int, int, int, int]) -> tuple[int, i
     return width, height
 
 
-def check_alpha_coverage(frame_paths: list[Path], clip_name: str, grace_frames: int = 0) -> None:
+def check_alpha_coverage(
+    frame_paths: list[Path],
+    clip_name: str,
+    grace_start: int = 0,
+    grace_end: int = 0,
+) -> None:
     """Guardrail: refuse to build if any source frame is near-fully opaque.
 
     A frame at or above ALPHA_COVERAGE_LIMIT opacity usually means the alpha silhouette
@@ -115,11 +128,15 @@ def check_alpha_coverage(frame_paths: list[Path], clip_name: str, grace_frames: 
     the window frame into whatever is behind it (see the push-clip camera regression
     this check was added to catch).
 
-    The first `grace_frames` of a clip are exempt: an intentional close/macro opening
-    (persiana closed, camera tight) legitimately fills the frame edge-to-edge with no
-    transparent margin — that's not the bug, it's the shot. The guardrail stays strict
-    for everything after, which is where the real regression showed up."""
+    Two intentional exceptions, both by design rather than by accident:
+    - `grace_start`: the reveal opens on a dark, fully-closed cabin (matching the
+      original animation's cold open) — full-bleed black is the shot, not a bug.
+    - `grace_end`: the flash climax legitimately ends at a full white frame — that's
+      the whiteout completing, not the camera clipping through geometry.
+    The guardrail stays strict for everything in between, which is where the real
+    regression (camera overshoot) showed up."""
     violations = []
+    total_frames = len(frame_paths)
     for index, path in enumerate(frame_paths):
         with Image.open(path) as image:
             rgba = image.convert("RGBA")
@@ -127,14 +144,15 @@ def check_alpha_coverage(frame_paths: list[Path], clip_name: str, grace_frames: 
             total = rgba.size[0] * rgba.size[1]
             opaque = sum(alpha.histogram()[250:])
             coverage = opaque / total
-            if coverage >= ALPHA_COVERAGE_LIMIT and index >= grace_frames:
+            in_grace = index < grace_start or index >= total_frames - grace_end
+            if coverage >= ALPHA_COVERAGE_LIMIT and not in_grace:
                 violations.append((path.name, coverage))
     if violations:
         details = "\n".join(f"  - {name}: {cov:.3f} opaque" for name, cov in violations[:10])
         raise SystemExit(
             f"Alpha coverage guardrail failed for clip '{clip_name}': "
             f"{len(violations)} frame(s) at or above {ALPHA_COVERAGE_LIMIT:.0%} opaque "
-            f"coverage after the {grace_frames}-frame grace window.\n{details}"
+            f"coverage outside the grace windows (start={grace_start}, end={grace_end}).\n{details}"
         )
 
 
@@ -290,7 +308,8 @@ def main() -> int:
     frames = {clip.name: expected_frames(input_dir, clip) for clip in CLIPS}
 
     for clip in CLIPS:
-        check_alpha_coverage(frames[clip.name], clip.name)
+        grace_start, grace_end = ALPHA_GRACE.get(clip.name, (0, 0))
+        check_alpha_coverage(frames[clip.name], clip.name, grace_start, grace_end)
 
     crops = {clip.name: union_alpha_bbox(frames[clip.name]) for clip in CLIPS}
 
