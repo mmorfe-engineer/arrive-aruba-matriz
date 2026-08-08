@@ -4,7 +4,7 @@
   "source": {
     "width": 1200,
     "height": 1600,
-    "frameCount": 130
+    "frameCount": 140
   },
   "encoding": {
     "format": "webp",
@@ -14,104 +14,104 @@
   "variants": {
     "desktop": {
       "budgetBytes": 5242880,
-      "totalBytes": 3896296,
+      "totalBytes": 3609242,
       "maxSheetSize": 4096,
       "slidingWindow": 2,
       "poster": {
         "src": "desktop/poster.webp",
-        "width": 745,
+        "width": 750,
         "height": 1000,
-        "bytes": 38480,
+        "bytes": 33482,
         "sourceCrop": {
-          "x": 40,
-          "y": 48,
-          "width": 1120,
-          "height": 1504
+          "x": 0,
+          "y": 0,
+          "width": 1200,
+          "height": 1600
         }
       },
       "clips": {
         "shade": {
           "frameStart": 1,
-          "frameEnd": 90,
-          "frameCount": 90,
+          "frameEnd": 100,
+          "frameCount": 100,
           "sourceCrop": {
-            "x": 40,
-            "y": 48,
-            "width": 1120,
-            "height": 1504
+            "x": 0,
+            "y": 0,
+            "width": 1200,
+            "height": 1600
           },
           "cell": {
-            "width": 745,
+            "width": 750,
             "height": 1000
           },
           "framesPerSheet": 20,
           "sheets": [
             {
               "src": "desktop/shade-00.webp",
-              "width": 3725,
+              "width": 3750,
               "height": 4000,
               "columns": 5,
               "rows": 4,
               "frameOffset": 0,
               "firstFrame": 1,
               "frameCount": 20,
-              "bytes": 447744
+              "bytes": 353934
             },
             {
               "src": "desktop/shade-01.webp",
-              "width": 3725,
+              "width": 3750,
               "height": 4000,
               "columns": 5,
               "rows": 4,
               "frameOffset": 20,
               "firstFrame": 21,
               "frameCount": 20,
-              "bytes": 492142
+              "bytes": 402424
             },
             {
               "src": "desktop/shade-02.webp",
-              "width": 3725,
+              "width": 3750,
               "height": 4000,
               "columns": 5,
               "rows": 4,
               "frameOffset": 40,
               "firstFrame": 41,
               "frameCount": 20,
-              "bytes": 543398
+              "bytes": 464066
             },
             {
               "src": "desktop/shade-03.webp",
-              "width": 3725,
+              "width": 3750,
               "height": 4000,
               "columns": 5,
               "rows": 4,
               "frameOffset": 60,
               "firstFrame": 61,
               "frameCount": 20,
-              "bytes": 570370
+              "bytes": 633016
             },
             {
               "src": "desktop/shade-04.webp",
-              "width": 3725,
-              "height": 2000,
+              "width": 3750,
+              "height": 4000,
               "columns": 5,
-              "rows": 2,
+              "rows": 4,
               "frameOffset": 80,
               "firstFrame": 81,
-              "frameCount": 10,
-              "bytes": 290038
+              "frameCount": 20,
+              "bytes": 650156
             }
           ]
         },
         "push": {
-          "frameStart": 91,
-          "frameEnd": 130,
+          "frameStart": 101,
+          "frameEnd": 140,
           "frameCount": 40,
           "sourceCrop": {
-            "x": 26,
-            "y": 29,
-            "width": 1148,
-            "height": 1542
+            "x": 41,
+            "y": 49,
+            "width": 1118,
+            "height": 1502
           },
           "cell": {
             "width": 744,
@@ -126,9 +126,9 @@
               "columns": 5,
               "rows": 4,
               "frameOffset": 0,
-              "firstFrame": 91,
+              "firstFrame": 101,
               "frameCount": 20,
-              "bytes": 750868
+              "bytes": 532980
             },
             {
               "src": "desktop/push-01.webp",
@@ -137,9 +137,9 @@
               "columns": 5,
               "rows": 4,
               "frameOffset": 20,
-              "firstFrame": 111,
+              "firstFrame": 121,
               "frameCount": 20,
-              "bytes": 763256
+              "bytes": 539184
             }
           ]
         }
@@ -147,137 +147,148 @@
     },
     "mobile": {
       "budgetBytes": 2621440,
-      "totalBytes": 2322678,
+      "totalBytes": 2199784,
       "maxSheetSize": 2048,
       "slidingWindow": 3,
       "poster": {
         "src": "mobile/poster.webp",
-        "width": 499,
+        "width": 502,
         "height": 670,
-        "bytes": 22604,
+        "bytes": 20690,
         "sourceCrop": {
-          "x": 40,
-          "y": 48,
-          "width": 1120,
-          "height": 1504
+          "x": 0,
+          "y": 0,
+          "width": 1200,
+          "height": 1600
         }
       },
       "clips": {
         "shade": {
           "frameStart": 1,
-          "frameEnd": 90,
-          "frameCount": 90,
+          "frameEnd": 100,
+          "frameCount": 100,
           "sourceCrop": {
-            "x": 40,
-            "y": 48,
-            "width": 1120,
-            "height": 1504
+            "x": 0,
+            "y": 0,
+            "width": 1200,
+            "height": 1600
           },
           "cell": {
-            "width": 499,
+            "width": 502,
             "height": 670
           },
           "framesPerSheet": 12,
           "sheets": [
             {
               "src": "mobile/shade-00.webp",
-              "width": 1996,
+              "width": 2008,
               "height": 2010,
               "columns": 4,
               "rows": 3,
               "frameOffset": 0,
               "firstFrame": 1,
               "frameCount": 12,
-              "bytes": 162500
+              "bytes": 127418
             },
             {
               "src": "mobile/shade-01.webp",
-              "width": 1996,
+              "width": 2008,
               "height": 2010,
               "columns": 4,
               "rows": 3,
               "frameOffset": 12,
               "firstFrame": 13,
               "frameCount": 12,
-              "bytes": 172382
+              "bytes": 137070
             },
             {
               "src": "mobile/shade-02.webp",
-              "width": 1996,
+              "width": 2008,
               "height": 2010,
               "columns": 4,
               "rows": 3,
               "frameOffset": 24,
               "firstFrame": 25,
               "frameCount": 12,
-              "bytes": 179532
+              "bytes": 147776
             },
             {
               "src": "mobile/shade-03.webp",
-              "width": 1996,
+              "width": 2008,
               "height": 2010,
               "columns": 4,
               "rows": 3,
               "frameOffset": 36,
               "firstFrame": 37,
               "frameCount": 12,
-              "bytes": 190574
+              "bytes": 157828
             },
             {
               "src": "mobile/shade-04.webp",
-              "width": 1996,
+              "width": 2008,
               "height": 2010,
               "columns": 4,
               "rows": 3,
               "frameOffset": 48,
               "firstFrame": 49,
               "frameCount": 12,
-              "bytes": 198994
+              "bytes": 180384
             },
             {
               "src": "mobile/shade-05.webp",
-              "width": 1996,
+              "width": 2008,
               "height": 2010,
               "columns": 4,
               "rows": 3,
               "frameOffset": 60,
               "firstFrame": 61,
               "frameCount": 12,
-              "bytes": 204380
+              "bytes": 222538
             },
             {
               "src": "mobile/shade-06.webp",
-              "width": 1996,
+              "width": 2008,
               "height": 2010,
               "columns": 4,
               "rows": 3,
               "frameOffset": 72,
               "firstFrame": 73,
               "frameCount": 12,
-              "bytes": 208218
+              "bytes": 238196
             },
             {
               "src": "mobile/shade-07.webp",
-              "width": 1996,
-              "height": 1340,
+              "width": 2008,
+              "height": 2010,
               "columns": 4,
-              "rows": 2,
+              "rows": 3,
               "frameOffset": 84,
               "firstFrame": 85,
-              "frameCount": 6,
-              "bytes": 108708
+              "frameCount": 12,
+              "bytes": 236954
+            },
+            {
+              "src": "mobile/shade-08.webp",
+              "width": 2008,
+              "height": 670,
+              "columns": 4,
+              "rows": 1,
+              "frameOffset": 96,
+              "firstFrame": 97,
+              "frameCount": 4,
+              "bytes": 80166
             }
           ]
         },
         "push": {
-          "frameStart": 91,
-          "frameEnd": 130,
+          "frameStart": 101,
+          "frameEnd": 140,
           "frameCount": 40,
           "sourceCrop": {
-            "x": 26,
-            "y": 29,
-            "width": 1148,
-            "height": 1542
+            "x": 41,
+            "y": 49,
+            "width": 1118,
+            "height": 1502
           },
           "cell": {
             "width": 499,
@@ -292,9 +303,9 @@
               "columns": 4,
               "rows": 3,
               "frameOffset": 0,
-              "firstFrame": 91,
+              "firstFrame": 101,
               "frameCount": 12,
-              "bytes": 261668
+              "bytes": 193350
             },
             {
               "src": "mobile/push-01.webp",
@@ -303,9 +314,9 @@
               "columns": 4,
               "rows": 3,
               "frameOffset": 12,
-              "firstFrame": 103,
+              "firstFrame": 113,
               "frameCount": 12,
-              "bytes": 264172
+              "bytes": 194496
             },
             {
               "src": "mobile/push-02.webp",
@@ -314,9 +325,9 @@
               "columns": 4,
               "rows": 3,
               "frameOffset": 24,
-              "firstFrame": 115,
+              "firstFrame": 125,
               "frameCount": 12,
-              "bytes": 262906
+              "bytes": 196626
             },
             {
               "src": "mobile/push-03.webp",
@@ -325,9 +336,9 @@
               "columns": 4,
               "rows": 1,
               "frameOffset": 36,
-              "firstFrame": 127,
+              "firstFrame": 137,
               "frameCount": 4,
-              "bytes": 86040
+              "bytes": 66292
             }
           ]
         }

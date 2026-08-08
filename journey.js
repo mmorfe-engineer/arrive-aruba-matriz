@@ -312,7 +312,7 @@
   Journey.prototype.renderProgress = function (progress) {
     var shadeEnd = 0.58;
     var pushEnd = 0.84;
-    var shadeLastIndex = (this.variant ? this.variant.clips.shade.frameCount : 90) - 1;
+    var shadeLastIndex = (this.variant ? this.variant.clips.shade.frameCount : 100) - 1;
     var pushLastIndex = (this.variant ? this.variant.clips.push.frameCount : 40) - 1;
     var shadeProgress = clamp((progress - 0.06) / (shadeEnd - 0.06), 0, 1);
     var pushProgress = ease((progress - shadeEnd) / (pushEnd - shadeEnd));

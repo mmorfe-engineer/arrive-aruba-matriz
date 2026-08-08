@@ -47,8 +47,8 @@ class Variant:
 
 
 CLIPS = (
-    Clip("shade", 1, 90),
-    Clip("push", 91, 130),
+    Clip("shade", 1, 100),
+    Clip("push", 101, 140),
 )
 
 VARIANTS = (
@@ -107,29 +107,34 @@ def cell_size(variant: Variant, crop: tuple[int, int, int, int]) -> tuple[int, i
     return width, height
 
 
-def check_alpha_coverage(frame_paths: list[Path], clip_name: str) -> None:
+def check_alpha_coverage(frame_paths: list[Path], clip_name: str, grace_frames: int = 0) -> None:
     """Guardrail: refuse to build if any source frame is near-fully opaque.
 
-    A frame at or above ALPHA_COVERAGE_LIMIT opacity means the alpha silhouette has
-    lost its transparent margin — almost always because the camera has dollied past
+    A frame at or above ALPHA_COVERAGE_LIMIT opacity usually means the alpha silhouette
+    has lost its transparent margin — almost always because the camera has dollied past
     the window frame into whatever is behind it (see the push-clip camera regression
-    this check was added to catch)."""
+    this check was added to catch).
+
+    The first `grace_frames` of a clip are exempt: an intentional close/macro opening
+    (persiana closed, camera tight) legitimately fills the frame edge-to-edge with no
+    transparent margin — that's not the bug, it's the shot. The guardrail stays strict
+    for everything after, which is where the real regression showed up."""
     violations = []
-    for path in frame_paths:
+    for index, path in enumerate(frame_paths):
         with Image.open(path) as image:
             rgba = image.convert("RGBA")
             alpha = rgba.getchannel("A")
             total = rgba.size[0] * rgba.size[1]
             opaque = sum(alpha.histogram()[250:])
             coverage = opaque / total
-            if coverage >= ALPHA_COVERAGE_LIMIT:
+            if coverage >= ALPHA_COVERAGE_LIMIT and index >= grace_frames:
                 violations.append((path.name, coverage))
     if violations:
         details = "\n".join(f"  - {name}: {cov:.3f} opaque" for name, cov in violations[:10])
         raise SystemExit(
             f"Alpha coverage guardrail failed for clip '{clip_name}': "
             f"{len(violations)} frame(s) at or above {ALPHA_COVERAGE_LIMIT:.0%} opaque "
-            f"coverage.\n{details}"
+            f"coverage after the {grace_frames}-frame grace window.\n{details}"
         )
 
 
