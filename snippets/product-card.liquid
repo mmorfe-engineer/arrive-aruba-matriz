@@ -3,8 +3,10 @@
   @param {product} product - Product to render.
   @param {boolean} [show_vendor] - Whether to show the vendor.
   @param {boolean} [show_wishlist] - Whether to show the wishlist button.
+  @param {number} [delay] - Reveal stagger step (0, 1, 2…) when rendered inside a grid loop.
 {% enddoc %}
-<article class="product-card" data-reveal>
+{%- assign reveal_delay = delay | default: 0 | times: 0.08 | at_most: 0.32 -%}
+<article class="product-card" style="--reveal-delay:{{ reveal_delay }}s" data-reveal>
   <a class="product-card-media" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
     {% if product.featured_media %}
       {{ product.featured_media.preview_image | image_url: width: 900 | image_tag: widths: '320, 480, 640, 900', sizes: '(min-width: 750px) 25vw, 50vw', loading: 'lazy', alt: product.featured_media.alt | default: product.title | escape }}

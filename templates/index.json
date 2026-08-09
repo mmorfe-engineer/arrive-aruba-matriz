@@ -149,6 +149,17 @@
         "button_link": ""
       }
     },
+    "heritage": {
+      "type": "editorial-image-text",
+      "settings": {
+        "reverse": true,
+        "subheading": "Heritage",
+        "heading": "Born on the island.<br>Made for the return.",
+        "text": "<p>ARRIVE ARUBA was founded on a simple idea: the island stays with you. Each garment is a memory, a quiet invitation to return.</p>",
+        "button_label": "Our story",
+        "button_link": ""
+      }
+    },
     "newsletter": {
       "type": "newsletter",
       "settings": {
@@ -160,11 +171,12 @@
   },
   "order": [
     "hero",
-    "ticker",
     "categories",
+    "ticker",
     "featured",
     "story",
     "editorial",
+    "heritage",
     "newsletter"
   ]
 }

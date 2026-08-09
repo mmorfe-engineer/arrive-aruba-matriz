@@ -27,21 +27,23 @@
   {% endif %}
 
   <div class="hero-overlay"></div>
-  <div class="hero-content" data-reveal>
-    {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
-    <div class="hero-mark" data-hero-mark aria-hidden="true">
+  <div class="hero-content">
+    {% if section.settings.eyebrow != blank %}<p class="eyebrow" data-reveal style="--reveal-delay:.08s">{{ section.settings.eyebrow }}</p>{% endif %}
+    <div class="hero-mark" data-hero-mark data-reveal style="--reveal-delay:.24s" aria-hidden="true">
       <img class="hero-mark-static" src="{{ 'arrive-a-mark.svg' | asset_url }}" alt="" width="420" height="420">
       <img class="hero-mark-animated" data-animated-mark src="{{ 'arrive-a-mark-animated.png' | asset_url }}" alt="" width="420" height="420">
     </div>
-    {% if section.settings.tagline != blank %}<h1 class="hero-tagline">{{ section.settings.tagline }}</h1>{% endif %}
-    <div class="hero-actions">
+    {% if section.settings.tagline != blank %}<h1 class="hero-tagline" data-reveal style="--reveal-delay:.42s">{{ section.settings.tagline }}</h1>{% endif %}
+    <div class="hero-actions" data-reveal style="--reveal-delay:.62s">
       {% if section.settings.primary_label != blank %}<a class="button button--light" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">{{ section.settings.primary_label }}</a>{% endif %}
       {% if section.settings.secondary_label != blank %}<a class="button button--ghost-light" href="{{ section.settings.secondary_link | default: routes.root_url }}">{{ section.settings.secondary_label }}</a>{% endif %}
     </div>
   </div>
+  <div class="hero-scroll-cue" data-reveal style="--reveal-delay:.86s" aria-hidden="true"></div>
   {% if section.settings.show_sound %}
     <button class="hero-sound" type="button" data-sound-toggle data-on-label="{{ section.settings.sound_on | escape }}" data-off-label="{{ section.settings.sound_off | escape }}" aria-pressed="false">{{ section.settings.sound_off }}</button>
   {% endif %}
+  <div class="hero-curtain" data-hero-curtain aria-hidden="true"><img src="{{ 'arrive-a-mark.svg' | asset_url }}" alt="" width="64" height="64"></div>
 </section>
 {% schema %}
 {
