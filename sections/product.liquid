@@ -111,6 +111,7 @@
               <input type="hidden" name="quantity" value="1">
             {% endif %}
 
+            <p class="product-unavailable-note" data-unavailable-note hidden>{{ 'products.product.unavailable_combination' | t }}</p>
             <button class="button button--primary product-submit" type="submit" data-product-submit data-available-label="{{ 'products.product.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.product.sold_out' | t | escape }}" data-added-label="{{ 'products.product.added_to_cart' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button>
             {% if section.settings.show_dynamic_checkout %}{{ form | payment_button }}{% endif %}
             {% if section.settings.show_sticky_mobile %}<div class="product-sticky-bar"><button class="button button--primary product-submit" type="submit" data-product-submit data-available-label="{{ 'products.product.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.product.sold_out' | t | escape }}" data-added-label="{{ 'products.product.added_to_cart' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button></div>{% endif %}
