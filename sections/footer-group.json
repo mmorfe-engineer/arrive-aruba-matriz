@@ -14,6 +14,13 @@
     "footer_3KDjeT": {
       "type": "footer",
       "blocks": {
+        "menu_YiEDC7": {
+          "type": "menu",
+          "settings": {
+            "heading": "Explore",
+            "menu": ""
+          }
+        },
         "menu_gxYFtp": {
           "type": "menu",
           "settings": {
@@ -30,6 +37,7 @@
         }
       },
       "block_order": [
+        "menu_YiEDC7",
         "menu_gxYFtp",
         "menu_8x946f"
       ],
