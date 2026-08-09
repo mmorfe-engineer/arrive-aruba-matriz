@@ -13,7 +13,7 @@
 .icon-button svg{width:21px;height:21px}
 .shopify-section-group-header-group{position:relative;z-index:50}.site-header{position:relative;z-index:50;background:var(--aa-cream);color:var(--aa-sapphire-dark);border-bottom:1px solid rgba(35,64,94,.12)}
 .site-header--overlay{position:absolute;inset:0 0 auto;background:linear-gradient(rgba(3,7,11,.64),transparent);color:var(--aa-cream);border:0;transition:background .3s ease,color .3s ease}
-.site-header--overlay.is-scrolled{position:sticky;top:0;background:var(--aa-cream);color:var(--aa-sapphire-dark);border-bottom:1px solid rgba(35,64,94,.12)}
+.site-header--overlay.is-scrolled{position:fixed;background:linear-gradient(180deg,var(--aa-cream) 0%,color-mix(in srgb,var(--aa-cream) 88%,var(--aa-lake) 12%) 100%);color:var(--aa-sapphire-dark);border-bottom:1px solid rgba(35,64,94,.1);box-shadow:0 1px 24px rgba(3,7,11,.06)}
 .header-logo-blue{display:none}
 .site-header--overlay.is-scrolled .header-logo-negative{display:none}
 .site-header--overlay.is-scrolled .header-logo-blue{display:block}
