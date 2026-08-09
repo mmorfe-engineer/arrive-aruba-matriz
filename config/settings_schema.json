@@ -49,8 +49,10 @@
     "name": "t:settings_schema.social.name",
     "settings": [
       { "type": "url", "id": "social_instagram", "label": "t:settings_schema.social.instagram" },
+      { "type": "url", "id": "social_facebook", "label": "t:settings_schema.social.facebook" },
       { "type": "url", "id": "social_tiktok", "label": "t:settings_schema.social.tiktok" },
-      { "type": "url", "id": "social_facebook", "label": "t:settings_schema.social.facebook" }
+      { "type": "url", "id": "social_pinterest", "label": "t:settings_schema.social.pinterest" },
+      { "type": "url", "id": "social_whatsapp", "label": "t:settings_schema.social.whatsapp" }
     ]
   }
 ]

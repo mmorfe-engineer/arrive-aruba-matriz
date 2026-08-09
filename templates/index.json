@@ -108,8 +108,8 @@
     "featured": {
       "type": "featured-collection",
       "settings": {
-        "subheading": "New arrivals",
-        "heading": "The first tide",
+        "subheading": "Essentials",
+        "heading": "Aruba Basics",
         "collection": "new-arrivals",
         "products_to_show": 4,
         "show_vendor": false,
