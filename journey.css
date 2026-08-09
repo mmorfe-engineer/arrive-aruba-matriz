@@ -97,6 +97,8 @@ a {
 
 .aa-journey {
   --aa-canvas-scale: 1;
+  --aa-canvas-w: min(88vw, 960px);
+  --aa-canvas-h: min(49.5vw, 540px);
   --aa-cloud-near-x: 0px;
   --aa-cloud-far-x: 0px;
   height: 300dvh;
@@ -214,15 +216,12 @@ a {
 }
 
 .aa-journey__canvas {
-  /* Both dimensions declared explicitly at the source render's ratio (1200x1600 = 3/4).
-     Deliberately NOT `width: auto` + `aspect-ratio`: width:auto would derive from the
-     canvas's OWN width/height attributes, which resizeCanvas() overwrites at runtime —
-     a circular dependency where a single bad read bakes in a wrong ratio that
-     self-reinforces on every later resize. And aspect-ratio + width:auto inside this
-     flex parent (.aa-journey__visual) was observed to collapse to 0x0 in testing.
-     Two explicit min() expressions at matching ratios sidesteps both. */
-  height: min(78dvh, 740px);
-  width: min(58.5dvh, 555px);
+  /* Source render is 1920x1080. Both dimensions stay explicit because width:auto
+     plus aspect-ratio collapsed inside this centered absolute flex layer in testing,
+     and deriving layout from the canvas attributes creates a loop once resizeCanvas()
+     updates the drawing buffer. */
+  height: var(--aa-canvas-h);
+  width: var(--aa-canvas-w);
   max-width: none;
   opacity: 0;
   transform: scale(var(--aa-canvas-scale));
@@ -236,16 +235,16 @@ a {
 }
 
 .aa-journey__poster {
-  height: min(70dvh, 664px);
+  height: var(--aa-canvas-h);
   position: absolute;
   transition: opacity 240ms ease;
-  width: auto;
+  width: var(--aa-canvas-w);
 }
 
 .aa-journey__poster img {
   height: 100%;
-  object-fit: contain;
-  width: auto;
+  object-fit: cover;
+  width: 100%;
 }
 
 .aa-journey--ready .aa-journey__poster {
@@ -462,19 +461,9 @@ a {
   }
 
   .aa-journey {
+    --aa-canvas-w: min(94vw, 480px);
+    --aa-canvas-h: min(52.9vw, 270px);
     height: 280dvh;
-  }
-
-  .aa-journey__canvas {
-    /* Mobile sprite cell is 670px tall; 600px keeps upscaling near 1.8x at DPR 2 —
-       the honest ceiling for this budget, versus the previous ~3.6x. Explicit width
-       at the same 3/4 ratio for the same reason as the base rule above. */
-    height: min(74dvh, 600px);
-    width: min(55.5dvh, 450px);
-  }
-
-  .aa-journey__poster {
-    height: min(65dvh, 513px);
   }
 
   .aa-journey__copy {

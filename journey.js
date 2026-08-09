@@ -79,6 +79,7 @@
     this.destroyed = false;
     this.raf = 0;
     this.lastFrameKey = "";
+    this.lastCanvasBox = "";
     this.pendingFrame = null;
     this.compact = compactQuery.matches;
     this.fallback = reduceMotionQuery.matches || connectionNeedsFallback();
@@ -100,6 +101,7 @@
     this.preloadObserver.observe(this.root);
     this.visibilityObserver.observe(this.root);
     this.resizeObserver.observe(this.stage);
+    this.applyCanvasSize(0);
     this.resizeCanvas();
   }
 
@@ -116,8 +118,51 @@
   };
 
   Journey.prototype.onResize = function () {
+    this.lastCanvasBox = "";
+    this.applyCanvasSize(this.currentProgress());
     this.resizeCanvas();
     this.lastFrameKey = "";
+  };
+
+  Journey.prototype.currentProgress = function () {
+    var rect = this.root.getBoundingClientRect();
+    var distance = Math.max(1, rect.height - window.innerHeight);
+    return clamp(-rect.top / distance, 0, 1);
+  };
+
+  Journey.prototype.canvasBoxFor = function (progress) {
+    var ratio = 16 / 9;
+    var viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
+    var viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+    var isMobile = mobileQuery.matches;
+    var containedWidth = Math.min(viewportWidth * (isMobile ? 0.94 : 0.88), isMobile ? 480 : 960);
+    var containedHeight = containedWidth / ratio;
+    var coverWidth = viewportWidth;
+    var coverHeight = viewportWidth / ratio;
+
+    if (coverHeight < viewportHeight) {
+      coverHeight = viewportHeight;
+      coverWidth = viewportHeight * ratio;
+    }
+
+    var introProgress = ease(progress / 0.16);
+    return {
+      width: coverWidth + (containedWidth - coverWidth) * introProgress,
+      height: coverHeight + (containedHeight - coverHeight) * introProgress
+    };
+  };
+
+  Journey.prototype.applyCanvasSize = function (progress) {
+    var box = this.canvasBoxFor(progress);
+    var width = Math.max(1, Math.round(box.width));
+    var height = Math.max(1, Math.round(box.height));
+    var key = width + "x" + height;
+    if (key === this.lastCanvasBox) return false;
+
+    this.lastCanvasBox = key;
+    this.root.style.setProperty("--aa-canvas-w", width + "px");
+    this.root.style.setProperty("--aa-canvas-h", height + "px");
+    return true;
   };
 
   Journey.prototype.resizeCanvas = function () {
@@ -316,6 +361,12 @@
     var pushLastIndex = (this.variant ? this.variant.clips.push.frameCount : 40) - 1;
     var shadeProgress = clamp((progress - 0.06) / (shadeEnd - 0.06), 0, 1);
     var pushProgress = ease((progress - shadeEnd) / (pushEnd - shadeEnd));
+    var resizedForIntro = this.applyCanvasSize(progress);
+
+    if (resizedForIntro) {
+      this.resizeCanvas();
+      this.lastFrameKey = "";
+    }
 
     if (progress <= shadeEnd || this.compact) {
       var shadeFrame = progress <= shadeEnd ? shadeProgress * shadeLastIndex : shadeLastIndex;
@@ -353,9 +404,7 @@
   Journey.prototype.tick = function () {
     this.raf = 0;
     if (!this.active || this.destroyed) return;
-    var rect = this.root.getBoundingClientRect();
-    var distance = Math.max(1, rect.height - window.innerHeight);
-    var progress = clamp(-rect.top / distance, 0, 1);
+    var progress = this.currentProgress();
     this.renderProgress(progress);
     this.raf = requestAnimationFrame(this.tick);
   };
