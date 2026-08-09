@@ -138,8 +138,9 @@
 .newsletter .field:focus{outline:none;border-color:var(--aa-lake)}
 .newsletter .field::placeholder{color:rgba(240,240,229,.4)}
 .form-message{margin:1rem 0 0;font-size:.85rem}
-.site-footer{padding:clamp(3.5rem,7vw,5rem) var(--aa-side-space) 2rem;background:var(--aa-navy);color:var(--aa-cream)}
-.footer-inner{display:grid;gap:clamp(2.25rem,5vw,3rem);max-width:var(--aa-page-width);margin:auto}
+.site-footer{position:relative;overflow:hidden;padding:clamp(3.5rem,7vw,5rem) var(--aa-side-space) 2rem;background:var(--aa-navy);color:var(--aa-cream)}
+.footer-dividivi{position:absolute;top:0;right:0;height:100%;width:auto;max-width:60%;object-fit:cover;object-position:right center;opacity:.14;pointer-events:none}
+.footer-inner{position:relative;z-index:1;display:grid;gap:clamp(2.25rem,5vw,3rem);max-width:var(--aa-page-width);margin:auto}
 .footer-logo{width:min(164px,46vw);height:auto;margin-bottom:.75rem}
 .footer-copy{max-width:320px;color:rgba(240,240,229,.35);font-size:.72rem;font-weight:300;line-height:1.75}
 .footer-navs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem}
@@ -147,7 +148,7 @@
 .footer-menu{display:grid;gap:.6rem;margin:0;padding:0;list-style:none;font-size:.76rem;font-weight:300}
 .footer-menu a{color:rgba(240,240,229,.5);transition:color .2s}
 .footer-menu a:hover{color:rgba(240,240,229,.85)}
-.footer-bottom{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem;max-width:var(--aa-page-width);margin:clamp(2.25rem,5vw,3rem) auto 0;padding-top:1.5rem;border-top:1px solid rgba(240,240,229,.07)}
+.footer-bottom{position:relative;z-index:1;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem;max-width:var(--aa-page-width);margin:clamp(2.25rem,5vw,3rem) auto 0;padding-top:1.5rem;border-top:1px solid rgba(240,240,229,.07)}
 .footer-legal{margin:0;font-size:.58rem;font-weight:300;letter-spacing:.04em;color:rgba(240,240,229,.22)}
 .footer-social{display:flex;gap:1rem;align-items:center}
 .footer-social a{display:grid;place-items:center;width:32px;height:32px;color:rgba(240,240,229,.45);transition:color .2s}
