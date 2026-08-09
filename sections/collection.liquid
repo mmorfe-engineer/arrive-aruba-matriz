@@ -4,46 +4,72 @@
     <h1 class="display-heading">{{ collection.title }}</h1>
     {% if section.settings.show_description and collection.description != blank %}<div class="rte">{{ collection.description }}</div>{% endif %}
   </header>
-  <div class="page-width collection-layout">
+  <div class="page-width">
     {% paginate collection.products by section.settings.products_per_page %}
-      {% if section.settings.show_filters and collection.filters.size > 0 %}
-        <aside>
-          <form id="CollectionFilters" method="get">
-            {% if collection.sort_by != blank %}<input type="hidden" name="sort_by" value="{{ collection.sort_by }}">{% endif %}
-            <div class="filters">
-              {% for filter in collection.filters %}
-                <details class="filter-group" open>
-                  <summary>{{ filter.label }} <span>+</span></summary>
-                  <div class="filter-values">
-                    {% case filter.type %}
-                      {% when 'boolean', 'list' %}
-                        {% for value in filter.values %}<label class="filter-value"><span><input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}> {{ value.label }}</span><span>{{ value.count }}</span></label>{% endfor %}
-                      {% when 'price_range' %}
-                        <label>{{ 'collections.from' | t }}<input class="field" name="{{ filter.min_value.param_name }}" type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"></label>
-                        <label>{{ 'collections.to' | t }}<input class="field" name="{{ filter.max_value.param_name }}" type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"></label>
-                    {% endcase %}
-                  </div>
-                </details>
-              {% endfor %}
-            </div>
-            <button class="button button--primary" type="submit">{{ 'collections.apply' | t }}</button>
-          </form>
-        </aside>
-      {% endif %}
-      <div>
-        <div class="collection-toolbar">
-          <span>{{ 'collections.product_count' | t: count: collection.products_count }}</span>
-          {% if section.settings.show_sort %}
-            <form method="get"><label class="sr-only" for="SortBy">{{ 'collections.sort' | t }}</label><select id="SortBy" name="sort_by" onchange="this.form.submit()">{% assign sort_by = collection.sort_by | default: collection.default_sort_by %}{% for option in collection.sort_options %}<option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name | escape }}</option>{% endfor %}</select></form>
-          {% endif %}
-        </div>
-        {% if collection.filters.size > 0 %}<div class="active-filters">{% for filter in collection.filters %}{% for value in filter.active_values %}<a class="filter-pill" href="{{ value.url_to_remove }}">{{ value.label }} ×</a>{% endfor %}{% if filter.type == 'price_range' and filter.min_value.value or filter.max_value.value %}<a class="filter-pill" href="{{ filter.url_to_remove }}">{{ filter.min_value.value | default: 0 | money }}–{{ filter.max_value.value | default: filter.range_max | money }} ×</a>{% endif %}{% endfor %}</div>{% endif %}
-        {% if collection.products.size > 0 %}<div class="product-grid">{% for product in collection.products %}{% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_wishlist: section.settings.show_wishlist, delay: forloop.index0 %}{% endfor %}</div>{% else %}<div class="empty-state"><h2 class="serif-heading">{{ 'collections.empty' | t }}</h2><a class="button button--primary" href="{{ collection.url }}">{{ 'collections.clear_all' | t }}</a></div>{% endif %}
-        {% if paginate.next %}<div class="collection-load-more"><a class="button button--primary" href="{{ paginate.next.url }}" data-load-more data-section-id="{{ section.id }}">{{ 'collections.load_more' | t }}</a></div>{% endif %}
+      <div class="collection-toolbar">
+        <span>{{ 'collections.product_count' | t: count: collection.products_count }}</span>
+        {% if section.settings.show_sort %}<button class="text-link" type="button" data-open-drawer="sort" aria-expanded="false">{{ 'collections.sort' | t }}</button>{% endif %}
       </div>
+      {% if section.settings.show_filters and collection.filters.size > 0 %}
+        <div class="filter-chips">
+          {% for filter in collection.filters %}
+            <button class="filter-chip{% if filter.active_values.size > 0 %} is-active{% endif %}" type="button" data-open-drawer="filters" data-filter-index="{{ forloop.index }}" aria-expanded="false">{{ filter.label }}{% if filter.active_values.size > 0 %} · {{ filter.active_values.size }}{% endif %}</button>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if collection.filters.size > 0 %}<div class="active-filters">{% for filter in collection.filters %}{% for value in filter.active_values %}<a class="filter-pill" href="{{ value.url_to_remove }}">{{ value.label }} ×</a>{% endfor %}{% if filter.type == 'price_range' and filter.min_value.value or filter.max_value.value %}<a class="filter-pill" href="{{ filter.url_to_remove }}">{{ filter.min_value.value | default: 0 | money }}–{{ filter.max_value.value | default: filter.range_max | money }} ×</a>{% endif %}{% endfor %}</div>{% endif %}
+      {% if collection.products.size > 0 %}<div class="product-grid">{% for product in collection.products %}{% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_wishlist: section.settings.show_wishlist, delay: forloop.index0 %}{% endfor %}</div>{% else %}<div class="empty-state"><h2 class="serif-heading">{{ 'collections.empty' | t }}</h2><a class="button button--primary" href="{{ collection.url }}">{{ 'collections.clear_all' | t }}</a></div>{% endif %}
+      {% if paginate.next %}<div class="collection-load-more"><a class="button button--primary" href="{{ paginate.next.url }}" data-load-more data-section-id="{{ section.id }}">{{ 'collections.load_more' | t }}</a></div>{% endif %}
     {% endpaginate %}
   </div>
 </section>
+
+{% if section.settings.show_filters and collection.filters.size > 0 %}
+  <div class="nav-drawer filters-drawer" data-drawer="filters" aria-hidden="true">
+    <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
+    <div class="filters-panel" role="dialog" aria-modal="true" aria-label="{{ 'collections.filter' | t }}">
+      <div class="drawer-top"><span class="eyebrow">{{ 'collections.filter' | t }}</span><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
+      <form id="CollectionFilters" method="get">
+        {% if collection.sort_by != blank %}<input type="hidden" name="sort_by" value="{{ collection.sort_by }}">{% endif %}
+        <div class="filters">
+          {% for filter in collection.filters %}
+            <details class="filter-group" id="FilterGroup-{{ forloop.index }}" open>
+              <summary>{{ filter.label }} <span>+</span></summary>
+              <div class="filter-values">
+                {% case filter.type %}
+                  {% when 'boolean', 'list' %}
+                    {% for value in filter.values %}<label class="filter-value"><span><input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}> {{ value.label }}</span><span>{{ value.count }}</span></label>{% endfor %}
+                  {% when 'price_range' %}
+                    <label>{{ 'collections.from' | t }}<input class="field" name="{{ filter.min_value.param_name }}" type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"></label>
+                    <label>{{ 'collections.to' | t }}<input class="field" name="{{ filter.max_value.param_name }}" type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"></label>
+                {% endcase %}
+              </div>
+            </details>
+          {% endfor %}
+        </div>
+        <button class="button button--primary" type="submit">{{ 'collections.apply' | t }}</button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+
+{% if section.settings.show_sort %}
+  <div class="nav-drawer sort-drawer" data-drawer="sort" aria-hidden="true">
+    <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
+    <div class="sort-panel" role="dialog" aria-modal="true" aria-label="{{ 'collections.sort' | t }}">
+      <div class="drawer-top"><span class="eyebrow">{{ 'collections.sort' | t }}</span><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
+      <form method="get" id="CollectionSort">
+        {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+        <ul class="sort-options">
+          {% for option in collection.sort_options %}
+            <li><label class="sort-option"><input type="radio" name="sort_by" value="{{ option.value | escape }}"{% if option.value == sort_by %} checked{% endif %}><span>{{ option.name | escape }}</span></label></li>
+          {% endfor %}
+        </ul>
+      </form>
+    </div>
+  </div>
+{% endif %}
+
 {% schema %}
 {
   "name": "t:sections.collection.name",
