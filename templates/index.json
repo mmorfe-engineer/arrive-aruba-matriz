@@ -17,7 +17,7 @@
         "tagline": "The island stays with you",
         "primary_label": "Shop the collection",
         "primary_link": "/collections/all",
-        "secondary_label": "Discover the island",
+        "secondary_label": "",
         "secondary_link": "/pages/island-story",
         "show_sound": true,
         "sound_on": "Sound on",
