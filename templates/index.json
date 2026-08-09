@@ -24,38 +24,6 @@
         "sound_off": "Sound off"
       }
     },
-    "ticker": {
-      "type": "ticker",
-      "blocks": {
-        "one": {
-          "type": "item",
-          "settings": {
-            "text": "The island stays with you"
-          }
-        },
-        "two": {
-          "type": "item",
-          "settings": {
-            "text": "Aruba resortwear"
-          }
-        },
-        "three": {
-          "type": "item",
-          "settings": {
-            "text": "Made for sunlit arrivals"
-          }
-        }
-      },
-      "block_order": [
-        "one",
-        "two",
-        "three"
-      ],
-      "settings": {
-        "heading": "Arrive Aruba highlights",
-        "speed": 28
-      }
-    },
     "categories": {
       "type": "category-grid",
       "blocks": {
@@ -117,6 +85,38 @@
         "stagger": true
       }
     },
+    "ticker": {
+      "type": "ticker",
+      "blocks": {
+        "one": {
+          "type": "item",
+          "settings": {
+            "text": "The island stays with you"
+          }
+        },
+        "two": {
+          "type": "item",
+          "settings": {
+            "text": "Aruba resortwear"
+          }
+        },
+        "three": {
+          "type": "item",
+          "settings": {
+            "text": "Made for sunlit arrivals"
+          }
+        }
+      },
+      "block_order": [
+        "one",
+        "two",
+        "three"
+      ],
+      "settings": {
+        "heading": "Arrive Aruba highlights",
+        "speed": 28
+      }
+    },
     "featured": {
       "type": "featured-collection",
       "settings": {
@@ -138,23 +138,12 @@
         "button_link": ""
       }
     },
-    "editorial": {
-      "type": "editorial-image-text",
-      "settings": {
-        "reverse": false,
-        "subheading": "Island uniform",
-        "heading": "Easy pieces, made for sunlit arrivals.",
-        "text": "<p>Relaxed resortwear designed to move from salt water to late lunch, with color and texture drawn from Aruba.</p>",
-        "button_label": "Explore the collection",
-        "button_link": ""
-      }
-    },
     "heritage": {
       "type": "editorial-image-text",
       "settings": {
         "reverse": true,
         "subheading": "Heritage",
-        "heading": "Born on the island.<br>Made for the return.",
+        "heading": "Born on the island.Made for the return.",
         "text": "<p>ARRIVE ARUBA was founded on a simple idea: the island stays with you. Each garment is a memory, a quiet invitation to return.</p>",
         "button_label": "Our story",
         "button_link": ""
@@ -175,7 +164,6 @@
     "ticker",
     "featured",
     "story",
-    "editorial",
     "heritage",
     "newsletter"
   ]
