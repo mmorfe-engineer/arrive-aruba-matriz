@@ -1,1 +1,48 @@
-{"sections":{"hero":{"type":"island-hero","settings":{"eyebrow":"The island","heading":"The island stays with you.","text":"<p>Not a souvenir. A feeling, carried forward.</p>"}},"introduction":{"type":"rich-text","settings":{"subheading":"Our point of view","heading":"Designed in the rhythm of Aruba.","text":"<p>Arrive Aruba is resortwear for the moments that stay with you: bright water, warm evenings and the ease of island time.</p>","alignment":"left"}},"editorial":{"type":"editorial-image-text","settings":{"reverse":true,"subheading":"A lasting feeling","heading":"Light, water and warmth in every piece.","text":"<p>This is temporary editorial copy. Replace it from the theme editor when the final story and campaign photography are ready.</p>","button_label":"Shop the collection"}},"newsletter":{"type":"newsletter","settings":{"subheading":"Postcards from Aruba","heading":"Stay close to the island.","text":"<p>New pieces, island notes and first access, sent occasionally.</p>"}}},"order":["hero","introduction","editorial","newsletter"]}
+{
+  "sections": {
+    "hero": {
+      "type": "island-hero",
+      "settings": {
+        "eyebrow": "Arrive Aruba",
+        "heading": "Our Story",
+        "text": "<p>How a return to the island became a way of dressing.</p>"
+      }
+    },
+    "founder": {
+      "type": "founder-story",
+      "settings": {
+        "subheading": "Our founder",
+        "heading": "Every piece begins with a return.",
+        "text": "<p>This is where Arrive Aruba's founder will share the story behind the brand: how the idea began, what the island means to them, and the people who helped carry it forward.</p><p>Replace this text and add a portrait from the theme editor once the founder's story and photography are ready.</p>"
+      }
+    },
+    "introduction": {
+      "type": "rich-text",
+      "settings": {
+        "subheading": "Our point of view",
+        "heading": "A brand shaped by return.",
+        "text": "<p>Arrive Aruba is resortwear for the moments that stay with you: bright water, warm evenings and the ease of island time.</p>",
+        "alignment": "left"
+      }
+    },
+    "editorial": {
+      "type": "editorial-image-text",
+      "settings": {
+        "reverse": true,
+        "subheading": "A lasting feeling",
+        "heading": "Light, water and warmth in every piece.",
+        "text": "<p>This is temporary editorial copy. Replace it from the theme editor when the final story and campaign photography are ready.</p>",
+        "button_label": "Shop the collection"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "subheading": "Postcards from Aruba",
+        "heading": "Stay close to the island.",
+        "text": "<p>New pieces, island notes and first access, sent occasionally.</p>"
+      }
+    }
+  },
+  "order": ["hero", "founder", "introduction", "editorial", "newsletter"]
+}

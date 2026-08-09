@@ -1,0 +1,39 @@
+{%- assign founder_image = section.settings.image -%}
+<section class="founder-section section-space">
+  <div class="page-width founder-grid{% if section.settings.reverse %} founder-grid--reverse{% endif %}">
+    <div class="founder-portrait">
+      <div class="founder-frame">
+        {% if founder_image != blank %}
+          {{ founder_image | image_url: width: 1200 | image_tag: widths: '400, 600, 900, 1200', sizes: '(min-width: 750px) 38vw, 100vw', loading: 'lazy', alt: founder_image.alt | default: section.settings.name | escape }}
+        {% else %}
+          <span class="founder-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420" loading="lazy"></span>
+        {% endif %}
+      </div>
+      {% if section.settings.name != blank %}
+        <p class="founder-caption">{{ section.settings.name }}{% if section.settings.role != blank %} · {{ section.settings.role }}{% endif %}</p>
+      {% endif %}
+    </div>
+    <div class="founder-copy" data-reveal>
+      {% if section.settings.subheading != blank %}<p class="eyebrow">{{ section.settings.subheading }}</p>{% endif %}
+      <h2 class="serif-heading">{{ section.settings.heading }}</h2>
+      <div class="rte prose">{{ section.settings.text }}</div>
+      {% if section.settings.signature != blank %}<p class="founder-signature">{{ section.settings.signature }}</p>{% endif %}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "t:sections.founder_story.name",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "t:sections.founder_story.image" },
+    { "type": "checkbox", "id": "reverse", "label": "t:sections.all.reverse", "default": false },
+    { "type": "text", "id": "name", "label": "t:sections.founder_story.name_field" },
+    { "type": "text", "id": "role", "label": "t:sections.founder_story.role" },
+    { "type": "text", "id": "subheading", "label": "t:sections.all.subheading", "default": "Our founder" },
+    { "type": "text", "id": "heading", "label": "t:sections.all.heading", "default": "Every piece begins with a return." },
+    { "type": "richtext", "id": "text", "label": "t:sections.all.text", "default": "<p>This is where Arrive Aruba's founder will share the story behind the brand: how the idea began, what the island means to them, and the people who helped carry it forward.</p><p>Replace this text and add a portrait from the theme editor once the founder's story and photography are ready.</p>" },
+    { "type": "text", "id": "signature", "label": "t:sections.founder_story.signature" }
+  ],
+  "presets": [{ "name": "t:sections.founder_story.name" }]
+}
+{% endschema %}

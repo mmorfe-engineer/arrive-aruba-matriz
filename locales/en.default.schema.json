@@ -27,6 +27,7 @@
     "featured_collection": { "name": "Featured collection", "show_vendor": "Show vendor", "show_wishlist": "Show saved button" },
     "story_banner": { "name": "Island story banner", "kicker": "Kicker", "overlay": "Overlay strength" },
     "editorial": { "name": "Editorial image with text" },
+    "founder_story": { "name": "Founder story", "image": "Portrait", "name_field": "Founder name", "role": "Role", "signature": "Signature line" },
     "ticker": { "name": "Ticker", "item": "Ticker item", "speed": "Speed" },
     "newsletter": { "name": "Newsletter" },
     "main_page": { "name": "Page" },
