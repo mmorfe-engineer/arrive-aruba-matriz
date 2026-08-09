@@ -27,17 +27,6 @@
     "categories": {
       "type": "category-grid",
       "blocks": {
-        "category_PTRtni": {
-          "type": "category",
-          "settings": {
-            "collection": "frontpage",
-            "eyebrow": "",
-            "heading": "",
-            "caption": "",
-            "link": "",
-            "background": "#5f8bb8"
-          }
-        },
         "resort_shirts": {
           "type": "category",
           "settings": {
@@ -73,7 +62,6 @@
         }
       },
       "block_order": [
-        "category_PTRtni",
         "resort_shirts",
         "travel_layers",
         "new_arrivals"
@@ -120,8 +108,8 @@
     "featured": {
       "type": "featured-collection",
       "settings": {
-        "subheading": "New arrivals",
-        "heading": "The first tide",
+        "subheading": "Essentials",
+        "heading": "Aruba Basics",
         "collection": "new-arrivals",
         "products_to_show": 4,
         "show_vendor": false,
@@ -143,7 +131,7 @@
       "settings": {
         "reverse": true,
         "subheading": "Heritage",
-        "heading": "Born on the island.Made for the return.",
+        "heading": "Born on the island.<br>Made for the return.",
         "text": "<p>ARRIVE ARUBA was founded on a simple idea: the island stays with you. Each garment is a memory, a quiet invitation to return.</p>",
         "button_label": "Our story",
         "button_link": "/pages/island-story"
