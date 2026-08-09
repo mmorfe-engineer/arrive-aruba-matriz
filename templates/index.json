@@ -30,29 +30,18 @@
         "resort_shirts": {
           "type": "category",
           "settings": {
-            "collection": "",
+            "collection": "resort",
             "eyebrow": "Polo",
-            "heading": "Resort Shirts",
+            "heading": "Resort",
             "caption": "",
             "link": "",
             "background": "#5f8bb8"
           }
         },
-        "performance_tees": {
-          "type": "category",
-          "settings": {
-            "collection": "",
-            "eyebrow": "Tee",
-            "heading": "Performance Tees",
-            "caption": "",
-            "link": "",
-            "background": "#92af88"
-          }
-        },
         "travel_layers": {
           "type": "category",
           "settings": {
-            "collection": "",
+            "collection": "travel-layers",
             "eyebrow": "Layer",
             "heading": "Travel Layers",
             "caption": "",
@@ -63,7 +52,7 @@
         "new_arrivals": {
           "type": "category",
           "settings": {
-            "collection": "",
+            "collection": "new-arrivals",
             "eyebrow": "All",
             "heading": "New Arrivals",
             "caption": "",
@@ -74,7 +63,6 @@
       },
       "block_order": [
         "resort_shirts",
-        "performance_tees",
         "travel_layers",
         "new_arrivals"
       ],
@@ -122,7 +110,7 @@
       "settings": {
         "subheading": "New arrivals",
         "heading": "The first tide",
-        "collection": "frontpage",
+        "collection": "new-arrivals",
         "products_to_show": 4,
         "show_vendor": false,
         "show_wishlist": true
