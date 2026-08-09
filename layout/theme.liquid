@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="theme-color" content="{{ settings.color_sapphire }}">
     {% render 'meta-tags' %}
+    {%- # theme-check-disable AssetPreload -%}
+    {%- comment -%} preload_tag doesn't support crossorigin, which font preloads require to avoid a double fetch {%- endcomment -%}
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'geologica-variable.woff2' | asset_url }}" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'arrive-legacy-medium.woff2' | asset_url }}" crossorigin>
+    {%- # theme-check-enable AssetPreload -%}
     {% render 'css-variables' %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'theme.css' | asset_url | stylesheet_tag }}
