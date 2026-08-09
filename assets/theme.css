@@ -56,7 +56,7 @@
 .hero-mark-animated{opacity:0;transition:opacity .25s}
 .hero-mark.is-ready .hero-mark-animated{opacity:1}
 .hero-mark.is-ready .hero-mark-static{opacity:0}
-.hero-tagline{margin:0 0 2.5rem;font-family:var(--aa-display-font);font-size:clamp(1.25rem,4.5vw,1.75rem);letter-spacing:.03em;line-height:1.4}
+.hero-tagline{margin:0 0 2.5rem;font-family:var(--aa-display-font);font-weight:400;font-style:normal;font-synthesis:none;font-size:clamp(1.25rem,4.5vw,1.75rem);letter-spacing:.03em;line-height:1.4}
 .hero-actions{display:flex;flex-direction:column;align-items:center;gap:.75rem}
 .hero-sound{position:absolute;right:1rem;bottom:1rem;z-index:3;min-height:38px;padding:.55rem .8rem;border:1px solid rgba(240,240,229,.38);background:rgba(3,7,11,.28);color:var(--aa-cream);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;backdrop-filter:blur(8px)}
 .hero-scroll-cue{position:absolute;left:50%;margin-left:-.5px;bottom:1.75rem;z-index:2;width:1px;height:38px;overflow:hidden;background:rgba(240,240,229,.25)}

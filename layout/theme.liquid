@@ -9,6 +9,7 @@
     {%- comment -%} preload_tag doesn't support crossorigin, which font preloads require to avoid a double fetch {%- endcomment -%}
     <link rel="preload" as="font" type="font/woff2" href="{{ 'geologica-variable.woff2' | asset_url }}" crossorigin>
     <link rel="preload" as="font" type="font/woff2" href="{{ 'arrive-legacy-medium.woff2' | asset_url }}" crossorigin>
+    <link rel="preload" as="font" type="font/woff2" href="{{ 'arrive-port-blair.woff2' | asset_url }}" crossorigin>
     {%- # theme-check-enable AssetPreload -%}
     {% render 'css-variables' %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
