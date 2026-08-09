@@ -77,6 +77,11 @@ document.addEventListener('click', (event) => {
   if (opener) {
     event.preventDefault();
     openDrawer(opener.dataset.openDrawer);
+    if (opener.dataset.filterIndex) {
+      const target = document.getElementById(`FilterGroup-${opener.dataset.filterIndex}`);
+      document.querySelectorAll('.filter-group').forEach((details) => { details.open = details === target; });
+      target?.scrollIntoView({ block: 'nearest' });
+    }
     return;
   }
   const closer = event.target.closest('[data-close-drawer]');
@@ -447,6 +452,11 @@ class ProductRecommendations extends HTMLElement {
 }
 
 customElements.define('product-recommendations', ProductRecommendations);
+
+document.addEventListener('change', (event) => {
+  const sortInput = event.target.closest('#CollectionSort input[type="radio"]');
+  if (sortInput) sortInput.closest('form')?.submit();
+});
 
 document.addEventListener('change', async (event) => {
   const input = event.target.closest('[data-cart-line-input]');
