@@ -130,13 +130,10 @@
     return clamp(-rect.top / distance, 0, 1);
   };
 
-  Journey.prototype.canvasBoxFor = function (progress) {
+  Journey.prototype.canvasBoxFor = function () {
     var ratio = 16 / 9;
     var viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1);
     var viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
-    var isMobile = mobileQuery.matches;
-    var containedWidth = Math.min(viewportWidth * (isMobile ? 0.94 : 0.88), isMobile ? 480 : 960);
-    var containedHeight = containedWidth / ratio;
     var coverWidth = viewportWidth;
     var coverHeight = viewportWidth / ratio;
 
@@ -145,10 +142,9 @@
       coverWidth = viewportHeight * ratio;
     }
 
-    var introProgress = ease(progress / 0.16);
     return {
-      width: coverWidth + (containedWidth - coverWidth) * introProgress,
-      height: coverHeight + (containedHeight - coverHeight) * introProgress
+      width: coverWidth,
+      height: coverHeight
     };
   };
 

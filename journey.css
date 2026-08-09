@@ -114,7 +114,8 @@ a {
       var(--aa-sky-horizon) 0%,
       var(--aa-sky-middle) 45%,
       var(--aa-sky-top) 100%
-    );
+    ),
+    #000;
   display: flex;
   height: 100dvh;
   isolation: isolate;
@@ -216,7 +217,9 @@ a {
 }
 
 .aa-journey__canvas {
-  /* Source render is 1920x1080. Both dimensions stay explicit because width:auto
+  /* Source render is 1920x1080 and is displayed as viewport-cover throughout
+     the journey so the render edges never become visible mid-scroll.
+     Both dimensions stay explicit because width:auto
      plus aspect-ratio collapsed inside this centered absolute flex layer in testing,
      and deriving layout from the canvas attributes creates a loop once resizeCanvas()
      updates the drawing buffer. */
