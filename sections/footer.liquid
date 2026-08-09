@@ -9,7 +9,7 @@
   </div>
   <div class="footer-bottom">
     <p class="footer-legal">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ 'footer.rights' | t }}</p>
-    <div class="footer-social">{% if settings.social_instagram != blank %}<a href="{{ settings.social_instagram }}">Instagram</a>{% endif %}{% if settings.social_tiktok != blank %}<a href="{{ settings.social_tiktok }}">TikTok</a>{% endif %}{% if settings.social_facebook != blank %}<a href="{{ settings.social_facebook }}">Facebook</a>{% endif %}</div>
+    <div class="footer-social">{% if settings.social_instagram != blank %}<a href="{{ settings.social_instagram }}" aria-label="Instagram">{% render 'icon', name: 'instagram' %}</a>{% endif %}{% if settings.social_facebook != blank %}<a href="{{ settings.social_facebook }}" aria-label="Facebook">{% render 'icon', name: 'facebook' %}</a>{% endif %}{% if settings.social_tiktok != blank %}<a href="{{ settings.social_tiktok }}" aria-label="TikTok">{% render 'icon', name: 'tiktok' %}</a>{% endif %}{% if settings.social_pinterest != blank %}<a href="{{ settings.social_pinterest }}" aria-label="Pinterest">{% render 'icon', name: 'pinterest' %}</a>{% endif %}{% if settings.social_whatsapp != blank %}<a href="{{ settings.social_whatsapp }}" aria-label="WhatsApp">{% render 'icon', name: 'whatsapp' %}</a>{% endif %}</div>
   </div>
 </footer>
 {% schema %}

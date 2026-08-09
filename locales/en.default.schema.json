@@ -13,7 +13,7 @@
     "colors": { "name": "Colors", "sapphire": "Star Sapphire", "sapphire_dark": "Deep Sapphire", "navy": "Harbour Navy", "lake": "Silver Lake Blue", "cream": "Cannoli Cream", "orange": "Mock Orange", "green": "Fair Green", "ink": "Ink" },
     "typography": { "name": "Typography", "body": "Alternative body font", "use_brand_body": "Use Arrive Aruba brand typography" },
     "layout": { "name": "Layout and motion", "page_width": "Maximum page width", "control_radius": "Control corner radius", "motion": "Enable motion" },
-    "social": { "name": "Social media", "instagram": "Instagram", "tiktok": "TikTok", "facebook": "Facebook" }
+    "social": { "name": "Social media", "instagram": "Instagram", "facebook": "Facebook", "tiktok": "TikTok", "pinterest": "Pinterest", "whatsapp": "WhatsApp (link, e.g. https://wa.me/12345678900)" }
   },
   "section_groups": { "header": "Header group", "footer": "Footer group" },
   "sections": {
