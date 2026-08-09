@@ -5,7 +5,7 @@
     assign overlay = true
   endif
 -%}
-<header class="site-header{% if overlay %} site-header--overlay{% endif %}{% if section.settings.sticky %} is-sticky{% endif %}" style="--logo-width:{{ logo_width }}px" data-header>
+<header class="site-header{% if overlay %} site-header--overlay{% endif %}{% if section.settings.sticky %} is-sticky{% endif %}" style="--logo-width:{{ logo_width }}px" data-header data-section-id="{{ section.id }}">
   <div class="header-inner page-width">
     <div class="header-left">
       <button class="icon-button menu-toggle" type="button" data-open-drawer="navigation" aria-expanded="false" aria-label="{{ 'header.open_menu' | t }}">{% render 'icon', name: 'menu' %}</button>
@@ -54,5 +54,5 @@
   </div>
 </div>
 {% schema %}
-{"name":"t:sections.header.name","settings":[{"type":"link_list","id":"menu","label":"t:sections.header.menu","default":"main-menu"},{"type":"checkbox","id":"overlay_home","label":"t:sections.header.overlay_home","default":true},{"type":"checkbox","id":"sticky","label":"t:sections.header.sticky","default":false},{"type":"checkbox","id":"show_search","label":"t:sections.header.show_search","default":true},{"type":"checkbox","id":"show_account","label":"t:sections.header.show_account","default":true},{"type":"checkbox","id":"show_wishlist","label":"t:sections.header.show_wishlist","default":true}]}
+{"name":"t:sections.header.name","settings":[{"type":"link_list","id":"menu","label":"t:sections.header.menu","default":"main-menu"},{"type":"checkbox","id":"overlay_home","label":"t:sections.header.overlay_home","default":true},{"type":"checkbox","id":"sticky","label":"t:sections.header.sticky","default":true},{"type":"checkbox","id":"show_search","label":"t:sections.header.show_search","default":true},{"type":"checkbox","id":"show_account","label":"t:sections.header.show_account","default":true},{"type":"checkbox","id":"show_wishlist","label":"t:sections.header.show_wishlist","default":true}]}
 {% endschema %}
