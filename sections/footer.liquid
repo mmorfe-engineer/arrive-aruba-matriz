@@ -1,4 +1,5 @@
 <footer class="site-footer">
+  <img class="footer-dividivi" src="{{ 'arrive-dividivi-footer.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy" width="1869" height="1223">
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">{% if settings.logo_inverse != blank %}{{ settings.logo_inverse | image_url: width: 420 | image_tag: class: 'footer-logo', widths: '180, 280, 420', loading: 'lazy', alt: shop.name }}{% else %}<img class="footer-logo" src="{{ 'arrive-logo-negative.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="500" height="260" loading="lazy">{% endif %}</a>
