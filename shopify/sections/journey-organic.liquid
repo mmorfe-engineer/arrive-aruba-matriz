@@ -1,0 +1,375 @@
+{% comment %}
+  Arrive Aruba Journey Organic v3
+  Upload journey-organic.css and journey-organic.js to the theme Assets directory.
+  Add sprite sheets as blocks in their generated manifest order.
+{% endcomment %}
+
+{{ 'journey-organic.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'journey-organic.js' | asset_url }}" defer></script>
+
+{% assign fallback_poster = section.settings.poster_mobile | default: section.settings.poster_desktop %}
+{% assign fallback_poster_url = '' %}
+{% if fallback_poster != blank %}
+  {% assign fallback_poster_url = fallback_poster | image_url: width: 1400 %}
+{% endif %}
+
+<section
+  class="aa-organic-journey"
+  data-journey-organic
+  data-scroll-length="{{ section.settings.scroll_length }}"
+  data-fallback-poster="{{ fallback_poster_url }}"
+  aria-label="{{ section.settings.accessibility_label | escape }}"
+  {{ section.shopify_attributes }}
+>
+  <script type="application/json" data-journey-organic-config>
+    {
+      "version": 3,
+      "timeline": {
+        "shadeStart": 0.10,
+        "shadeEnd": 0.62,
+        "zoomStart": 0.62,
+        "finalSwap": 0.80,
+        "zoomEnd": 0.95
+      },
+      "aperture": {
+        "x": {{ section.settings.aperture_x | divided_by: 1000.0 }},
+        "y": {{ section.settings.aperture_y | divided_by: 1000.0 }},
+        "width": {{ section.settings.aperture_width | divided_by: 1000.0 }},
+        "height": {{ section.settings.aperture_height | divided_by: 1000.0 }}
+      },
+      "variants": {
+        "desktop": {
+          "slidingWindow": 2,
+          "cell": {
+            "width": {{ section.settings.desktop_cell_width }},
+            "height": {{ section.settings.desktop_cell_height }}
+          },
+          "poster": {
+            "src": {% if section.settings.poster_desktop != blank %}{{ section.settings.poster_desktop | image_url: width: 1800 | json }}{% else %}""{% endif %}
+          },
+          "finalStill": {
+            "src": {% if section.settings.final_desktop != blank %}{{ section.settings.final_desktop | image_url: width: 2200 | json }}{% else %}""{% endif %}
+          },
+          "clip": {
+            "frameStart": 1,
+            "frameEnd": {{ section.settings.frame_count }},
+            "frameCount": {{ section.settings.frame_count }},
+            "sheets": [
+              {% assign desktop_first = true %}
+              {% for block in section.blocks %}
+                {% if block.type == 'sprite_sheet' and block.settings.variant == 'desktop' and block.settings.image != blank %}
+                  {% unless desktop_first %},{% endunless %}
+                  {
+                    "src": {{ block.settings.image | image_url: width: 4096 | json }},
+                    "width": {{ block.settings.image.width | default: 2048 }},
+                    "height": {{ block.settings.image.height | default: 2048 }},
+                    "columns": {{ block.settings.columns }},
+                    "rows": {{ block.settings.rows }},
+                    "frameOffset": {{ block.settings.frame_offset }},
+                    "frameCount": {{ block.settings.frame_count }}
+                  }
+                  {% assign desktop_first = false %}
+                {% endif %}
+              {% endfor %}
+            ]
+          }
+        },
+        "mobile": {
+          "slidingWindow": 2,
+          "cell": {
+            "width": {{ section.settings.mobile_cell_width }},
+            "height": {{ section.settings.mobile_cell_height }}
+          },
+          "poster": {
+            "src": {% if section.settings.poster_mobile != blank %}{{ section.settings.poster_mobile | image_url: width: 1400 | json }}{% elsif section.settings.poster_desktop != blank %}{{ section.settings.poster_desktop | image_url: width: 1400 | json }}{% else %}""{% endif %}
+          },
+          "finalStill": {
+            "src": {% if section.settings.final_mobile != blank %}{{ section.settings.final_mobile | image_url: width: 1600 | json }}{% elsif section.settings.final_desktop != blank %}{{ section.settings.final_desktop | image_url: width: 1600 | json }}{% else %}""{% endif %}
+          },
+          "clip": {
+            "frameStart": 1,
+            "frameEnd": {{ section.settings.frame_count }},
+            "frameCount": {{ section.settings.frame_count }},
+            "sheets": [
+              {% assign mobile_first = true %}
+              {% for block in section.blocks %}
+                {% if block.type == 'sprite_sheet' and block.settings.variant == 'mobile' and block.settings.image != blank %}
+                  {% unless mobile_first %},{% endunless %}
+                  {
+                    "src": {{ block.settings.image | image_url: width: 4096 | json }},
+                    "width": {{ block.settings.image.width | default: 2048 }},
+                    "height": {{ block.settings.image.height | default: 2048 }},
+                    "columns": {{ block.settings.columns }},
+                    "rows": {{ block.settings.rows }},
+                    "frameOffset": {{ block.settings.frame_offset }},
+                    "frameCount": {{ block.settings.frame_count }}
+                  }
+                  {% assign mobile_first = false %}
+                {% endif %}
+              {% endfor %}
+            ]
+          }
+        }
+      }
+    }
+  </script>
+
+  <div class="aa-organic-journey__sticky">
+    <div class="aa-organic-sky" aria-hidden="true">
+      <div class="aa-organic-sky__wash"></div>
+      <div class="aa-organic-cloud aa-organic-cloud--far"></div>
+      <div class="aa-organic-cloud aa-organic-cloud--middle"></div>
+      <div class="aa-organic-cloud aa-organic-cloud--near"></div>
+      <div class="aa-organic-sky__haze"></div>
+    </div>
+
+    <header class="aa-organic-header">
+      <a class="aa-organic-header__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+        {% if section.settings.logo != blank %}
+          {{ section.settings.logo | image_url: width: 260 | image_tag:
+            loading: 'eager',
+            widths: '120, 180, 260',
+            alt: shop.name
+          }}
+        {% else %}
+          <span>{{ shop.name }}</span>
+        {% endif %}
+      </a>
+      <a class="aa-organic-header__home" href="{{ routes.root_url }}">{{ section.settings.home_label }}</a>
+    </header>
+
+    <div class="aa-organic-visual" data-journey-visual aria-hidden="true">
+      <img class="aa-organic-visual__poster" data-journey-poster alt="" decoding="async">
+      <canvas class="aa-organic-visual__canvas" data-journey-canvas></canvas>
+      <img class="aa-organic-visual__final" data-journey-final alt="" decoding="async">
+    </div>
+
+    {% if section.settings.copy != blank %}
+      <p class="aa-organic-copy" data-journey-copy>{{ section.settings.copy }}</p>
+    {% endif %}
+
+    <a class="aa-organic-skip" href="{{ section.settings.skip_link | default: '#MainContent' }}">
+      {{ section.settings.skip_label }}
+    </a>
+    <p class="aa-organic-status" data-journey-status role="status" aria-live="polite">{{ section.settings.loading_label }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Journey Organic",
+  "tag": "section",
+  "class": "aa-journey-organic-section",
+  "max_blocks": 40,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Arrive Aruba logo"
+    },
+    {
+      "type": "text",
+      "id": "home_label",
+      "label": "Home link label",
+      "default": "Arrive home"
+    },
+    {
+      "type": "text",
+      "id": "copy",
+      "label": "Journey copy",
+      "default": "Nine degrees north."
+    },
+    {
+      "type": "text",
+      "id": "skip_label",
+      "label": "Skip link label",
+      "default": "Skip to shop"
+    },
+    {
+      "type": "url",
+      "id": "skip_link",
+      "label": "Skip link destination"
+    },
+    {
+      "type": "text",
+      "id": "loading_label",
+      "label": "Loading status",
+      "default": "Preparing the view"
+    },
+    {
+      "type": "text",
+      "id": "accessibility_label",
+      "label": "Accessibility label",
+      "default": "Arrive Aruba window journey"
+    },
+    {
+      "type": "range",
+      "id": "scroll_length",
+      "label": "Scroll length",
+      "min": 200,
+      "max": 400,
+      "step": 10,
+      "unit": "vh",
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "frame_count",
+      "label": "Frame count",
+      "min": 60,
+      "max": 180,
+      "step": 1,
+      "default": 120
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_desktop",
+      "label": "Desktop poster"
+    },
+    {
+      "type": "image_picker",
+      "id": "final_desktop",
+      "label": "Desktop final still"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_mobile",
+      "label": "Mobile poster"
+    },
+    {
+      "type": "image_picker",
+      "id": "final_mobile",
+      "label": "Mobile final still"
+    },
+    {
+      "type": "header",
+      "content": "Generated cell dimensions"
+    },
+    {
+      "type": "number",
+      "id": "desktop_cell_width",
+      "label": "Desktop cell width",
+      "default": 653
+    },
+    {
+      "type": "number",
+      "id": "desktop_cell_height",
+      "label": "Desktop cell height",
+      "default": 900
+    },
+    {
+      "type": "number",
+      "id": "mobile_cell_width",
+      "label": "Mobile cell width",
+      "default": 435
+    },
+    {
+      "type": "number",
+      "id": "mobile_cell_height",
+      "label": "Mobile cell height",
+      "default": 600
+    },
+    {
+      "type": "header",
+      "content": "Aperture geometry per 1000"
+    },
+    {
+      "type": "range",
+      "id": "aperture_x",
+      "label": "Aperture X",
+      "min": 0,
+      "max": 500,
+      "step": 1,
+      "default": 122
+    },
+    {
+      "type": "range",
+      "id": "aperture_y",
+      "label": "Aperture Y",
+      "min": 0,
+      "max": 500,
+      "step": 1,
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "aperture_width",
+      "label": "Aperture width",
+      "min": 300,
+      "max": 1000,
+      "step": 1,
+      "default": 756
+    },
+    {
+      "type": "range",
+      "id": "aperture_height",
+      "label": "Aperture height",
+      "min": 300,
+      "max": 1000,
+      "step": 1,
+      "default": 763
+    }
+  ],
+  "blocks": [
+    {
+      "type": "sprite_sheet",
+      "name": "Sprite sheet",
+      "settings": [
+        {
+          "type": "select",
+          "id": "variant",
+          "label": "Variant",
+          "options": [
+            { "value": "desktop", "label": "Desktop" },
+            { "value": "mobile", "label": "Mobile" }
+          ],
+          "default": "desktop"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "WebP sprite sheet"
+        },
+        {
+          "type": "number",
+          "id": "frame_offset",
+          "label": "Frame offset",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "frame_count",
+          "label": "Frames in this sheet",
+          "min": 1,
+          "max": 24,
+          "step": 1,
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "columns",
+          "label": "Columns",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "type": "range",
+          "id": "rows",
+          "label": "Rows",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "default": 2
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Journey Organic"
+    }
+  ]
+}
+{% endschema %}
