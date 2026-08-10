@@ -1,2 +1,105 @@
-<section class="collection-section section-space"><div class="page-width"><header class="section-header"><div><p class="eyebrow">{{ section.settings.eyebrow }}</p><h1 class="serif-heading">{{ section.settings.heading }}</h1></div></header><div class="category-grid" style="--category-columns:3">{% for collection in collections %}{% unless collection.handle == 'frontpage' %}<a class="category-card" href="{{ collection.url }}"><span class="category-card-media">{% if collection.featured_image %}{{ collection.featured_image | image_url: width: 1200 | image_tag: widths: '400, 700, 900, 1200', sizes: '(min-width: 750px) 33vw, 50vw', loading: 'lazy', alt: collection.featured_image.alt | default: collection.title | escape }}{% else %}<span class="category-card-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420" loading="lazy"></span>{% endif %}</span><span class="category-card-body"><span class="category-card-title">{{ collection.title }}</span><span class="category-card-meta">{{ 'collections.product_count' | t: count: collection.products_count }}</span></span></a>{% endunless %}{% endfor %}</div></div></section>
-{% schema %}{"name":"t:sections.list_collections.name","settings":[{"type":"text","id":"eyebrow","label":"t:sections.all.subheading","default":"Arrive Aruba"},{"type":"text","id":"heading","label":"t:sections.all.heading","default":"Collections"}]}{% endschema %}
+{%- liquid
+  assign featured_collection = null
+  for list_collection in collections
+    unless list_collection.handle == 'frontpage'
+      assign featured_collection = list_collection
+      break
+    endunless
+  endfor
+  assign hero_image = section.settings.hero_image
+  if hero_image == blank
+    assign hero_asset = 'arrive-brand-web.webp'
+  endif
+-%}
+
+<section class="collections-index">
+  <header class="collections-index-hero">
+    <div class="collections-index-copy">
+      {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+      <h1 class="display-heading">{{ section.settings.heading }}</h1>
+      {% if section.settings.text != blank %}<div class="rte">{{ section.settings.text }}</div>{% endif %}
+    </div>
+    <div class="collections-index-media" aria-hidden="true">
+      {% if hero_image != blank %}
+        {{ hero_image | image_url: width: 1400 | image_tag: widths: '520, 760, 1000, 1400', sizes: '(min-width: 990px) 42vw, 100vw', loading: 'eager', alt: section.settings.heading | escape }}
+      {% else %}
+        <img src="{{ hero_asset | asset_url }}" alt="" width="1400" height="980" loading="eager">
+      {% endif %}
+    </div>
+  </header>
+
+  <div class="page-width collections-index-body">
+    {% if section.blocks.size > 0 %}
+      <div class="collections-index-notes">
+        {% for block in section.blocks %}
+          <div class="collections-index-note" {{ block.shopify_attributes }}>
+            {% if block.settings.title != blank %}<strong>{{ block.settings.title }}</strong>{% endif %}
+            {% if block.settings.text != blank %}<span>{{ block.settings.text }}</span>{% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if featured_collection != blank %}
+      <a class="collections-feature-card" href="{{ featured_collection.url }}">
+        <span class="collections-feature-media">
+          {% if featured_collection.featured_image %}
+            {{ featured_collection.featured_image | image_url: width: 1400 | image_tag: widths: '520, 760, 1000, 1400', sizes: '(min-width: 990px) 48vw, 100vw', loading: 'lazy', alt: featured_collection.featured_image.alt | default: featured_collection.title | escape }}
+          {% else %}
+            <span class="category-card-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420" loading="lazy"></span>
+          {% endif %}
+        </span>
+        <span class="collections-feature-copy">
+          <span class="eyebrow">{{ section.settings.featured_label }}</span>
+          <span class="serif-heading">{{ featured_collection.title }}</span>
+          {% if featured_collection.description != blank %}<span class="collections-feature-text">{{ featured_collection.description | strip_html | truncatewords: 26 }}</span>{% endif %}
+          <span class="collections-feature-meta">{{ 'collections.product_count' | t: count: featured_collection.all_products_count }}</span>
+        </span>
+      </a>
+    {% endif %}
+
+    <div class="collections-index-grid">
+      {% for list_collection in collections %}
+        {% unless list_collection.handle == 'frontpage' or list_collection.handle == featured_collection.handle %}
+          <a class="category-card" href="{{ list_collection.url }}" data-reveal>
+            <span class="category-card-media">
+              {% if list_collection.featured_image %}
+                {{ list_collection.featured_image | image_url: width: 1200 | image_tag: widths: '400, 700, 900, 1200', sizes: '(min-width: 990px) 30vw, 50vw', loading: 'lazy', alt: list_collection.featured_image.alt | default: list_collection.title | escape }}
+              {% else %}
+                <span class="category-card-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420" loading="lazy"></span>
+              {% endif %}
+            </span>
+            <span class="category-card-body">
+              <span class="category-card-title">{{ list_collection.title }}</span>
+              <span class="category-card-meta">{{ 'collections.product_count' | t: count: list_collection.all_products_count }}</span>
+            </span>
+          </a>
+        {% endunless %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.list_collections.name",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:sections.all.subheading", "default": "Arrive Aruba" },
+    { "type": "text", "id": "heading", "label": "t:sections.all.heading", "default": "Shop the island" },
+    { "type": "richtext", "id": "text", "label": "t:sections.all.text", "default": "<p>Resortwear shaped by Aruba's light, water and long sunlit arrivals.</p>" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero image" },
+    { "type": "text", "id": "featured_label", "label": "Featured label", "default": "Featured collection" }
+  ],
+  "blocks": [
+    {
+      "type": "note",
+      "name": "Service note",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Island delivery" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Delivered across Aruba in 24 hours" }
+      ]
+    }
+  ]
+}
+{% endschema %}

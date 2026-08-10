@@ -1,1 +1,38 @@
-{"sections":{"main":{"type":"collections","settings":{"eyebrow":"Arrive Aruba","heading":"Collections"}}},"order":["main"]}
+{
+  "sections": {
+    "main": {
+      "type": "collections",
+      "blocks": {
+        "note-delivery": {
+          "type": "note",
+          "settings": {
+            "title": "Island delivery",
+            "text": "Delivered across Aruba in 24 hours"
+          }
+        },
+        "note-fit": {
+          "type": "note",
+          "settings": {
+            "title": "Resort-ready fit",
+            "text": "Soft layers for arrival, beach and dinner"
+          }
+        },
+        "note-save": {
+          "type": "note",
+          "settings": {
+            "title": "Saved pieces",
+            "text": "Keep favorites ready while you browse"
+          }
+        }
+      },
+      "block_order": ["note-delivery", "note-fit", "note-save"],
+      "settings": {
+        "eyebrow": "Arrive Aruba",
+        "heading": "Shop the island",
+        "text": "<p>Resortwear shaped by Aruba's light, water and long sunlit arrivals.</p>",
+        "featured_label": "Featured collection"
+      }
+    }
+  },
+  "order": ["main"]
+}
