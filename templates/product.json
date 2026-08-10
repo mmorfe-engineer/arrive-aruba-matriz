@@ -33,10 +33,11 @@
         "show_dynamic_checkout": false,
         "show_metafields": true,
         "show_sticky_mobile": true,
+        "delivery_note": "Free delivery to Aruba",
         "delivery_heading": "Delivered in 24 hours across Aruba",
         "delivery_text": "Free on orders over $150. Island ease guaranteed.",
-        "gallery_background": "#F0F0E5",
-        "media_background": "#F0F0E5",
+        "gallery_background": "#386395",
+        "media_background": "#386395",
         "media_fit": "contain"
       }
     },
