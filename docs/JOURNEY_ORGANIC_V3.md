@@ -30,11 +30,11 @@ El `.blend` independiente se genera en:
 
 | Progreso | Acción |
 | --- | --- |
-| `0.00–0.10` | Persiana cerrada y nubes suaves |
-| `0.10–0.62` | Apertura y juego de luces |
-| `0.62–0.95` | Zoom web calculado desde la apertura |
-| `0.80–0.95` | Cambio progresivo al still de alta resolución |
-| `0.95–1.00` | La vista de Aruba cubre el viewport |
+| `0.00–0.02` | Persiana cerrada y nubes suaves |
+| `0.02–0.50` | Apertura de la persiana; el clip avanza hasta aproximadamente el frame 72 |
+| `0.50–0.94` | Zoom web mientras continúa el juego de luces hasta el frame 144 |
+| `0.90–0.98` | Cambio progresivo al still final y cobertura del viewport |
+| `0.98–1.00` | Salida hacia el bloque comercial de ejemplo |
 
 ## Presupuesto y memoria
 
@@ -42,18 +42,23 @@ El `.blend` independiente se genera en:
 - Móvil: máximo 2.5 MB transferidos.
 - El runtime mantiene como máximo dos sprite sheets decodificados y libera `ImageBitmap` al avanzar o desmontar la sección.
 - Hay fallback estático para reduced motion, Save Data, redes 2G/3G y errores de carga.
+- El fallback estático usa el frame 72 abierto; el frame 144 blanco queda reservado para la transición final.
 - El scroll es nativo; no se secuestra la rueda ni se instala un listener de `scroll`.
 
 ## Regenerar los entregables
 
 ```bash
 blender -b \
-  "/Users/martinmorfe/Documents/Aruba animacion/3d-arrive-aruba-ventana/Ventana_Journey_Web_pre-animation_20260807.blend" \
-  --python tools/setup_journey_organic_scene.py
+  "/Users/martinmorfe/Documents/Aruba animacion/3d-arrive-aruba-ventana/Ventana_Journey_Organic_v3.blend" \
+  --python tools/render_journey_organic_final.py -- \
+  --output "/Users/martinmorfe/Documents/Aruba animacion/renders/journey-organic/master-final-eevee-v3"
 
 python3 tools/build_journey_organic_assets.py \
-  --input "/Users/martinmorfe/Documents/Aruba animacion/renders/journey-organic/master" \
+  --input "/Users/martinmorfe/Documents/Aruba animacion/renders/journey-organic/master-final-eevee-v3" \
   --output preview-assets/journey-organic
+
+python3 tools/validate_journey_organic_manifest.py \
+  preview-assets/journey-organic/manifest.json
 ```
 
 La escena conserva las luces posteriores y no agrega keyframes a posición, rotación, lente o enfoque de cámara.

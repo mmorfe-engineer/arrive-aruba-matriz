@@ -360,7 +360,9 @@
   }
 
   .aa-organic-visual {
-    height: min(67dvh, 650px);
+    width: min(92vw, 472px);
+    height: auto;
+    aspect-ratio: var(--aa-visual-ratio, 0.726);
   }
 
   .aa-organic-copy {

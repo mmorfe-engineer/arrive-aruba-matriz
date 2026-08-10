@@ -285,12 +285,13 @@
     var baseHeight = rect.height / Math.max(0.001, this.currentScale);
     var apertureWidth = baseWidth * aperture.width;
     var apertureHeight = baseHeight * aperture.height;
-    return Math.max(window.innerWidth / apertureWidth, window.innerHeight / apertureHeight) * 1.06;
+    return Math.max(window.innerWidth / apertureWidth, window.innerHeight / apertureHeight) * 1.2;
   };
 
   OrganicJourney.prototype.renderStatic = function () {
     if (!this.variant) return;
-    this.poster.src = this.assetUrl(this.variant.finalStill.src || this.variant.poster.src);
+    var still = this.variant.staticStill || this.variant.poster || this.variant.finalStill;
+    this.poster.src = this.assetUrl(still && still.src);
     this.visual.style.setProperty("--aa-final-opacity", "0");
     this.root.style.setProperty("--aa-copy-opacity", "1");
   };

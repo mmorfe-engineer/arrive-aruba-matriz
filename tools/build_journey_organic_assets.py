@@ -13,7 +13,8 @@ from PIL import Image, ImageChops
 
 
 FRAME_START = 1
-FRAME_END = 120
+FRAME_END = 144
+STATIC_FRAME = 72
 DESKTOP_BUDGET = 5 * 1024 * 1024
 MOBILE_BUDGET = int(2.5 * 1024 * 1024)
 
@@ -29,8 +30,8 @@ class Variant:
 
 
 VARIANTS = (
-    Variant("desktop", 900, 2048, 2, DESKTOP_BUDGET, 74),
-    Variant("mobile", 600, 2048, 2, MOBILE_BUDGET, 70),
+    Variant("desktop", 920, 2048, 2, DESKTOP_BUDGET, 76),
+    Variant("mobile", 620, 2048, 2, MOBILE_BUDGET, 72),
 )
 
 
@@ -121,6 +122,12 @@ def pack_variant(
     poster = prepared_frame(paths[0], source_size, mask).crop(crop).resize((cell_width, cell_height), resampling)
     poster.save(poster_path, "WEBP", quality=82, method=6, exact=True)
     poster.close()
+    static_path = variant_root / "static.webp"
+    static_frame = prepared_frame(paths[STATIC_FRAME - FRAME_START], source_size, mask).crop(crop).resize(
+        (cell_width, cell_height), resampling
+    )
+    static_frame.save(static_path, "WEBP", quality=82, method=6, exact=True)
+    static_frame.close()
     final_path = variant_root / "final.webp"
     final_height = min(1400 if variant.name == "desktop" else 1100, crop_height)
     final_width = round(crop_width * final_height / crop_height)
@@ -128,7 +135,12 @@ def pack_variant(
     final.save(final_path, "WEBP", quality=84, method=6, exact=True)
     final.close()
 
-    total_bytes = sum(sheet["bytes"] for sheet in sheets) + poster_path.stat().st_size + final_path.stat().st_size
+    total_bytes = (
+        sum(sheet["bytes"] for sheet in sheets)
+        + poster_path.stat().st_size
+        + static_path.stat().st_size
+        + final_path.stat().st_size
+    )
     if total_bytes > variant.budget:
         raise SystemExit(
             f"{variant.name} budget exceeded: {total_bytes / 1024 / 1024:.2f} MB > {variant.budget / 1024 / 1024:.2f} MB"
@@ -141,6 +153,7 @@ def pack_variant(
         "slidingWindow": variant.sliding_window,
         "cell": {"width": cell_width, "height": cell_height},
         "poster": {"src": f"{variant.name}/poster.webp", "width": cell_width, "height": cell_height},
+        "staticStill": {"src": f"{variant.name}/static.webp", "width": cell_width, "height": cell_height},
         "finalStill": {"src": f"{variant.name}/final.webp", "width": final_width, "height": final_height},
         "clip": {
             "frameStart": FRAME_START,
@@ -161,7 +174,8 @@ def main() -> None:
         "version": 3,
         "generator": "tools/build_journey_organic_assets.py",
         "source": {"width": source_width, "height": source_height, "frameCount": len(paths), "crop": crop},
-        "timeline": {"shadeStart": 0.10, "shadeEnd": 0.62, "zoomStart": 0.62, "finalSwap": 0.80, "zoomEnd": 0.95},
+        "frames": {"shadeOpen": 72, "whiteoutStart": 84, "final": 144},
+        "timeline": {"shadeStart": 0.02, "shadeEnd": 0.94, "zoomStart": 0.50, "finalSwap": 0.90, "zoomEnd": 0.98},
         "aperture": {"x": 0.122, "y": 0.12, "width": 0.756, "height": 0.763},
         "variants": {
             variant.name: pack_variant(paths, source_size, mask, crop, args.output, variant)

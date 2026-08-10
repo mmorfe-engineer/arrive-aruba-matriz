@@ -25,11 +25,11 @@
     {
       "version": 3,
       "timeline": {
-        "shadeStart": 0.10,
-        "shadeEnd": 0.62,
-        "zoomStart": 0.62,
-        "finalSwap": 0.80,
-        "zoomEnd": 0.95
+        "shadeStart": 0.02,
+        "shadeEnd": 0.94,
+        "zoomStart": 0.50,
+        "finalSwap": 0.90,
+        "zoomEnd": 0.98
       },
       "aperture": {
         "x": {{ section.settings.aperture_x | divided_by: 1000.0 }},
@@ -46,6 +46,9 @@
           },
           "poster": {
             "src": {% if section.settings.poster_desktop != blank %}{{ section.settings.poster_desktop | image_url: width: 1800 | json }}{% else %}""{% endif %}
+          },
+          "staticStill": {
+            "src": {% if section.settings.static_desktop != blank %}{{ section.settings.static_desktop | image_url: width: 1800 | json }}{% elsif section.settings.poster_desktop != blank %}{{ section.settings.poster_desktop | image_url: width: 1800 | json }}{% else %}""{% endif %}
           },
           "finalStill": {
             "src": {% if section.settings.final_desktop != blank %}{{ section.settings.final_desktop | image_url: width: 2200 | json }}{% else %}""{% endif %}
@@ -82,6 +85,9 @@
           },
           "poster": {
             "src": {% if section.settings.poster_mobile != blank %}{{ section.settings.poster_mobile | image_url: width: 1400 | json }}{% elsif section.settings.poster_desktop != blank %}{{ section.settings.poster_desktop | image_url: width: 1400 | json }}{% else %}""{% endif %}
+          },
+          "staticStill": {
+            "src": {% if section.settings.static_mobile != blank %}{{ section.settings.static_mobile | image_url: width: 1400 | json }}{% elsif section.settings.static_desktop != blank %}{{ section.settings.static_desktop | image_url: width: 1400 | json }}{% elsif section.settings.poster_mobile != blank %}{{ section.settings.poster_mobile | image_url: width: 1400 | json }}{% else %}""{% endif %}
           },
           "finalStill": {
             "src": {% if section.settings.final_mobile != blank %}{{ section.settings.final_mobile | image_url: width: 1600 | json }}{% elsif section.settings.final_desktop != blank %}{{ section.settings.final_desktop | image_url: width: 1600 | json }}{% else %}""{% endif %}
@@ -210,7 +216,7 @@
       "max": 400,
       "step": 10,
       "unit": "vh",
-      "default": 320
+      "default": 240
     },
     {
       "type": "range",
@@ -219,7 +225,7 @@
       "min": 60,
       "max": 180,
       "step": 1,
-      "default": 120
+      "default": 144
     },
     {
       "type": "image_picker",
@@ -233,6 +239,11 @@
     },
     {
       "type": "image_picker",
+      "id": "static_desktop",
+      "label": "Desktop reduced-motion still"
+    },
+    {
+      "type": "image_picker",
       "id": "poster_mobile",
       "label": "Mobile poster"
     },
@@ -242,6 +253,11 @@
       "label": "Mobile final still"
     },
     {
+      "type": "image_picker",
+      "id": "static_mobile",
+      "label": "Mobile reduced-motion still"
+    },
+    {
       "type": "header",
       "content": "Generated cell dimensions"
     },
@@ -249,25 +265,25 @@
       "type": "number",
       "id": "desktop_cell_width",
       "label": "Desktop cell width",
-      "default": 653
+      "default": 669
     },
     {
       "type": "number",
       "id": "desktop_cell_height",
       "label": "Desktop cell height",
-      "default": 900
+      "default": 920
     },
     {
       "type": "number",
       "id": "mobile_cell_width",
       "label": "Mobile cell width",
-      "default": 435
+      "default": 451
     },
     {
       "type": "number",
       "id": "mobile_cell_height",
       "label": "Mobile cell height",
-      "default": 600
+      "default": 620
     },
     {
       "type": "header",
