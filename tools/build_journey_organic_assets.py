@@ -15,8 +15,8 @@ from PIL import Image, ImageChops
 FRAME_START = 1
 FRAME_END = 144
 STATIC_FRAME = 72
-DESKTOP_BUDGET = 5 * 1024 * 1024
-MOBILE_BUDGET = int(2.5 * 1024 * 1024)
+DESKTOP_BUDGET = 9 * 1024 * 1024
+MOBILE_BUDGET = int(4.5 * 1024 * 1024)
 
 
 @dataclass(frozen=True)
@@ -30,14 +30,14 @@ class Variant:
 
 
 VARIANTS = (
-    Variant("desktop", 920, 2048, 2, DESKTOP_BUDGET, 76),
-    Variant("mobile", 620, 2048, 2, MOBILE_BUDGET, 72),
+    Variant("desktop", 1000, 2048, 2, DESKTOP_BUDGET, 92),
+    Variant("mobile", 700, 2048, 2, MOBILE_BUDGET, 90),
 )
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", type=Path, required=True, help="Directory containing frame_0001.png through frame_0120.png")
+    parser.add_argument("--input", type=Path, required=True, help="Directory containing frame_0001.png through frame_0144.png")
     parser.add_argument("--output", type=Path, required=True, help="Destination asset directory")
     return parser.parse_args()
 
@@ -120,19 +120,19 @@ def pack_variant(
 
     poster_path = variant_root / "poster.webp"
     poster = prepared_frame(paths[0], source_size, mask).crop(crop).resize((cell_width, cell_height), resampling)
-    poster.save(poster_path, "WEBP", quality=82, method=6, exact=True)
+    poster.save(poster_path, "WEBP", quality=95, method=6, exact=True)
     poster.close()
     static_path = variant_root / "static.webp"
     static_frame = prepared_frame(paths[STATIC_FRAME - FRAME_START], source_size, mask).crop(crop).resize(
         (cell_width, cell_height), resampling
     )
-    static_frame.save(static_path, "WEBP", quality=82, method=6, exact=True)
+    static_frame.save(static_path, "WEBP", quality=95, method=6, exact=True)
     static_frame.close()
     final_path = variant_root / "final.webp"
     final_height = min(1400 if variant.name == "desktop" else 1100, crop_height)
     final_width = round(crop_width * final_height / crop_height)
     final = prepared_frame(paths[-1], source_size, mask).crop(crop).resize((final_width, final_height), resampling)
-    final.save(final_path, "WEBP", quality=84, method=6, exact=True)
+    final.save(final_path, "WEBP", quality=95, method=6, exact=True)
     final.close()
 
     total_bytes = (

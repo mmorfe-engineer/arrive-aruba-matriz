@@ -38,8 +38,8 @@ El `.blend` independiente se genera en:
 
 ## Presupuesto y memoria
 
-- Desktop: máximo 5 MB transferidos.
-- Móvil: máximo 2.5 MB transferidos.
+- Desktop HQ: máximo 9 MB transferidos.
+- Móvil HQ: máximo 4.5 MB transferidos.
 - El runtime mantiene como máximo dos sprite sheets decodificados y libera `ImageBitmap` al avanzar o desmontar la sección.
 - Hay fallback estático para reduced motion, Save Data, redes 2G/3G y errores de carga.
 - El fallback estático usa el frame 72 abierto; el frame 144 blanco queda reservado para la transición final.

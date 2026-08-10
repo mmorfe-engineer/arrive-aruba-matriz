@@ -29,10 +29,10 @@ El runtime consume 144 frames y conserva el scroll nativo. La apertura comienza 
 
 | Variante | Peso empaquetado | Límite | Ventana decodificada máxima |
 | --- | ---: | ---: | ---: |
-| Desktop | 3,256,058 bytes | 5 MiB | 29,543,040 bytes |
-| Móvil | 1,849,594 bytes | 2.5 MiB | 26,843,520 bytes |
+| Desktop HQ | 8,677,456 bytes | 9 MiB | 23,264,000 bytes |
+| Móvil HQ | 4,090,376 bytes | 4.5 MiB | 22,803,200 bytes |
 
-Ambas variantes permanecen por debajo del límite de 48 MiB de imágenes decodificadas simultáneamente para Safari iOS.
+Ambas variantes permanecen por debajo del límite de 48 MiB de imágenes decodificadas simultáneamente para Safari iOS. La entrega HQ usa WebP 92 en desktop, WebP 90 en móvil y calidad 95 para poster, fallback y still final.
 
 ## QA completado
 
