@@ -148,14 +148,14 @@
 .footer-leaf{position:absolute;display:block;color:var(--aa-lake);pointer-events:none;animation-fill-mode:both;animation-timing-function:cubic-bezier(.45,.05,.55,.95);animation-play-state:paused}
 .footer-dividivi-wrap.is-visible .footer-leaf{animation-play-state:running}
 .footer-leaf svg{width:100%;height:100%;display:block;fill:currentColor}
-.footer-leaf--1{top:9%;left:57%;width:6.2%;aspect-ratio:33/15;animation-name:footerLeafFall1;animation-duration:11s}
-.footer-leaf--2{top:15%;left:71%;width:5.2%;aspect-ratio:2/1;animation-name:footerLeafFall2;animation-duration:12.5s;animation-delay:2.4s}
-.footer-leaf--3{top:19%;left:45%;width:5.7%;aspect-ratio:2/1;animation-name:footerLeafFall3;animation-duration:11.8s;animation-delay:5.2s}
-.footer-leaf--4{top:6%;left:80%;width:4.8%;aspect-ratio:2/1;animation-name:footerLeafFall4;animation-duration:13.2s;animation-delay:7.6s}
-.footer-leaf--5{top:8%;left:55%;width:6%;aspect-ratio:33/15;animation-name:footerLeafCycle1;animation-duration:14s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:9s}
-.footer-leaf--6{top:17%;left:42%;width:5.4%;aspect-ratio:2/1;animation-name:footerLeafCycle2;animation-duration:16s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:14s}
-.footer-leaf--7{top:13%;left:68%;width:4.9%;aspect-ratio:2/1;animation-name:footerLeafCycle3;animation-duration:15s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:19s}
-.footer-leaf--8{top:11%;left:62%;width:5.1%;aspect-ratio:33/15;animation-name:footerLeafCycle4;animation-duration:12.5s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:4s}
+.footer-leaf--1{top:9%;left:57%;width:6.2%;aspect-ratio:33/15;animation-name:footerLeafFall1;animation-duration:11s;animation-delay:-3s}
+.footer-leaf--2{top:15%;left:71%;width:5.2%;aspect-ratio:2/1;animation-name:footerLeafFall2;animation-duration:12.5s;animation-delay:-5.6s}
+.footer-leaf--3{top:19%;left:45%;width:5.7%;aspect-ratio:2/1;animation-name:footerLeafFall3;animation-duration:11.8s;animation-delay:-1.4s}
+.footer-leaf--4{top:6%;left:80%;width:4.8%;aspect-ratio:2/1;animation-name:footerLeafFall4;animation-duration:13.2s;animation-delay:-8.2s}
+.footer-leaf--5{top:8%;left:55%;width:6%;aspect-ratio:33/15;animation-name:footerLeafCycle1;animation-duration:14s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:-6.5s}
+.footer-leaf--6{top:17%;left:42%;width:5.4%;aspect-ratio:2/1;animation-name:footerLeafCycle2;animation-duration:16s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:-2s}
+.footer-leaf--7{top:13%;left:68%;width:4.9%;aspect-ratio:2/1;animation-name:footerLeafCycle3;animation-duration:15s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:-10.5s}
+.footer-leaf--8{top:11%;left:62%;width:5.1%;aspect-ratio:33/15;animation-name:footerLeafCycle4;animation-duration:12.5s;animation-timing-function:linear;animation-iteration-count:infinite;animation-delay:-9s}
 @keyframes footerTreeSway{0%,100%{transform:rotate(0deg)}30%{transform:rotate(.9deg)}55%{transform:rotate(1.7deg)}78%{transform:rotate(.5deg)}}
 @keyframes footerLeafFall1{0%{top:9%;left:57%;transform:rotate(0deg)}20%{top:28%;left:48%;transform:rotate(-34deg)}40%{top:47%;left:41%;transform:rotate(28deg)}60%{top:65%;left:28%;transform:rotate(-46deg)}80%{top:81%;left:19%;transform:rotate(22deg)}100%{top:93%;left:6%;transform:rotate(-8deg)}}
 @keyframes footerLeafFall2{0%{top:15%;left:71%;transform:rotate(0deg)}22%{top:33%;left:63%;transform:rotate(30deg)}44%{top:52%;left:52%;transform:rotate(-32deg)}66%{top:69%;left:41%;transform:rotate(38deg)}86%{top:84%;left:31%;transform:rotate(-24deg)}100%{top:95%;left:22%;transform:rotate(6deg)}}
