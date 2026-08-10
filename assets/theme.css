@@ -8,6 +8,8 @@
 .button--primary{border-color:var(--aa-sapphire);background:var(--aa-sapphire);color:var(--aa-cream)}
 .button--light{border-color:var(--aa-cream);background:var(--aa-cream);color:var(--aa-sapphire-dark)}
 .button--ghost-light{border-color:rgba(240,240,229,.48);color:var(--aa-cream);font-weight:300}
+.newsletter .button--primary{border-color:var(--aa-orange);background:var(--aa-orange);color:var(--aa-sapphire-dark)}
+.newsletter .button--primary:hover{background:color-mix(in srgb,var(--aa-orange) 80%,black);border-color:color-mix(in srgb,var(--aa-orange) 80%,black);color:var(--aa-cream)}
 .button:hover{background:var(--aa-sapphire-dark);border-color:var(--aa-sapphire-dark);color:var(--aa-cream)}
 .icon-button{display:inline-grid;width:44px;height:44px;place-items:center;border:0;background:transparent;padding:0}
 .icon-button svg{width:21px;height:21px}
@@ -124,7 +126,7 @@
 .founder-copy{max-width:540px;margin-inline:auto}
 .founder-copy .prose{margin-top:1.1rem}
 .founder-signature{margin:1.75rem 0 0;font-family:var(--aa-display-font);font-style:italic;font-size:1.15rem;color:var(--aa-sapphire)}
-.ticker{overflow:hidden;background:var(--aa-sapphire);color:rgba(240,240,229,.75);white-space:nowrap}
+.ticker{overflow:hidden;background:var(--aa-orange);color:var(--aa-sapphire-dark);white-space:nowrap}
 .ticker-track{display:flex;width:max-content;animation:ticker 28s linear infinite}
 .ticker-item{padding:1rem 2rem;font-size:.65rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase}
 @keyframes ticker{to{transform:translateX(-50%)}}
