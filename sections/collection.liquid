@@ -7,21 +7,9 @@
     <div class="collection-hero-inner">
       <div class="collection-hero-copy">
         {% if section.settings.hero_kicker != blank %}<p class="eyebrow">{{ section.settings.hero_kicker }}</p>{% endif %}
-        <p class="collection-count">{{ 'collections.product_count' | t: count: collection.products_count }}</p>
         <h1 class="display-heading">{{ collection.title }}</h1>
         {% if section.settings.show_description and collection.description != blank %}
           <div class="rte collection-description">{{ collection.description }}</div>
-        {% endif %}
-
-        {% if section.blocks.size > 0 %}
-          <div class="collection-service-strip">
-            {% for block in section.blocks %}
-              <div class="collection-service" {{ block.shopify_attributes }}>
-                {% if block.settings.title != blank %}<strong>{{ block.settings.title }}</strong>{% endif %}
-                {% if block.settings.text != blank %}<span>{{ block.settings.text }}</span>{% endif %}
-              </div>
-            {% endfor %}
-          </div>
         {% endif %}
       </div>
 
@@ -31,7 +19,6 @@
         {% else %}
           <img src="{{ 'arrive-island-banner.jpg' | asset_url }}" alt="" width="1400" height="980" loading="eager">
         {% endif %}
-        <span class="collection-hero-mark"><img src="{{ 'arrive-a-mark.svg' | asset_url }}" alt="" width="220" height="220" loading="eager"></span>
       </div>
     </div>
   </header>
@@ -164,17 +151,6 @@
     { "type": "range", "id": "products_per_page", "min": 8, "max": 48, "step": 4, "default": 24, "label": "t:sections.collection.products_per_page" },
     { "type": "checkbox", "id": "show_vendor", "label": "t:sections.collection.show_vendor", "default": false },
     { "type": "checkbox", "id": "show_wishlist", "label": "t:sections.collection.show_wishlist", "default": true }
-  ],
-  "blocks": [
-    {
-      "type": "service",
-      "name": "Service note",
-      "limit": 3,
-      "settings": [
-        { "type": "text", "id": "title", "label": "Title", "default": "24-hour island delivery" },
-        { "type": "text", "id": "text", "label": "Text", "default": "Available across Aruba" }
-      ]
-    }
   ]
 }
 {% endschema %}

@@ -2,30 +2,6 @@
   "sections": {
     "main-collection": {
       "type": "collection",
-      "blocks": {
-        "service-delivery": {
-          "type": "service",
-          "settings": {
-            "title": "24-hour island delivery",
-            "text": "Across Aruba"
-          }
-        },
-        "service-returns": {
-          "type": "service",
-          "settings": {
-            "title": "Resort-ready sizing",
-            "text": "XS to XXL"
-          }
-        },
-        "service-support": {
-          "type": "service",
-          "settings": {
-            "title": "Easy support",
-            "text": "Before and after checkout"
-          }
-        }
-      },
-      "block_order": ["service-delivery", "service-returns", "service-support"],
       "settings": {
         "show_description": true,
         "hero_kicker": "Shop the island",
