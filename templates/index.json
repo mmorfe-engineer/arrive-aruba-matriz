@@ -52,7 +52,7 @@
         "new_arrivals": {
           "type": "category",
           "settings": {
-            "collection": "new-arrivals",
+            "collection": "",
             "eyebrow": "All",
             "heading": "New Arrivals",
             "caption": "",
