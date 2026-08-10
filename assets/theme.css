@@ -144,16 +144,19 @@
 .form-message{margin:1rem 0 0;font-size:.85rem}
 .site-footer{position:relative;overflow:hidden;padding:clamp(3.5rem,7vw,5rem) var(--aa-side-space) 2rem;background:var(--aa-navy);color:var(--aa-cream)}
 .footer-dividivi-wrap{position:absolute;bottom:0;right:0;height:50%;width:auto;opacity:.14;pointer-events:none;overflow:visible}
-.footer-dividivi{display:block;height:100%;width:auto;transform-origin:82% 78%;animation:footerTreeSway 7s ease-in-out infinite}
-.footer-leaf{position:absolute;display:block;color:var(--aa-lake);pointer-events:none}
+.footer-dividivi{display:block;height:100%;width:auto;transform-origin:79% 99%;animation:footerTreeSway 9s ease-in-out infinite}
+.footer-leaf{position:absolute;display:block;color:var(--aa-lake);pointer-events:none;animation-fill-mode:both;animation-timing-function:cubic-bezier(.45,.05,.55,.95);animation-play-state:paused}
+.footer-dividivi-wrap.is-visible .footer-leaf{animation-play-state:running}
 .footer-leaf svg{width:100%;height:100%;display:block;fill:currentColor}
-.footer-leaf--1{top:16%;left:34%;width:11px;height:11px;animation:footerLeafDrift1 11s ease-in-out infinite}
-.footer-leaf--2{top:24%;left:20%;width:9px;height:9px;animation:footerLeafDrift2 13s ease-in-out infinite 3.5s}
-.footer-leaf--3{top:10%;left:46%;width:10px;height:10px;animation:footerLeafDrift3 9.5s ease-in-out infinite 6.5s}
-@keyframes footerTreeSway{0%,100%{transform:rotate(0deg)}50%{transform:rotate(1.4deg)}}
-@keyframes footerLeafDrift1{0%,100%{transform:translate(0,0) rotate(0deg)}30%{transform:translate(-18px,10px) rotate(-25deg)}60%{transform:translate(-34px,22px) rotate(-45deg)}85%{transform:translate(-16px,14px) rotate(-20deg)}}
-@keyframes footerLeafDrift2{0%,100%{transform:translate(0,0) rotate(0deg)}35%{transform:translate(-14px,8px) rotate(20deg)}65%{transform:translate(-30px,18px) rotate(40deg)}88%{transform:translate(-12px,10px) rotate(15deg)}}
-@keyframes footerLeafDrift3{0%,100%{transform:translate(0,0) rotate(0deg)}40%{transform:translate(-20px,12px) rotate(-30deg)}70%{transform:translate(-38px,24px) rotate(-55deg)}90%{transform:translate(-18px,15px) rotate(-25deg)}}
+.footer-leaf--1{left:57%;width:6.2%;aspect-ratio:33/15;animation-name:footerLeafFall1;animation-duration:9s}
+.footer-leaf--2{left:71%;width:5.2%;aspect-ratio:2/1;animation-name:footerLeafFall2;animation-duration:10.5s;animation-delay:2.4s}
+.footer-leaf--3{left:45%;width:5.7%;aspect-ratio:2/1;animation-name:footerLeafFall3;animation-duration:9.8s;animation-delay:5.2s}
+.footer-leaf--4{left:80%;width:4.8%;aspect-ratio:2/1;animation-name:footerLeafFall4;animation-duration:11.2s;animation-delay:7.6s}
+@keyframes footerTreeSway{0%,100%{transform:rotate(0deg)}30%{transform:rotate(.9deg)}55%{transform:rotate(1.7deg)}78%{transform:rotate(.5deg)}}
+@keyframes footerLeafFall1{0%{top:9%;transform:translateX(0) rotate(0deg)}20%{top:28%;transform:translateX(-22px) rotate(-34deg)}40%{top:47%;transform:translateX(-6px) rotate(28deg)}60%{top:65%;transform:translateX(-40px) rotate(-46deg)}80%{top:81%;transform:translateX(-24px) rotate(22deg)}100%{top:93%;transform:translateX(-58px) rotate(-8deg)}}
+@keyframes footerLeafFall2{0%{top:15%;transform:translateX(0) rotate(0deg)}22%{top:33%;transform:translateX(-18px) rotate(30deg)}44%{top:52%;transform:translateX(-38px) rotate(-32deg)}66%{top:69%;transform:translateX(-16px) rotate(38deg)}86%{top:84%;transform:translateX(-46px) rotate(-24deg)}100%{top:95%;transform:translateX(-72px) rotate(6deg)}}
+@keyframes footerLeafFall3{0%{top:19%;transform:translateX(0) rotate(0deg)}24%{top:36%;transform:translateX(-26px) rotate(-28deg)}48%{top:55%;transform:translateX(-8px) rotate(34deg)}72%{top:73%;transform:translateX(-44px) rotate(-40deg)}90%{top:87%;transform:translateX(-28px) rotate(18deg)}100%{top:94%;transform:translateX(-50px) rotate(-10deg)}}
+@keyframes footerLeafFall4{0%{top:6%;transform:translateX(0) rotate(0deg)}20%{top:26%;transform:translateX(-20px) rotate(26deg)}42%{top:45%;transform:translateX(-44px) rotate(-30deg)}64%{top:63%;transform:translateX(-22px) rotate(36deg)}84%{top:80%;transform:translateX(-56px) rotate(-20deg)}100%{top:92%;transform:translateX(-84px) rotate(4deg)}}
 .footer-inner{position:relative;z-index:1;display:grid;gap:clamp(2.25rem,5vw,3rem);max-width:var(--aa-page-width);margin:auto}
 .footer-logo{width:min(164px,46vw);height:auto;margin-bottom:.75rem}
 .footer-copy{max-width:320px;color:rgba(240,240,229,.35);font-size:.72rem;font-weight:300;line-height:1.75}
