@@ -119,6 +119,7 @@
     "story": {
       "type": "island-story-banner",
       "settings": {
+        "image": "shopify://shop_images/2.png",
         "kicker": "The island",
         "heading": "A quieter way to remember Aruba.",
         "text": "<p>Every piece is shaped by the light, the water and the warmth you carry home long after you leave.</p>",
