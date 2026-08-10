@@ -47,11 +47,10 @@
 
     <div class="product-info">
       <div class="product-info-inner">
-        <p class="eyebrow">{% if product.type != blank %}{{ product.type }} · {% elsif section.settings.show_vendor and product.vendor != blank %}{{ product.vendor }} · {% endif %}Arrive Aruba</p>
+        <p class="eyebrow">{% if product.type != blank %}{{ product.type }} / {% elsif section.settings.show_vendor and product.vendor != blank %}{{ product.vendor }} / {% endif %}Arrive Aruba</p>
         <h1 class="product-title">{{ product.title }}</h1>
         <div class="product-price-row">
           <div class="product-price">{% render 'price', product: product, variant: current_variant %}</div>
-          {% if section.settings.delivery_note != blank %}<span>{{ section.settings.delivery_note }}</span>{% endif %}
         </div>
 
         {% if product_rating != blank %}
@@ -60,6 +59,16 @@
             <span>{{ product_rating.rating | round: 1 }}{% if rating_count != blank %} · {{ 'products.product.reviews' | t: count: rating_count }}{% endif %}</span>
           </div>
         {% endif %}
+
+        {% if section.settings.show_description and product.description != blank %}
+          <div class="product-intro rte">{{ product.description | strip_html | truncatewords: 28 }}</div>
+        {% endif %}
+
+        <div class="product-quick-notes" aria-label="Product service notes">
+          {% if section.settings.delivery_note != blank %}<span>{{ section.settings.delivery_note }}</span>{% endif %}
+          {% if product.metafields.custom.fit != blank %}<span>{{ 'products.product.fit' | t }}</span>{% endif %}
+          {% if product.metafields.custom.care != blank %}<span>{{ 'products.product.care' | t }}</span>{% endif %}
+        </div>
 
         <product-form>
           {% form 'product', product, id: product_form_id %}
@@ -97,8 +106,6 @@
                 </fieldset>
               {% endfor %}
             {% endunless %}
-
-            {% if section.settings.show_description and product.description != blank %}<div class="product-description rte">{{ product.description }}</div>{% endif %}
 
             {% if section.settings.show_quantity_selector %}
               <label class="eyebrow" for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
@@ -151,7 +158,7 @@
     { "type": "checkbox", "id": "show_sticky_mobile", "label": "t:sections.product.show_sticky_mobile", "default": true },
     { "type": "text", "id": "delivery_note", "label": "t:sections.product.delivery_note", "default": "Free delivery to Aruba" },
     { "type": "text", "id": "delivery_heading", "label": "t:sections.product.delivery_heading", "default": "Delivered in 24 hours across Aruba" },
-    { "type": "text", "id": "delivery_text", "label": "t:sections.product.delivery_text", "default": "Free on orders over $150 · Island ease guaranteed" },
+    { "type": "text", "id": "delivery_text", "label": "t:sections.product.delivery_text", "default": "Free on orders over $150. Island ease guaranteed." },
     { "type": "color", "id": "gallery_background", "label": "t:sections.product.gallery_background", "default": "#386395" },
     { "type": "color", "id": "media_background", "label": "t:sections.product.media_background", "default": "#386395" },
     { "type": "select", "id": "media_fit", "label": "t:sections.product.media_fit", "default": "contain", "options": [{ "value": "cover", "label": "t:options.cover" }, { "value": "contain", "label": "t:options.contain" }] }
