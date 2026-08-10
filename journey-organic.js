@@ -129,7 +129,12 @@
 
   OrganicJourney.prototype.assetUrl = function (source) {
     if (!source) return "";
-    return new URL(source, this.manifestUrl || document.baseURI).href;
+    var url = new URL(source, this.manifestUrl || document.baseURI);
+    if (this.manifestUrl) {
+      var version = new URL(this.manifestUrl, document.baseURI).searchParams.get("v");
+      if (version && !url.searchParams.has("v")) url.searchParams.set("v", version);
+    }
+    return url.href;
   };
 
   OrganicJourney.prototype.applyConfig = function (config) {
