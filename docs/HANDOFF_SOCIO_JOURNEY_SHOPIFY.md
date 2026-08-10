@@ -205,10 +205,14 @@ Trabajar en:
 - `.aa-organic-header`
 - `.aa-organic-header__brand`
 - `.aa-organic-header__home`
-- `.aa-organic-copy`
+- `.aa-organic-story`
+- `.aa-organic-story__script`
+- `.aa-organic-story__title`
 - `.aa-organic-skip`
 
 Separar contenido de presentación. Textos, enlaces y logo deben poder convertirse después en settings de Shopify.
+
+Baseline aprobado para esta fase: ventana móvil al 74% del viewport, fondo de cielo a azul profundo, nubes CSS animadas y mensaje “What you felt when you arrived, take it home.” La ventana permanece por encima del mensaje durante el acercamiento.
 
 Validar:
 

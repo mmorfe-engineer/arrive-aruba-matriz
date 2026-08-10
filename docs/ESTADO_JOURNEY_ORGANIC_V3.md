@@ -25,6 +25,8 @@ La experiencia Journey Organic v3 está renderizada, empaquetada y validada para
 
 El runtime consume 144 frames y conserva el scroll nativo. La apertura comienza al 2% del recorrido, el zoom web comienza al 50%, el resplandor final entra al 90% y la transición termina al 98%.
 
+El banner mobile-first usa una ventana 20% menor que la versión anterior, nubes CSS en movimiento, degradado Star Sapphire profundo y el mensaje de marca “What you felt when you arrived, take it home.” con Port Blair e ITC Legacy Serif. Los assets CSS, JavaScript y tipográficos necesarios también están preparados dentro de `shopify/assets/`.
+
 ## Presupuesto y rendimiento
 
 | Variante | Peso empaquetado | Límite | Ventana decodificada máxima |

@@ -145,18 +145,22 @@
     </header>
 
     <div class="aa-organic-visual" data-journey-visual aria-hidden="true">
-      <img class="aa-organic-visual__poster" data-journey-poster alt="" decoding="async">
+      <img class="aa-organic-visual__poster" data-journey-poster alt="" width="727" height="1000" decoding="async">
       <canvas class="aa-organic-visual__canvas" data-journey-canvas></canvas>
-      <img class="aa-organic-visual__final" data-journey-final alt="" decoding="async">
+      <img class="aa-organic-visual__final" data-journey-final alt="" width="727" height="1000" decoding="async">
     </div>
 
-    {% if section.settings.copy != blank %}
-      <p class="aa-organic-copy" data-journey-copy>{{ section.settings.copy }}</p>
-    {% endif %}
-
-    <a class="aa-organic-skip" href="{{ section.settings.skip_link | default: '#MainContent' }}">
-      {{ section.settings.skip_label }}
-    </a>
+    <div class="aa-organic-story" data-journey-copy>
+      {% if section.settings.story_script != blank %}
+        <p class="aa-organic-story__script">{{ section.settings.story_script }}</p>
+      {% endif %}
+      {% if section.settings.story_title != blank %}
+        <p class="aa-organic-story__title">{{ section.settings.story_title }}</p>
+      {% endif %}
+      <a class="aa-organic-skip" href="{{ section.settings.skip_link | default: '#MainContent' }}">
+        {{ section.settings.skip_label }}
+      </a>
+    </div>
     <p class="aa-organic-status" data-journey-status role="status" aria-live="polite">{{ section.settings.loading_label }}</p>
   </div>
 </section>
@@ -181,9 +185,15 @@
     },
     {
       "type": "text",
-      "id": "copy",
-      "label": "Journey copy",
-      "default": "Nine degrees north."
+      "id": "story_script",
+      "label": "Story handwritten line",
+      "default": "What you felt when you arrived,"
+    },
+    {
+      "type": "text",
+      "id": "story_title",
+      "label": "Story title",
+      "default": "take it home."
     },
     {
       "type": "text",
