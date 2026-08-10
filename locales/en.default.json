@@ -47,7 +47,7 @@
       "sale": "Sale",
       "sold_out": "Sold out",
       "unavailable": "Unavailable",
-      "unavailable_combination": "That combination isn't available — try a different size or color.",
+      "unavailable_combination": "That combination isn't available. Try a different size or color.",
       "add_to_cart": "Add to bag",
       "added_to_cart": "Added to your bag",
       "quantity": "Quantity",
@@ -71,7 +71,7 @@
   },
   "collections": { "product_count": "{{ count }} pieces", "filter": "Filter", "sort": "Sort", "apply": "Apply filters", "clear": "Clear", "clear_all": "Clear all", "empty": "No pieces match these filters.", "from": "From", "to": "To", "load_more": "Load more" },
   "newsletter": { "email": "Email address", "submit": "Join the list", "success": "Welcome to the island." },
-  "contact": { "name": "Name", "email": "Email", "phone": "Phone", "message": "Message", "send": "Send message", "success": "Thank you. We will be in touch soon." },
+  "contact": { "name": "Name", "email": "Email", "phone": "Phone", "topic": "Topic", "topic_order": "Order support", "topic_sizing": "Sizing question", "topic_island": "Island request", "message": "Message", "send": "Send message", "success": "Thank you. We will be in touch soon." },
   "password": { "title": "The island is almost here.", "text": "Enter your email for first access.", "admin": "Enter using password", "password": "Store password", "submit": "Enter" },
   "blogs": { "read_more": "Read story", "back": "Back to island notes" },
   "gift_card": { "expired": "This gift card has expired", "expires_on": "Expires on {{ expires_on }}", "card": "Gift card", "use_at_checkout": "Use this code at checkout", "add_to_apple_wallet": "Add to Apple Wallet" }

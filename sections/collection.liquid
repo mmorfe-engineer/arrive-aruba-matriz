@@ -1,25 +1,96 @@
 <section class="main-collection">
-  <header class="collection-hero">
-    <p class="eyebrow">{{ collection.products_count | pluralize: 'Piece', 'Pieces' }}</p>
-    <h1 class="display-heading">{{ collection.title }}</h1>
-    {% if section.settings.show_description and collection.description != blank %}<div class="rte">{{ collection.description }}</div>{% endif %}
+  {%- liquid
+    assign hero_image = collection.image | default: section.settings.hero_image
+  -%}
+
+  <header class="collection-hero collection-hero--editorial">
+    <div class="collection-hero-inner">
+      <div class="collection-hero-copy">
+        {% if section.settings.hero_kicker != blank %}<p class="eyebrow">{{ section.settings.hero_kicker }}</p>{% endif %}
+        <p class="collection-count">{{ 'collections.product_count' | t: count: collection.products_count }}</p>
+        <h1 class="display-heading">{{ collection.title }}</h1>
+        {% if section.settings.show_description and collection.description != blank %}
+          <div class="rte collection-description">{{ collection.description }}</div>
+        {% endif %}
+
+        {% if section.blocks.size > 0 %}
+          <div class="collection-service-strip">
+            {% for block in section.blocks %}
+              <div class="collection-service" {{ block.shopify_attributes }}>
+                {% if block.settings.title != blank %}<strong>{{ block.settings.title }}</strong>{% endif %}
+                {% if block.settings.text != blank %}<span>{{ block.settings.text }}</span>{% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="collection-hero-media" aria-hidden="true">
+        {% if hero_image %}
+          {{ hero_image | image_url: width: 1400 | image_tag: widths: '520, 760, 1000, 1400', sizes: '(min-width: 990px) 42vw, 100vw', loading: 'eager', alt: collection.title | escape }}
+        {% else %}
+          <img src="{{ 'arrive-island-banner.jpg' | asset_url }}" alt="" width="1400" height="980" loading="eager">
+        {% endif %}
+        <span class="collection-hero-mark"><img src="{{ 'arrive-a-mark.svg' | asset_url }}" alt="" width="220" height="220" loading="eager"></span>
+      </div>
+    </div>
   </header>
+
   <div class="page-width">
     {% paginate collection.products by section.settings.products_per_page %}
       <div class="collection-toolbar">
         <span>{{ 'collections.product_count' | t: count: collection.products_count }}</span>
-        {% if section.settings.show_sort %}<button class="text-link" type="button" data-open-drawer="sort" aria-expanded="false">{{ 'collections.sort' | t }}</button>{% endif %}
+        <div class="collection-toolbar-actions">
+          {% if section.settings.show_filters and collection.filters.size > 0 %}
+            <button class="text-link" type="button" data-open-drawer="filters" aria-expanded="false">{{ 'collections.filter' | t }}</button>
+          {% endif %}
+          {% if section.settings.show_sort %}
+            <button class="text-link" type="button" data-open-drawer="sort" aria-expanded="false">{{ 'collections.sort' | t }}</button>
+          {% endif %}
+        </div>
       </div>
+
       {% if section.settings.show_filters and collection.filters.size > 0 %}
         <div class="filter-chips">
           {% for filter in collection.filters %}
-            <button class="filter-chip{% if filter.active_values.size > 0 %} is-active{% endif %}" type="button" data-open-drawer="filters" data-filter-index="{{ forloop.index }}" aria-expanded="false">{{ filter.label }}{% if filter.active_values.size > 0 %} · {{ filter.active_values.size }}{% endif %}</button>
+            <button class="filter-chip{% if filter.active_values.size > 0 %} is-active{% endif %}" type="button" data-open-drawer="filters" data-filter-index="{{ forloop.index }}" aria-expanded="false">
+              {{ filter.label }}{% if filter.active_values.size > 0 %} · {{ filter.active_values.size }}{% endif %}
+            </button>
           {% endfor %}
         </div>
       {% endif %}
-      {% if collection.filters.size > 0 %}<div class="active-filters">{% for filter in collection.filters %}{% for value in filter.active_values %}<a class="filter-pill" href="{{ value.url_to_remove }}">{{ value.label }} ×</a>{% endfor %}{% if filter.type == 'price_range' and filter.min_value.value or filter.max_value.value %}<a class="filter-pill" href="{{ filter.url_to_remove }}">{{ filter.min_value.value | default: 0 | money }}–{{ filter.max_value.value | default: filter.range_max | money }} ×</a>{% endif %}{% endfor %}</div>{% endif %}
-      {% if collection.products.size > 0 %}<div class="product-grid">{% for product in collection.products %}{% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_wishlist: section.settings.show_wishlist, delay: forloop.index0 %}{% endfor %}</div>{% else %}<div class="empty-state"><h2 class="serif-heading">{{ 'collections.empty' | t }}</h2><a class="button button--primary" href="{{ collection.url }}">{{ 'collections.clear_all' | t }}</a></div>{% endif %}
-      {% if paginate.next %}<div class="collection-load-more"><a class="button button--primary" href="{{ paginate.next.url }}" data-load-more data-section-id="{{ section.id }}">{{ 'collections.load_more' | t }}</a></div>{% endif %}
+
+      {% if collection.filters.size > 0 %}
+        <div class="active-filters">
+          {% for filter in collection.filters %}
+            {% for value in filter.active_values %}
+              <a class="filter-pill" href="{{ value.url_to_remove }}">{{ value.label }} ×</a>
+            {% endfor %}
+            {% if filter.type == 'price_range' and filter.min_value.value or filter.max_value.value %}
+              <a class="filter-pill" href="{{ filter.url_to_remove }}">{{ filter.min_value.value | default: 0 | money }} - {{ filter.max_value.value | default: filter.range_max | money }} ×</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if collection.products.size > 0 %}
+        <div class="product-grid product-grid--collection">
+          {% for product in collection.products %}
+            {% render 'product-card', product: product, show_vendor: section.settings.show_vendor, show_wishlist: section.settings.show_wishlist, delay: forloop.index0 %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <h2 class="serif-heading">{{ 'collections.empty' | t }}</h2>
+          <a class="button button--primary" href="{{ collection.url }}">{{ 'collections.clear_all' | t }}</a>
+        </div>
+      {% endif %}
+
+      {% if paginate.next %}
+        <div class="collection-load-more">
+          <a class="button button--primary" href="{{ paginate.next.url }}" data-load-more data-section-id="{{ section.id }}">{{ 'collections.load_more' | t }}</a>
+        </div>
+      {% endif %}
     {% endpaginate %}
   </div>
 </section>
@@ -28,7 +99,10 @@
   <div class="nav-drawer filters-drawer" data-drawer="filters" aria-hidden="true">
     <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
     <div class="filters-panel" role="dialog" aria-modal="true" aria-label="{{ 'collections.filter' | t }}">
-      <div class="drawer-top"><span class="eyebrow">{{ 'collections.filter' | t }}</span><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
+      <div class="drawer-top">
+        <span class="eyebrow">{{ 'collections.filter' | t }}</span>
+        <button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+      </div>
       <form id="CollectionFilters" method="get">
         {% if collection.sort_by != blank %}<input type="hidden" name="sort_by" value="{{ collection.sort_by }}">{% endif %}
         <div class="filters">
@@ -38,7 +112,12 @@
               <div class="filter-values">
                 {% case filter.type %}
                   {% when 'boolean', 'list' %}
-                    {% for value in filter.values %}<label class="filter-value"><span><input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}> {{ value.label }}</span><span>{{ value.count }}</span></label>{% endfor %}
+                    {% for value in filter.values %}
+                      <label class="filter-value">
+                        <span><input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}> {{ value.label }}</span>
+                        <span>{{ value.count }}</span>
+                      </label>
+                    {% endfor %}
                   {% when 'price_range' %}
                     <label>{{ 'collections.from' | t }}<input class="field" name="{{ filter.min_value.param_name }}" type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"></label>
                     <label>{{ 'collections.to' | t }}<input class="field" name="{{ filter.max_value.param_name }}" type="number" min="0" max="{{ filter.range_max | money_without_currency | replace: ',', '' }}" value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"></label>
@@ -57,7 +136,10 @@
   <div class="nav-drawer sort-drawer" data-drawer="sort" aria-hidden="true">
     <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
     <div class="sort-panel" role="dialog" aria-modal="true" aria-label="{{ 'collections.sort' | t }}">
-      <div class="drawer-top"><span class="eyebrow">{{ 'collections.sort' | t }}</span><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
+      <div class="drawer-top">
+        <span class="eyebrow">{{ 'collections.sort' | t }}</span>
+        <button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button>
+      </div>
       <form method="get" id="CollectionSort">
         {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
         <ul class="sort-options">
@@ -75,11 +157,24 @@
   "name": "t:sections.collection.name",
   "settings": [
     { "type": "checkbox", "id": "show_description", "label": "t:sections.collection.show_description", "default": true },
+    { "type": "text", "id": "hero_kicker", "label": "Hero kicker", "default": "Shop the island" },
+    { "type": "image_picker", "id": "hero_image", "label": "Fallback hero image" },
     { "type": "checkbox", "id": "show_filters", "label": "t:sections.collection.show_filters", "default": true },
     { "type": "checkbox", "id": "show_sort", "label": "t:sections.collection.show_sort", "default": true },
     { "type": "range", "id": "products_per_page", "min": 8, "max": 48, "step": 4, "default": 24, "label": "t:sections.collection.products_per_page" },
     { "type": "checkbox", "id": "show_vendor", "label": "t:sections.collection.show_vendor", "default": false },
     { "type": "checkbox", "id": "show_wishlist", "label": "t:sections.collection.show_wishlist", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Service note",
+      "limit": 3,
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "24-hour island delivery" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Available across Aruba" }
+      ]
+    }
   ]
 }
 {% endschema %}

@@ -1,1 +1,41 @@
-{"sections":{"main-contact":{"type":"contact-form","settings":{"eyebrow":"From the island","heading":"Let’s stay in touch.","text":"<p>Questions about a piece, an order or the story? Send us a note.</p>"}}},"order":["main-contact"]}
+{
+  "sections": {
+    "main-contact": {
+      "type": "contact-form",
+      "blocks": {
+        "support-orders": {
+          "type": "service",
+          "settings": {
+            "label": "Orders",
+            "title": "Delivery coordination",
+            "text": "Share your hotel or villa details and we will help with timing."
+          }
+        },
+        "support-fit": {
+          "type": "service",
+          "settings": {
+            "label": "Fit",
+            "title": "Sizing guidance",
+            "text": "Ask about fit, fabric feel or the best piece for your trip."
+          }
+        },
+        "support-brand": {
+          "type": "service",
+          "settings": {
+            "label": "Island",
+            "title": "Local questions",
+            "text": "For collaborations, resort requests and island details."
+          }
+        }
+      },
+      "block_order": ["support-orders", "support-fit", "support-brand"],
+      "settings": {
+        "eyebrow": "From the island",
+        "heading": "Let's stay in touch.",
+        "text": "<p>Questions about a piece, an order or the story? Send us a note.</p>",
+        "note": "For order support, include your order number so the team can help faster."
+      }
+    }
+  },
+  "order": ["main-contact"]
+}
