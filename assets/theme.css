@@ -139,7 +139,7 @@
 .newsletter .field::placeholder{color:rgba(240,240,229,.4)}
 .form-message{margin:1rem 0 0;font-size:.85rem}
 .site-footer{position:relative;overflow:hidden;padding:clamp(3.5rem,7vw,5rem) var(--aa-side-space) 2rem;background:var(--aa-navy);color:var(--aa-cream)}
-.footer-dividivi{position:absolute;bottom:0;right:0;height:20%;width:auto;opacity:.14;pointer-events:none}
+.footer-dividivi{position:absolute;bottom:0;right:0;height:50%;width:auto;opacity:.14;pointer-events:none}
 .footer-inner{position:relative;z-index:1;display:grid;gap:clamp(2.25rem,5vw,3rem);max-width:var(--aa-page-width);margin:auto}
 .footer-logo{width:min(164px,46vw);height:auto;margin-bottom:.75rem}
 .footer-copy{max-width:320px;color:rgba(240,240,229,.35);font-size:.72rem;font-weight:300;line-height:1.75}
