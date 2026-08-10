@@ -5,6 +5,14 @@
 
   <header class="collection-hero collection-hero--editorial">
     <div class="collection-hero-inner">
+      <div class="collection-hero-media" aria-hidden="true">
+        {% if hero_image %}
+          {{ hero_image | image_url: width: 1800 | image_tag: widths: '760, 1100, 1400, 1800', sizes: '100vw', loading: 'eager', alt: collection.title | escape }}
+        {% else %}
+          <img src="{{ 'arrive-island-banner.jpg' | asset_url }}" alt="" width="1800" height="620" loading="eager">
+        {% endif %}
+      </div>
+
       <div class="collection-hero-copy">
         {% if section.settings.hero_kicker != blank %}<p class="eyebrow">{{ section.settings.hero_kicker }}</p>{% endif %}
         <h1 class="display-heading">{{ collection.title }}</h1>
@@ -13,13 +21,6 @@
         {% endif %}
       </div>
 
-      <div class="collection-hero-media" aria-hidden="true">
-        {% if hero_image %}
-          {{ hero_image | image_url: width: 1400 | image_tag: widths: '520, 760, 1000, 1400', sizes: '(min-width: 990px) 42vw, 100vw', loading: 'eager', alt: collection.title | escape }}
-        {% else %}
-          <img src="{{ 'arrive-island-banner.jpg' | asset_url }}" alt="" width="1400" height="980" loading="eager">
-        {% endif %}
-      </div>
     </div>
   </header>
 
