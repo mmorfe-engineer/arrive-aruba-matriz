@@ -76,6 +76,12 @@
     "ticker": {
       "type": "ticker",
       "blocks": {
+        "item_iwTPtk": {
+          "type": "item",
+          "settings": {
+            "text": "The island stays with you"
+          }
+        },
         "one": {
           "type": "item",
           "settings": {
@@ -96,6 +102,7 @@
         }
       },
       "block_order": [
+        "item_iwTPtk",
         "one",
         "two",
         "three"
@@ -149,8 +156,8 @@
   },
   "order": [
     "hero",
-    "categories",
     "ticker",
+    "categories",
     "featured",
     "story",
     "heritage",
