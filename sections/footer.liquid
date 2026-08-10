@@ -1,5 +1,12 @@
 <footer class="site-footer">
-  <img class="footer-dividivi" src="{{ 'arrive-dividivi-footer.svg' | asset_url }}" alt="" aria-hidden="true" loading="lazy" width="1869" height="1223">
+  <div class="footer-dividivi-wrap" aria-hidden="true">
+    <img class="footer-dividivi" src="{{ 'arrive-dividivi-footer.svg' | asset_url }}" alt="" loading="lazy" width="1869" height="1223">
+    <span class="footer-leaf footer-leaf--1"><svg viewBox="0 0 24 24"><path d="M12 2C7 6 4 11 4 15a8 8 0 0 0 16 0c0-4-3-9-8-13Z"/></svg></span>
+    <span class="footer-leaf footer-leaf--2"><svg viewBox="0 0 24 24"><path d="M12 2C7 6 4 11 4 15a8 8 0 0 0 16 0c0-4-3-9-8-13Z"/></svg></span>
+    <span class="footer-leaf footer-leaf--3"><svg viewBox="0 0 24 24"><path d="M12 2C7 6 4 11 4 15a8 8 0 0 0 16 0c0-4-3-9-8-13Z"/></svg></span>
+    <span class="footer-leaf footer-leaf--4"><svg viewBox="0 0 24 24"><path d="M12 2C7 6 4 11 4 15a8 8 0 0 0 16 0c0-4-3-9-8-13Z"/></svg></span>
+    <span class="footer-leaf footer-leaf--5"><svg viewBox="0 0 24 24"><path d="M12 2C7 6 4 11 4 15a8 8 0 0 0 16 0c0-4-3-9-8-13Z"/></svg></span>
+  </div>
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">{% if settings.logo_inverse != blank %}{{ settings.logo_inverse | image_url: width: 420 | image_tag: class: 'footer-logo', widths: '180, 280, 420', loading: 'lazy', alt: shop.name }}{% else %}<img class="footer-logo" src="{{ 'arrive-logo-negative.webp' | asset_url }}" alt="{{ shop.name | escape }}" width="500" height="260" loading="lazy">{% endif %}</a>
