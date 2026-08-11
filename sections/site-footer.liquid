@@ -205,19 +205,16 @@
   <div class="aa-footer-main">
     <div class="aa-footer-logo-section">
       {% if section.settings.logo != blank %}
-        <img 
-          src="{{ section.settings.logo | img_url: '400x' }}" 
-          alt="{{ section.settings.logo_alt | escape }}" 
-          class="aa-footer-logo"
-          loading="lazy"
-        />
+        {{ section.settings.logo | image_url: width: 400 | image_tag: class: 'aa-footer-logo', loading: 'lazy', alt: section.settings.logo_alt }}
       {% else %}
         <img 
-          src="preview-assets/brand/logo-negative.webp" 
+          src="{{ 'arrive-logo-negative.webp' | asset_url }}"
           alt="Arrive Aruba" 
           class="aa-footer-logo"
           loading="lazy"
-        />
+          width="640"
+          height="429"
+        >
       {% endif %}
       <p class="aa-footer-tagline">{{ section.settings.tagline }}</p>
     </div>

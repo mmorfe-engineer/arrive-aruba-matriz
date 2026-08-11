@@ -238,13 +238,13 @@
             {{ product_item.featured_media | image_url: width: 800 | image_tag:
               class: 'aa-staggered-card__image',
               loading: 'lazy',
-              alt: product_item.featured_media.alt | escape,
+              alt: product_item.featured_media.alt,
               widths: '360, 540, 720, 800',
               sizes: '(max-width: 767px) 45vw, 25vw'
             }}
           {% else %}
             <div class="aa-staggered-card__bg">
-              <img src="preview-assets/brand/logo-mark.svg" alt="" class="aa-staggered-card__brand-mark" />
+              <img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" class="aa-staggered-card__brand-mark" width="512" height="512" loading="lazy">
             </div>
           {% endif %}
           
@@ -295,7 +295,7 @@
 
 {% schema %}
 {
-  "name": "Featured Products - Staggered",
+  "name": "Featured products",
   "settings": [
     {
       "type": "header",
@@ -317,9 +317,7 @@
       "type": "product_list",
       "id": "products",
       "label": "Select products",
-      "limits": {
-        "max": 8
-      }
+      "limit": 8
     },
     {
       "type": "range",
