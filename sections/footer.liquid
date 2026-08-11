@@ -95,7 +95,7 @@
     {% endif %}
   </div>
   <div class="footer-bottom">
-    <p class="footer-legal">&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}. {{ 'footer.rights' | t }}</p>
+    <p class="footer-legal">&copy; {{ 'now' | date: '%Y' }} Arrive Aruba. {{ 'footer.rights' | t }}</p>
     {% if settings.social_pinterest != blank or settings.social_whatsapp != blank %}
       <nav class="footer-secondary-social" aria-label="{{ 'footer.additional_socials' | t }}">
         {% if settings.social_pinterest != blank %}<a href="{{ settings.social_pinterest | escape }}" aria-label="Pinterest">{% render 'icon', name: 'pinterest' %}</a>{% endif %}
