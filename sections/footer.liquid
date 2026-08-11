@@ -40,13 +40,27 @@
     </div>
     <div class="footer-navs">
       {% for block in section.blocks %}
+        {%- assign footer_block_index = forloop.index -%}
         <div class="footer-nav" {{ block.shopify_attributes }}>
           <p class="footer-heading">{{ block.settings.heading | escape }}</p>
           {% if block.settings.menu != blank %}
+            {%- liquid
+              assign footer_menu_has_story = false
+              for link in block.settings.menu.links
+                if link.url contains '/pages/island-story'
+                  assign footer_menu_has_story = true
+                endif
+              endfor
+            -%}
             <ul class="footer-menu">
               {% for link in block.settings.menu.links %}
                 <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
               {% endfor %}
+              {% if footer_block_index == 1 %}
+                {% unless footer_menu_has_story %}
+                  <li><a href="/pages/island-story">{{ 'footer.menu_story' | t }}</a></li>
+                {% endunless %}
+              {% endif %}
             </ul>
           {% else %}
             <ul class="footer-menu">

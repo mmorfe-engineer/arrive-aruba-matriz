@@ -10,7 +10,15 @@
     <div class="header-left">
       <button class="icon-button menu-toggle" type="button" data-open-drawer="navigation" aria-expanded="false" aria-label="{{ 'header.open_menu' | t }}">{% render 'icon', name: 'menu' %}</button>
       {% if section.settings.menu != blank %}
-        <nav aria-label="{{ 'header.main_menu' | t }}"><ul class="header-menu">{% for link in section.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}</ul></nav>
+        {%- liquid
+          assign header_has_story = false
+          for link in section.settings.menu.links
+            if link.url contains '/pages/island-story'
+              assign header_has_story = true
+            endif
+          endfor
+        -%}
+        <nav aria-label="{{ 'header.main_menu' | t }}"><ul class="header-menu">{% for link in section.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}{% unless header_has_story %}<li><a href="/pages/island-story">{{ 'footer.menu_story' | t }}</a></li>{% endunless %}</ul></nav>
       {% endif %}
     </div>
     <a class="header-logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
@@ -33,7 +41,7 @@
   <button class="drawer-scrim" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}"></button>
   <div class="nav-drawer-panel" role="dialog" aria-modal="true" aria-label="{{ 'header.main_menu' | t }}">
     <div class="drawer-top"><span class="eyebrow">{{ shop.name }}</span><button class="icon-button" type="button" data-close-drawer aria-label="{{ 'general.close' | t }}">{% render 'icon', name: 'close' %}</button></div>
-    {% if section.settings.menu != blank %}<nav><ul class="drawer-menu">{% for link in section.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}</ul></nav>{% endif %}
+    {% if section.settings.menu != blank %}<nav><ul class="drawer-menu">{% for link in section.settings.menu.links %}<li><a href="{{ link.url }}">{{ link.title }}</a></li>{% endfor %}{% unless header_has_story %}<li><a href="/pages/island-story">{{ 'footer.menu_story' | t }}</a></li>{% endunless %}</ul></nav>{% endif %}
     <div class="drawer-utilities"><a href="{{ routes.search_url }}">{{ 'header.search' | t }}</a>{% if shop.customer_accounts_enabled %}<a href="{{ routes.account_url }}">{{ 'customer.account' | t }}</a>{% endif %}</div>
   </div>
 </div>
