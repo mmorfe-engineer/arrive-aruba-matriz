@@ -145,6 +145,38 @@
         "button_link": "/pages/island-story"
       }
     },
+    "standard": {
+      "type": "arrive-standard",
+      "blocks": {
+        "island": {
+          "type": "principle",
+          "settings": {
+            "heading": "Shaped by the island",
+            "text": "<p>Design informed by Aruba's light, landscape and unhurried rhythm.</p>"
+          }
+        },
+        "lived": {
+          "type": "principle",
+          "settings": {
+            "heading": "Made to be lived in",
+            "text": "<p>Pieces considered for movement, warm days and easy returns.</p>"
+          }
+        },
+        "personal": {
+          "type": "principle",
+          "settings": {
+            "heading": "Personal by nature",
+            "text": "<p>Thoughtful support before, during and after your arrival.</p>"
+          }
+        }
+      },
+      "block_order": ["island", "lived", "personal"],
+      "settings": {
+        "eyebrow": "The Arrive standard",
+        "heading": "What every piece carries.",
+        "text": "<p>A considered approach to resortwear, shaped by the ease, warmth and character of Aruba.</p>"
+      }
+    },
     "newsletter": {
       "type": "newsletter",
       "settings": {
@@ -161,6 +193,7 @@
     "featured",
     "story",
     "heritage",
+    "standard",
     "newsletter"
   ]
 }

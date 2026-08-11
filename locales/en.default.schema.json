@@ -35,6 +35,8 @@
     "contact": { "name": "Contact form" },
     "collection": { "name": "Main collection", "show_description": "Show collection description", "show_filters": "Show filters", "show_sort": "Show sorting", "columns": "Desktop columns", "mobile_columns": "Mobile columns", "products_per_page": "Products per page", "show_vendor": "Show vendor", "show_wishlist": "Show saved button" },
     "product": { "name": "Main product", "default_back_collection": "Back button fallback collection", "show_vendor": "Show vendor", "show_description": "Show description", "show_quantity_selector": "Show quantity selector", "show_dynamic_checkout": "Show dynamic checkout", "show_metafields": "Show product custom data", "show_sticky_mobile": "Show sticky add-to-bag on mobile", "delivery_note": "Delivery note beside price", "delivery_heading": "Delivery heading", "delivery_text": "Delivery text", "gallery_background": "Gallery background", "media_background": "Media frame background", "media_fit": "Media fit", "collapsible": "Collapsible row" },
+    "product_reviews": { "name": "Product reviews", "launch_state": "Before the first review", "launch_eyebrow": "Launch eyebrow", "launch_heading": "Launch heading", "launch_text": "Launch text", "editor_setup": "Reviews app setup", "editor_heading": "Editor setup heading", "editor_text": "Editor setup instructions" },
+    "arrive_standard": { "name": "The Arrive standard", "principle": "Brand principle" },
     "recommendations": { "name": "Product recommendations", "intent": "Recommendation intent" },
     "search": { "name": "Main search", "products_per_page": "Results per page" },
     "cart": { "name": "Main cart" },

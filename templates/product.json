@@ -50,6 +50,22 @@
         "media_fit": "contain"
       }
     },
+    "reviews": {
+      "type": "product-reviews",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "eyebrow": "Island stories",
+        "heading": "Worn, remembered, shared.",
+        "launch_eyebrow": "First arrivals",
+        "launch_heading": "Be among the first to wear Arrive Aruba.",
+        "launch_text": "<p>Our first island stories are still being lived. Discover the collection, then return to share where your Arrive piece took you.</p>",
+        "launch_button_label": "Discover the first collection",
+        "launch_button_link": "shopify://collections/all",
+        "editor_heading": "Connect your reviews app",
+        "editor_text": "Add the review widget as an app block in this section. This setup note is visible only in the theme editor."
+      }
+    },
     "recommendations": {
       "type": "product-recommendations",
       "settings": {
@@ -60,5 +76,5 @@
       }
     }
   },
-  "order": ["main-product", "recommendations"]
+  "order": ["main-product", "reviews", "recommendations"]
 }

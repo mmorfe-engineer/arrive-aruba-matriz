@@ -9,7 +9,11 @@
     assign back_url = collection.url
   endif
   assign product_rating = product.metafields.reviews.rating.value
-  assign rating_count = product.metafields.reviews.rating_count.value
+  assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+  if product_rating != blank and rating_count > 0
+    assign product_rating_scale = product_rating.scale_max | default: 5
+    assign product_rating_percent = product_rating.rating | divided_by: product_rating_scale | times: 100
+  endif
 -%}
 <section
   class="main-product"
@@ -53,10 +57,10 @@
           <div class="product-price">{% render 'price', product: product, variant: current_variant %}</div>
         </div>
 
-        {% if product_rating != blank %}
-          <div class="product-rating" aria-label="{{ 'products.product.rating' | t: rating: product_rating.rating, maximum: product_rating.scale_max }}">
-            <span aria-hidden="true">★★★★★</span>
-            <span>{{ product_rating.rating | round: 1 }}{% if rating_count != blank %} · {{ 'products.product.reviews' | t: count: rating_count }}{% endif %}</span>
+        {% if product_rating != blank and rating_count > 0 %}
+          <div class="product-rating" aria-label="{{ 'products.product.rating' | t: rating: product_rating.rating, maximum: product_rating_scale }}">
+            <span class="product-rating-stars" style="--rating-percent:{{ product_rating_percent }}%" aria-hidden="true">★★★★★</span>
+            <span>{{ product_rating.rating | round: 1 }} · {{ 'products.product.reviews' | t: count: rating_count }}</span>
           </div>
         {% endif %}
 

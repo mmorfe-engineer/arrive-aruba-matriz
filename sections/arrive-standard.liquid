@@ -1,0 +1,51 @@
+<section class="arrive-standard section-space">
+  <div class="arrive-standard-inner page-width" data-reveal>
+    <header class="arrive-standard-header">
+      {% if section.settings.eyebrow != blank %}<p class="eyebrow">{{ section.settings.eyebrow }}</p>{% endif %}
+      <h2 class="serif-heading">{{ section.settings.heading }}</h2>
+      {% if section.settings.text != blank %}<div class="arrive-standard-intro rte">{{ section.settings.text }}</div>{% endif %}
+    </header>
+
+    <div class="arrive-standard-grid">
+      {% for block in section.blocks %}
+        <article class="arrive-standard-item" {{ block.shopify_attributes }}>
+          <span class="arrive-standard-number" aria-hidden="true">0{{ forloop.index }}</span>
+          <h3>{{ block.settings.heading }}</h3>
+          {% if block.settings.text != blank %}<div class="arrive-standard-copy rte">{{ block.settings.text }}</div>{% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.arrive_standard.name",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "t:sections.all.subheading", "default": "The Arrive standard" },
+    { "type": "text", "id": "heading", "label": "t:sections.all.heading", "default": "What every piece carries." },
+    { "type": "richtext", "id": "text", "label": "t:sections.all.text", "default": "<p>A considered approach to resortwear, shaped by the ease, warmth and character of Aruba.</p>" }
+  ],
+  "blocks": [
+    {
+      "type": "principle",
+      "name": "t:sections.arrive_standard.principle",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "t:sections.all.heading", "default": "Shaped by the island" },
+        { "type": "richtext", "id": "text", "label": "t:sections.all.text", "default": "<p>Design informed by Aruba's light, landscape and unhurried rhythm.</p>" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.arrive_standard.name",
+      "blocks": [
+        { "type": "principle", "settings": { "heading": "Shaped by the island", "text": "<p>Design informed by Aruba's light, landscape and unhurried rhythm.</p>" } },
+        { "type": "principle", "settings": { "heading": "Made to be lived in", "text": "<p>Pieces considered for movement, warm days and easy returns.</p>" } },
+        { "type": "principle", "settings": { "heading": "Personal by nature", "text": "<p>Thoughtful support before, during and after your arrival.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
