@@ -12,6 +12,7 @@
     "hero": {
       "type": "island-hero",
       "settings": {
+        "image": "shopify://shop_images/BANNER_FACEBOOK_7446faf6-628a-4f95-820e-247ef86f0cfd.png",
         "eyebrow": "Brand Story",
         "heading": "That moment has arrived.",
         "text": "<p>The anticipation, the arrival, the first breath of island air.</p>"
@@ -20,21 +21,13 @@
     "founder": {
       "type": "founder-story",
       "settings": {
-        "subheading": "Brand Story",
-        "heading": "Designed for the feeling of arrival.",
+        "reverse": false,
         "name": "Adriana and Patrick",
         "role": "Arrive Aruba",
+        "subheading": "Brand Story",
+        "heading": "Designed for the feeling of arrival.",
         "text": "<p>That moment has arrived. You've counted down for months, planned it with the people you love, and then the plane door opens and the island meets you all at once, the heat, the light, that first breath of fresh air.</p><p>We wanted to bottle that, the anticipation, the arrival, that feeling, so we built a clothing brand designed for Aruba. One that represents the island, and brings that whole feeling home with you, long after the trip ends.</p><p>We're Adriana and Patrick. We live here, we raise our kids here, and Arrive Aruba is what we built.</p>",
         "signature": "Adriana and Patrick"
-      }
-    },
-    "introduction": {
-      "type": "rich-text",
-      "settings": {
-        "subheading": "Our point of view",
-        "heading": "A brand shaped by arrival.",
-        "text": "<p>Arrive Aruba is resortwear for the moments that stay with you: bright water, warm evenings, and the ease of island time carried home.</p>",
-        "alignment": "left"
       }
     },
     "editorial": {
@@ -44,7 +37,8 @@
         "subheading": "Made here",
         "heading": "Built from the place it represents.",
         "text": "<p>From the first arrival to the last walk before leaving, the island sets the rhythm. The pieces are designed to keep that rhythm close: simple, sunlit, and easy to return to.</p>",
-        "button_label": "Shop the collection"
+        "button_label": "Shop the collection",
+        "button_link": ""
       }
     },
     "newsletter": {
@@ -56,5 +50,10 @@
       }
     }
   },
-  "order": ["hero", "founder", "introduction", "editorial", "newsletter"]
+  "order": [
+    "hero",
+    "founder",
+    "editorial",
+    "newsletter"
+  ]
 }
