@@ -168,7 +168,7 @@
 .footer-inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(280px,390px) minmax(460px,640px);gap:clamp(2.75rem,5vw,4.5rem);align-items:start;box-sizing:border-box;max-width:var(--aa-page-width);margin:auto;padding-right:min(26vw,430px)}
 .footer-logo{width:min(164px,46vw);height:auto;margin-bottom:.75rem}
 .footer-copy{max-width:320px;color:rgba(240,240,229,.35);font-size:.72rem;font-weight:300;line-height:1.75}
-.footer-navs{grid-column:2;grid-row:2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.75rem,4vw,3.4rem);max-width:640px;margin-top:clamp(1.75rem,4vw,2.5rem)}
+.footer-navs{grid-column:2;grid-row:1 / span 2;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(1.75rem,4vw,3.4rem);max-width:640px;margin-top:clamp(7.25rem,9vw,9.25rem)}
 .footer-heading{margin:0 0 .9rem;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,240,229,.35)}
 .footer-menu{display:grid;gap:.6rem;margin:0;padding:0;list-style:none;font-size:.76rem;font-weight:300}
 .footer-menu a{color:rgba(240,240,229,.5);transition:color .2s}
