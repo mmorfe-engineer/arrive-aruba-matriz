@@ -38,6 +38,23 @@
                 <li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>
               {% endfor %}
             </ul>
+          {% else %}
+            <ul class="footer-menu">
+              {% case forloop.index %}
+                {% when 1 %}
+                  <li><a href="/pages/island-story">{{ 'footer.menu_story' | t }}</a></li>
+                  <li><a href="/pages/contact">{{ 'footer.menu_contact' | t }}</a></li>
+                  <li><a href="{{ routes.search_url }}">{{ 'footer.menu_search' | t }}</a></li>
+                {% when 2 %}
+                  <li><a href="{{ routes.all_products_collection_url }}">{{ 'footer.menu_all' | t }}</a></li>
+                  <li><a href="{{ routes.collections_url }}">{{ 'footer.menu_collections' | t }}</a></li>
+                  <li><a href="{{ routes.cart_url }}">{{ 'footer.menu_bag' | t }}</a></li>
+                {% else %}
+                  <li><a href="mailto:{{ settings.contact_email | default: 'info@arrivearuba.com' | escape }}">{{ 'footer.menu_service' | t }}</a></li>
+                  <li><a href="mailto:{{ settings.contact_email | default: 'info@arrivearuba.com' | escape }}?subject=Shipping%20question">{{ 'footer.menu_shipping' | t }}</a></li>
+                  <li><a href="mailto:{{ settings.contact_email | default: 'info@arrivearuba.com' | escape }}?subject=Returns%20question">{{ 'footer.menu_returns' | t }}</a></li>
+              {% endcase %}
+            </ul>
           {% endif %}
         </div>
       {% endfor %}
