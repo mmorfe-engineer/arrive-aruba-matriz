@@ -144,8 +144,7 @@
 .form-message{margin:1rem 0 0;font-size:.85rem}
 .site-footer{position:relative;overflow:hidden;padding:clamp(3.5rem,7vw,5rem) var(--aa-side-space) 2rem;background:var(--aa-navy);color:var(--aa-cream)}
 .footer-dividivi-wrap{position:absolute;bottom:0;right:-2%;height:50%;width:auto;opacity:.12;pointer-events:none;overflow:visible}
-.footer-dividivi{display:block;height:100%;width:auto}
-.footer-dividivi-canopy{position:absolute;inset:0 auto auto 0;display:block;height:100%;width:auto;opacity:.38;clip-path:polygon(4% 0,100% 0,100% 43%,78% 48%,56% 43%,30% 51%,0 40%,0 12%);-webkit-mask-image:radial-gradient(ellipse at 64% 25%,#000 0 43%,rgba(0,0,0,.72) 53%,transparent 72%);mask-image:radial-gradient(ellipse at 64% 25%,#000 0 43%,rgba(0,0,0,.72) 53%,transparent 72%);transform-origin:69% 28%;animation:footerCanopySway 7.2s cubic-bezier(.45,.05,.55,.95) infinite;will-change:transform,opacity}
+.footer-dividivi{display:block;height:100%;width:auto;transform-origin:79% 99%;animation:footerTreeSway 9s ease-in-out infinite}
 .footer-leaf,.footer-canopy-leaf,.footer-ground-leaf{position:absolute;display:block;color:var(--aa-lake);pointer-events:none;will-change:transform,opacity}
 .footer-leaf,.footer-canopy-leaf{animation-fill-mode:both;animation-timing-function:cubic-bezier(.45,.05,.55,.95);animation-play-state:paused}
 .footer-dividivi-wrap.is-visible .footer-leaf,.footer-dividivi-wrap.is-visible .footer-canopy-leaf{animation-play-state:running}
@@ -181,7 +180,7 @@
 .footer-ground-leaf--4{bottom:5.4%;left:70%;width:5.4%;aspect-ratio:33/15;transform:rotate(20deg)}
 .footer-ground-leaf--5{bottom:2.2%;left:79%;width:4.1%;aspect-ratio:2/1;transform:rotate(-24deg)}
 .footer-ground-leaf--6{bottom:6.8%;left:87%;width:4.7%;aspect-ratio:2/1;transform:rotate(9deg)}
-@keyframes footerCanopySway{0%,100%{transform:translate3d(0,0,0) rotate(0deg)}28%{transform:translate3d(-1%,.28%,0) rotate(1.85deg)}56%{transform:translate3d(-1.75%,.46%,0) rotate(3.15deg)}78%{transform:translate3d(-.7%,.2%,0) rotate(1.25deg)}}
+@keyframes footerTreeSway{0%,100%{transform:rotate(0deg)}30%{transform:rotate(1.08deg)}55%{transform:rotate(2.04deg)}78%{transform:rotate(.6deg)}}
 @keyframes footerCanopyLeafSway1{0%,100%{transform:translate3d(0,0,0) rotate(-4deg)}30%{transform:translate3d(-18%,7%,0) rotate(12deg)}62%{transform:translate3d(14%,-5%,0) rotate(-13deg)}}
 @keyframes footerCanopyLeafSway2{0%,100%{transform:translate3d(0,0,0) rotate(5deg)}34%{transform:translate3d(19%,-8%,0) rotate(-12deg)}70%{transform:translate3d(-14%,7%,0) rotate(14deg)}}
 @keyframes footerCanopyLeafSway3{0%,100%{transform:translate3d(0,0,0) rotate(-3deg)}38%{transform:translate3d(-13%,-8%,0) rotate(13deg)}74%{transform:translate3d(18%,6%,0) rotate(-11deg)}}
