@@ -13,7 +13,7 @@
   {% if desktop_video != blank %}
     {{ desktop_video | video_tag: class: 'hero-video hero-video--desktop', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', data-hero-video: '' }}
   {% else %}
-    <video class="hero-video hero-video--desktop" data-hero-video autoplay muted loop playsinline preload="metadata" poster="{{ 'arrive-hero-poster.jpg' | asset_url }}">
+    <video class="hero-video hero-video--desktop" data-hero-video autoplay muted loop playsinline preload="none" poster="{{ 'arrive-hero-poster.jpg' | asset_url }}">
       <source src="{{ 'arrive-hero-desktop.mp4' | asset_url }}" type="video/mp4">
     </video>
   {% endif %}
@@ -21,7 +21,7 @@
   {% if mobile_video != blank %}
     {{ mobile_video | video_tag: class: 'hero-video hero-video--mobile', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, preload: 'metadata', data-hero-video: '' }}
   {% else %}
-    <video class="hero-video hero-video--mobile" data-hero-video data-sound-src="{{ 'arrive-hero-mobile-sound.mp4' | asset_url }}" autoplay muted loop playsinline preload="metadata" poster="{{ 'arrive-hero-poster.jpg' | asset_url }}">
+    <video class="hero-video hero-video--mobile" data-hero-video data-sound-src="{{ 'arrive-hero-mobile-sound.mp4' | asset_url }}" autoplay muted loop playsinline preload="none" poster="{{ 'arrive-hero-poster.jpg' | asset_url }}">
       <source src="{{ 'arrive-hero-mobile-muted.mp4' | asset_url }}" type="video/mp4">
     </video>
   {% endif %}

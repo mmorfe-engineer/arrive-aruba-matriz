@@ -1,0 +1,60 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "intro": {
+      "type": "rich-text",
+      "settings": {
+        "subheading": "Aruba resortwear",
+        "heading": "What to wear in Aruba, and what to take home.",
+        "text": "<p>Aruba dressing should feel easy: breathable layers, sun-soft color, and pieces that move from the beach to dinner without losing the mood of the island. Arrive Aruba is resortwear designed for travelers who want more than a souvenir — something elevated, useful and tied to the feeling of arriving.</p>",
+        "alignment": "left",
+        "button_label": "Shop the first collection",
+        "button_link": "/collections/all"
+      }
+    },
+    "travel_uniform": {
+      "type": "editorial-image-text",
+      "settings": {
+        "reverse": false,
+        "subheading": "Vacation clothing Aruba",
+        "heading": "Built for heat, light and that first island breath.",
+        "text": "<p>For days in Aruba, the best pieces are light without feeling disposable, relaxed without looking unfinished, and memorable without shouting. Think resort shirts, easy layers and pieces that carry the color of the coast.</p>",
+        "button_label": "Discover the story",
+        "button_link": "/pages/island-story"
+      }
+    },
+    "take_home": {
+      "type": "rich-text",
+      "settings": {
+        "subheading": "Take the island home",
+        "heading": "Souvenirs from Aruba, but elevated.",
+        "text": "<p>Arrive Aruba is for the trip you counted down to and the feeling you want to keep after the flight home. Designed on the island, made for warm days, and shaped around the memory of arrival.</p>",
+        "alignment": "center",
+        "button_label": "Explore Arrive Aruba",
+        "button_link": "/collections/all"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "subheading": "First arrivals",
+        "heading": "Stay close to Aruba.",
+        "text": "<p>New pieces, island notes and first access, sent occasionally.</p>"
+      }
+    }
+  },
+  "order": [
+    "intro",
+    "travel_uniform",
+    "take_home",
+    "newsletter"
+  ]
+}

@@ -2,22 +2,118 @@
   Renders canonical, SEO and social metadata for the current resource.
 {% enddoc %}
 {%- liquid
-  assign social_title = page_title | default: shop.name
-  assign social_description = page_description | default: shop.description | default: shop.name
+  assign brand_name = 'Arrive Aruba'
+  assign store_name = shop.name | strip
+  if store_name == blank or store_name == 'My Store'
+    assign store_name = brand_name
+  endif
+
+  assign default_description = 'Island-inspired resortwear for Aruba vacations, sunlit arrivals and pieces made to take the feeling of the island home.'
+  assign seo_title = page_title | strip
+  assign seo_description = page_description | default: shop.description | strip
+
+  if seo_title == blank
+    case request.page_type
+      when 'password'
+        assign seo_title = 'Arrive Aruba | Resortwear inspired by the island'
+      when 'index'
+        assign seo_title = 'Arrive Aruba | Aruba Resortwear Inspired by the Island'
+      when 'product'
+        assign seo_title = product.title
+      when 'collection'
+        assign seo_title = collection.title | default: 'Aruba Resortwear'
+      when 'page'
+        if page.handle == 'island-story'
+          assign seo_title = 'Island Story | Arrive Aruba'
+        elsif page.handle == 'aruba-resortwear'
+          assign seo_title = 'What to Wear in Aruba | Arrive Aruba Resortwear'
+        elsif page.handle == 'contact'
+          assign seo_title = 'Contact Arrive Aruba'
+        else
+          assign seo_title = page.title
+        endif
+      else
+        assign seo_title = brand_name
+    endcase
+  endif
+
+  if seo_description == blank or seo_description == 'My Store'
+    case request.page_type
+      when 'password'
+        assign seo_description = 'Arrive Aruba is almost here. Join for first access to island-inspired resortwear designed for Aruba.'
+      when 'index'
+        assign seo_description = 'Discover Arrive Aruba, resortwear shaped by Aruba light, warm arrivals and the feeling travelers want to take home.'
+      when 'product'
+        assign seo_description = product.description | strip_html | truncate: 155 | default: default_description
+      when 'collection'
+        assign seo_description = collection.description | strip_html | truncate: 155 | default: 'Explore Aruba resortwear and vacation clothing designed to carry the island feeling home.'
+      when 'page'
+        if page.handle == 'island-story'
+          assign seo_description = 'The story behind Arrive Aruba: clothing designed to bottle the anticipation, arrival and island feeling of Aruba.'
+        elsif page.handle == 'aruba-resortwear'
+          assign seo_description = 'A guide to Aruba resortwear, vacation clothing and elevated island pieces for travelers who want to take Aruba home.'
+        elsif page.handle == 'contact'
+          assign seo_description = 'Contact Arrive Aruba for resortwear questions, island delivery, collaborations and customer support.'
+        else
+          assign seo_description = page.content | strip_html | truncate: 155 | default: default_description
+        endif
+      else
+        assign seo_description = default_description
+    endcase
+  endif
+
+  assign social_title = seo_title | default: store_name
+  assign social_description = seo_description | default: default_description
   assign social_image = page_image | default: settings.social_image
+  assign social_image_url = ''
+  if social_image
+    assign social_image_url = social_image | image_url: width: 1200
+  else
+    assign social_image_url = 'arrive-brand-web.webp' | asset_url
+  endif
+  assign site_url = settings.official_domain | default: shop.url
+  assign logo_url = 'arrive-logo-negative.webp' | asset_url
 -%}
-<title>{{ page_title }}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}</title>
-{% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+<title>{{ seo_title }}{% unless seo_title contains store_name %}{% unless seo_title contains brand_name %} &ndash; {{ store_name }}{% endunless %}{% endunless %}</title>
+<meta name="description" content="{{ seo_description | escape }}">
 <link rel="canonical" href="{{ canonical_url }}">
 {% if settings.favicon != blank %}<link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 64, height: 64 }}">{% else %}<link rel="icon" href="{{ 'arrive-logo-mark.svg' | asset_url }}">{% endif %}
-<meta property="og:site_name" content="{{ shop.name | escape }}">
+<meta property="og:site_name" content="{{ store_name | escape }}">
 <meta property="og:url" content="{{ canonical_url }}">
 <meta property="og:title" content="{{ social_title | escape }}">
 <meta property="og:type" content="{% if request.page_type == 'product' %}product{% elsif request.page_type == 'article' %}article{% else %}website{% endif %}">
 <meta property="og:description" content="{{ social_description | escape }}">
-{% if social_image %}<meta property="og:image" content="https:{{ social_image | image_url: width: 1200 }}">{% endif %}
+<meta property="og:image" content="https:{{ social_image_url }}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ social_title | escape }}">
 <meta name="twitter:description" content="{{ social_description | escape }}">
-{% if social_image %}<meta name="twitter:image" content="https:{{ social_image | image_url: width: 1200 }}">{% endif %}
+<meta name="twitter:image" content="https:{{ social_image_url }}">
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": {{ brand_name | json }},
+    "url": {{ site_url | json }},
+    "logo": {{ logo_url | prepend: 'https:' | json }},
+    "sameAs": [
+      "https://www.instagram.com/arrive_aruba",
+      "https://www.tiktok.com/@arrive_aruba",
+      "https://www.facebook.com/ArriveAruba",
+      "https://x.com/arrive_aruba"
+    ]
+  }
+</script>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": {{ brand_name | json }},
+    "url": {{ site_url | json }},
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {{ site_url | append: 'search?q={search_term_string}' | json }},
+      "query-input": "required name=search_term_string"
+    }
+  }
+</script>
 {% if request.page_type == 'product' %}<script type="application/ld+json">{{ product | structured_data }}</script>{% elsif request.page_type == 'article' %}<script type="application/ld+json">{{ article | structured_data }}</script>{% endif %}

@@ -366,17 +366,39 @@ Permisos recomendados:
 9. Revisar CTAs para no enviar demasiado trafico a colecciones vacias.
 10. Revisar Judge.me para que muestre estado honesto sin resenas.
 
-### P2 post-milestone
+### Preparado ahora; requiere aprobacion o datos de Patrick para activar
 
-1. Crear contenido editorial SEO:
+1. Contenido editorial SEO:
    - "What to wear in Aruba"
    - "Aruba resortwear"
    - "Take the island home"
-2. Anadir schema adicional cuando existan productos reales.
-3. Conectar Google Search Console despues de quitar password.
-4. Conectar GA4 y pixels de marketing si Patrick los aprueba.
-5. Configurar Judge.me collection flow para obtener resenas reales.
-6. Crear landing o coleccion orientada a turistas de Estados Unidos.
+2. Landing orientada a turistas de Estados Unidos.
+3. Schema adicional de productos cuando existan productos reales.
+4. Google Search Console despues de quitar password.
+5. GA4 y pixels de marketing si Patrick los aprueba.
+6. Judge.me collection flow para obtener resenas reales.
+
+## 7.1 Mejoras developer-side aplicadas tras esta auditoria
+
+Estas mejoras quedan dentro del alcance de desarrollo y no requieren publicar la tienda:
+
+- Metadata del theme reforzada para usar `Arrive Aruba` como fallback en lugar de depender de `My Store`.
+- Meta descriptions SEO base preparadas para Home, Password, Story, Contact, Collection, Product y la futura landing editorial.
+- JSON-LD base de `Organization` y `WebSite` agregado al theme.
+- Template editorial `page.aruba-resortwear` preparado para una pagina SEO orientada a turistas estadounidenses.
+- Riesgo de resenas falsas reducido quitando `sample_data` del bloque Judge.me en producto.
+- Videos fallback del hero ajustados a `preload="none"` para evitar carga anticipada innecesaria de desktop/mobile.
+- Password y publicacion permanecen intactos.
+
+### Estado de autorizacion Shopify CLI
+
+Se reintento autorizacion CLI para `arrive-aruba.myshopify.com` y Shopify respondio:
+
+```text
+You are not authorized to use the CLI to develop in the provided store: arrive-aruba.myshopify.com
+```
+
+Esto confirma que el bloqueo actual es de permisos de tienda, no del theme. Patrick debe ampliar permisos de colaborador/staff antes de que podamos confirmar o modificar Pages, Navigation, Products, Policies y Settings desde CLI/Admin.
 
 ## 8. Checklist de aceptacion para el primer milestone
 
@@ -437,4 +459,4 @@ The main thing before going public is that we need to replace the remaining Shop
 
 El sitio esta en buen estado para una entrega de primer milestone privada. La prioridad no es rehacer el theme: la prioridad es cerrar configuracion real de Shopify, limpiar placeholders de marca, preparar SEO base y validar performance en mobile antes de publicar.
 
-Recomendacion final: mantener password activo hasta aprobacion de Patrick, completar P0, compartir preview para feedback, y solo despues pasar a optimizacion P1/P2.
+Recomendacion final: mantener password activo hasta aprobacion de Patrick, completar lo tecnico que depende de desarrollo, compartir preview para feedback, y dejar a Patrick una checklist concreta de aprobaciones/configuraciones de dueno antes de publicar.
