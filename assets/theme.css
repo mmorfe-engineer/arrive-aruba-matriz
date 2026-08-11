@@ -176,9 +176,9 @@
 .footer-bottom{position:relative;z-index:1;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem;max-width:620px;margin:clamp(2.25rem,5vw,3rem) 0 0;padding-top:1.5rem;border-top:1px solid rgba(240,240,229,.07)}
 .footer-legal{margin:0;font-size:.68rem;font-weight:300;letter-spacing:.04em;color:rgba(240,240,229,.34)}
 .footer-agency{display:inline-flex;align-items:center;gap:.48rem;color:rgba(240,240,229,.42);font-size:.68rem;font-weight:300;letter-spacing:.055em;text-decoration:none;transition:color .2s}
-.footer-agency img{display:block;width:auto;height:1.05rem;opacity:.86}
+.footer-agency img{display:block;width:auto;height:1.05rem;opacity:.42}
 .footer-agency:hover{color:rgba(240,240,229,.58)}
-.footer-agency:hover img{opacity:.92}
+.footer-agency:hover img{opacity:.58}
 .footer-social-callout{grid-column:2;grid-row:1;justify-self:start;align-self:start;max-width:390px;margin-top:.35rem;padding-top:0}
 .footer-social-copy{max-width:34ch;margin:0 0 1.15rem;color:rgba(240,240,229,.62);font-family:var(--aa-serif-font);font-size:clamp(1.05rem,1.65vw,1.38rem);font-weight:300;line-height:1.22}
 .footer-social{display:flex;flex-wrap:wrap;gap:.65rem;align-items:center}
