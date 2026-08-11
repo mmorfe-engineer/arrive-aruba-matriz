@@ -6,7 +6,10 @@
         {% if founder_image != blank %}
           {{ founder_image | image_url: width: 1200 | image_tag: widths: '400, 600, 900, 1200', sizes: '(min-width: 750px) 38vw, 100vw', loading: 'lazy', alt: founder_image.alt | default: section.settings.name | escape }}
         {% else %}
-          <span class="founder-placeholder"><img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420" loading="lazy"></span>
+          <span class="founder-placeholder">
+            <img src="{{ 'arrive-logo-mark.svg' | asset_url }}" alt="" width="420" height="420" loading="lazy">
+            <span class="founder-placeholder__text">Founder portrait space</span>
+          </span>
         {% endif %}
       </div>
       {% if section.settings.name != blank %}

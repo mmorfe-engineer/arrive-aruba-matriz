@@ -12,25 +12,28 @@
     "hero": {
       "type": "island-hero",
       "settings": {
-        "eyebrow": "Arrive Aruba",
-        "heading": "Our Story",
-        "text": "<p>How a return to the island became a way of dressing.</p>"
+        "eyebrow": "Brand Story",
+        "heading": "That moment has arrived.",
+        "text": "<p>The anticipation, the arrival, the first breath of island air.</p>"
       }
     },
     "founder": {
       "type": "founder-story",
       "settings": {
-        "subheading": "Our founder",
-        "heading": "Every piece begins with a return.",
-        "text": "<p>This is where Arrive Aruba's founder will share the story behind the brand: how the idea began, what the island means to them, and the people who helped carry it forward.</p><p>Replace this text and add a portrait from the theme editor once the founder's story and photography are ready.</p>"
+        "subheading": "Brand Story",
+        "heading": "Designed for the feeling of arrival.",
+        "name": "Adriana and Patrick",
+        "role": "Arrive Aruba",
+        "text": "<p>That moment has arrived. You've counted down for months, planned it with the people you love, and then the plane door opens and the island meets you all at once, the heat, the light, that first breath of fresh air.</p><p>We wanted to bottle that, the anticipation, the arrival, that feeling, so we built a clothing brand designed for Aruba. One that represents the island, and brings that whole feeling home with you, long after the trip ends.</p><p>We're Adriana and Patrick. We live here, we raise our kids here, and Arrive Aruba is what we built.</p>",
+        "signature": "Adriana and Patrick"
       }
     },
     "introduction": {
       "type": "rich-text",
       "settings": {
         "subheading": "Our point of view",
-        "heading": "A brand shaped by return.",
-        "text": "<p>Arrive Aruba is resortwear for the moments that stay with you: bright water, warm evenings and the ease of island time.</p>",
+        "heading": "A brand shaped by arrival.",
+        "text": "<p>Arrive Aruba is resortwear for the moments that stay with you: bright water, warm evenings, and the ease of island time carried home.</p>",
         "alignment": "left"
       }
     },
@@ -38,9 +41,9 @@
       "type": "editorial-image-text",
       "settings": {
         "reverse": true,
-        "subheading": "A lasting feeling",
-        "heading": "Light, water and warmth in every piece.",
-        "text": "<p>This is temporary editorial copy. Replace it from the theme editor when the final story and campaign photography are ready.</p>",
+        "subheading": "Made here",
+        "heading": "Built from the place it represents.",
+        "text": "<p>From the first arrival to the last walk before leaving, the island sets the rhythm. The pieces are designed to keep that rhythm close: simple, sunlit, and easy to return to.</p>",
         "button_label": "Shop the collection"
       }
     },
