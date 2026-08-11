@@ -17,7 +17,7 @@
     "404": { "eyebrow": "404", "title": "This shore could not be found.", "text": "The page may have moved or no longer exists.", "button": "Return home" }
   },
   "header": { "open_menu": "Open menu", "main_menu": "Main menu", "search": "Search" },
-  "footer": { "rights": "All rights reserved.", "socials": "Arrive Aruba social links", "additional_socials": "Additional Arrive Aruba social links", "social_title": "Stay close", "social_copy": "Follow the island mood, new arrivals, and stories from Aruba.", "website": "Website", "menu_story": "Island story", "menu_contact": "Contact", "menu_search": "Search", "menu_all": "All pieces", "menu_collections": "Collections", "menu_bag": "View bag", "menu_service": "Client service", "menu_shipping": "Shipping", "menu_returns": "Returns" },
+  "footer": { "rights": "All rights reserved.", "agency_credit": "Developed in collaboration with Morfe Maison", "socials": "Arrive Aruba social links", "additional_socials": "Additional Arrive Aruba social links", "social_title": "Stay close", "social_copy": "Follow the island mood, new arrivals, and stories from Aruba.", "website": "Website", "menu_story": "Island story", "menu_contact": "Contact", "menu_search": "Search", "menu_all": "All pieces", "menu_collections": "Collections", "menu_bag": "View bag", "menu_service": "Client service", "menu_shipping": "Shipping", "menu_returns": "Returns" },
   "customer": { "account": "Account" },
   "localization": { "country": "Country and currency", "language": "Language" },
   "wishlist": { "title": "Saved pieces", "toggle": "Save {{ product }}", "updated": "Saved pieces updated", "empty": "No saved pieces yet.", "explore": "Explore the collection", "remove": "Remove {{ product }}" },

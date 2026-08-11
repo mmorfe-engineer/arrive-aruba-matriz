@@ -96,6 +96,10 @@
   </div>
   <div class="footer-bottom">
     <p class="footer-legal">&copy; {{ 'now' | date: '%Y' }} Arrive Aruba. {{ 'footer.rights' | t }}</p>
+    <a class="footer-agency" href="https://www.upwork.com/agencies/2049134329997668985/" target="_blank" rel="noopener noreferrer" aria-label="{{ 'footer.agency_credit' | t }}">
+      <img src="{{ 'morfe-maison-icon-white.svg' | asset_url }}" alt="" width="241" height="358" loading="lazy" aria-hidden="true">
+      <span>{{ 'footer.agency_credit' | t }}</span>
+    </a>
     {% if settings.social_pinterest != blank or settings.social_whatsapp != blank %}
       <nav class="footer-secondary-social" aria-label="{{ 'footer.additional_socials' | t }}">
         {% if settings.social_pinterest != blank %}<a href="{{ settings.social_pinterest | escape }}" aria-label="Pinterest">{% render 'icon', name: 'pinterest' %}</a>{% endif %}
