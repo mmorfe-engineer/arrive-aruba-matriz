@@ -42,6 +42,20 @@
         </div>
       {% endfor %}
     </div>
+    <div class="footer-social-callout">
+      <p class="footer-heading">{{ 'footer.social_title' | t }}</p>
+      <p class="footer-social-copy">{{ 'footer.social_copy' | t }}</p>
+      <nav class="footer-social" aria-label="{{ 'footer.socials' | t }}">
+        {% if settings.social_instagram != blank %}<a href="{{ settings.social_instagram | escape }}" aria-label="Instagram">{% render 'icon', name: 'instagram' %}</a>{% endif %}
+        {% if settings.social_facebook != blank %}<a href="{{ settings.social_facebook | escape }}" aria-label="Facebook">{% render 'icon', name: 'facebook' %}</a>{% endif %}
+        {% if settings.social_tiktok != blank %}<a href="{{ settings.social_tiktok | escape }}" aria-label="TikTok">{% render 'icon', name: 'tiktok' %}</a>{% endif %}
+        {% if settings.social_x != blank %}<a href="{{ settings.social_x | escape }}" aria-label="X">{% render 'icon', name: 'x' %}</a>{% endif %}
+      </nav>
+      <div class="footer-contact-links">
+        {% if settings.official_domain != blank %}<a href="{{ settings.official_domain | escape }}">{{ 'footer.website' | t }}</a>{% endif %}
+        {% if settings.contact_email != blank %}<a href="mailto:{{ settings.contact_email | escape }}">{{ settings.contact_email | escape }}</a>{% endif %}
+      </div>
+    </div>
     {% if localization.available_countries.size > 1 or localization.available_languages.size > 1 %}
       {% form 'localization', class: 'localization-form' %}
         {% if localization.available_countries.size > 1 %}
@@ -65,16 +79,12 @@
   </div>
   <div class="footer-bottom">
     <p class="footer-legal">&copy; {{ 'now' | date: '%Y' }} {{ shop.name | escape }}. {{ 'footer.rights' | t }}</p>
-    <nav class="footer-social" aria-label="{{ 'footer.socials' | t }}">
-      {% if settings.social_instagram != blank %}<a href="{{ settings.social_instagram | escape }}" aria-label="Instagram">{% render 'icon', name: 'instagram' %}</a>{% endif %}
-      {% if settings.social_facebook != blank %}<a href="{{ settings.social_facebook | escape }}" aria-label="Facebook">{% render 'icon', name: 'facebook' %}</a>{% endif %}
-      {% if settings.social_tiktok != blank %}<a href="{{ settings.social_tiktok | escape }}" aria-label="TikTok">{% render 'icon', name: 'tiktok' %}</a>{% endif %}
-      {% if settings.social_x != blank %}<a href="{{ settings.social_x | escape }}" aria-label="X">{% render 'icon', name: 'x' %}</a>{% endif %}
-      {% if settings.social_pinterest != blank %}<a href="{{ settings.social_pinterest | escape }}" aria-label="Pinterest">{% render 'icon', name: 'pinterest' %}</a>{% endif %}
-      {% if settings.social_whatsapp != blank %}<a href="{{ settings.social_whatsapp | escape }}" aria-label="WhatsApp">{% render 'icon', name: 'whatsapp' %}</a>{% endif %}
-      {% if settings.contact_email != blank %}<a href="mailto:{{ settings.contact_email | escape }}" aria-label="Email">{% render 'icon', name: 'mail' %}</a>{% endif %}
-      {% if settings.official_domain != blank %}<a href="{{ settings.official_domain | escape }}" aria-label="Website">{% render 'icon', name: 'globe' %}</a>{% endif %}
-    </nav>
+    {% if settings.social_pinterest != blank or settings.social_whatsapp != blank %}
+      <nav class="footer-secondary-social" aria-label="{{ 'footer.additional_socials' | t }}">
+        {% if settings.social_pinterest != blank %}<a href="{{ settings.social_pinterest | escape }}" aria-label="Pinterest">{% render 'icon', name: 'pinterest' %}</a>{% endif %}
+        {% if settings.social_whatsapp != blank %}<a href="{{ settings.social_whatsapp | escape }}" aria-label="WhatsApp">{% render 'icon', name: 'whatsapp' %}</a>{% endif %}
+      </nav>
+    {% endif %}
   </div>
 </footer>
 
