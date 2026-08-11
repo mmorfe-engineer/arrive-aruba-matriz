@@ -145,20 +145,23 @@
 .site-footer{position:relative;overflow:hidden;padding:clamp(3.5rem,7vw,5rem) var(--aa-side-space) 2rem;background:var(--aa-navy);color:var(--aa-cream)}
 .footer-dividivi-wrap{position:absolute;bottom:0;right:-2%;height:50%;width:auto;opacity:.12;pointer-events:none;overflow:visible}
 .footer-dividivi{display:block;height:100%;width:auto}
-.footer-dividivi-canopy{position:absolute;inset:0 auto auto 0;display:block;height:100%;width:auto;clip-path:polygon(0 0,100% 0,100% 49%,0 49%);transform-origin:69% 30%;animation:footerCanopySway 7.2s cubic-bezier(.45,.05,.55,.95) infinite;will-change:transform}
 .footer-leaf,.footer-canopy-leaf,.footer-ground-leaf{position:absolute;display:block;color:var(--aa-lake);pointer-events:none;will-change:transform,opacity}
 .footer-leaf,.footer-canopy-leaf{animation-fill-mode:both;animation-timing-function:cubic-bezier(.45,.05,.55,.95);animation-play-state:paused}
 .footer-dividivi-wrap.is-visible .footer-leaf,.footer-dividivi-wrap.is-visible .footer-canopy-leaf{animation-play-state:running}
 .footer-leaf svg,.footer-canopy-leaf svg,.footer-ground-leaf svg{width:100%;height:100%;display:block;fill:currentColor}
-.footer-canopy-leaf{opacity:.58;transform-origin:50% 55%;filter:blur(.05px)}
+.footer-canopy-leaf{opacity:.72;transform-origin:50% 55%;filter:blur(.04px)}
 .footer-ground-leaf{opacity:.34;filter:blur(.08px)}
 
-.footer-canopy-leaf--1{top:13%;left:54%;width:5.4%;aspect-ratio:33/15;animation-name:footerCanopyLeafSway1;animation-duration:5.8s;animation-delay:-1.4s}
-.footer-canopy-leaf--2{top:18%;left:63%;width:4.5%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway2;animation-duration:6.6s;animation-delay:-3.1s}
-.footer-canopy-leaf--3{top:24%;left:49%;width:4.8%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway3;animation-duration:7.2s;animation-delay:-2.2s}
-.footer-canopy-leaf--4{top:28%;left:70%;width:5.2%;aspect-ratio:33/15;animation-name:footerCanopyLeafSway1;animation-duration:6.1s;animation-delay:-4.5s}
-.footer-canopy-leaf--5{top:34%;left:58%;width:4.3%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway2;animation-duration:6.9s;animation-delay:-.8s}
-.footer-canopy-leaf--6{top:38%;left:75%;width:4.7%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway3;animation-duration:7.7s;animation-delay:-5.2s}
+.footer-canopy-leaf--1{top:12%;left:53%;width:5.9%;aspect-ratio:33/15;animation-name:footerCanopyLeafSway1;animation-duration:5.4s;animation-delay:-1.4s}
+.footer-canopy-leaf--2{top:17%;left:62%;width:5.1%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway2;animation-duration:5.9s;animation-delay:-3.1s}
+.footer-canopy-leaf--3{top:23%;left:48%;width:5.3%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway3;animation-duration:6.3s;animation-delay:-2.2s}
+.footer-canopy-leaf--4{top:27%;left:70%;width:5.8%;aspect-ratio:33/15;animation-name:footerCanopyLeafSway1;animation-duration:5.7s;animation-delay:-4.5s}
+.footer-canopy-leaf--5{top:33%;left:58%;width:4.9%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway2;animation-duration:6.1s;animation-delay:-.8s}
+.footer-canopy-leaf--6{top:37%;left:75%;width:5.2%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway3;animation-duration:6.6s;animation-delay:-5.2s}
+.footer-canopy-leaf--7{top:8%;left:66%;width:5.4%;aspect-ratio:33/15;animation-name:footerCanopyLeafSway2;animation-duration:5.2s;animation-delay:-2.9s}
+.footer-canopy-leaf--8{top:21%;left:80%;width:4.8%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway3;animation-duration:5.8s;animation-delay:-4.1s}
+.footer-canopy-leaf--9{top:31%;left:42%;width:5.1%;aspect-ratio:2/1;animation-name:footerCanopyLeafSway1;animation-duration:6.4s;animation-delay:-1.1s}
+.footer-canopy-leaf--10{top:40%;left:64%;width:5.6%;aspect-ratio:33/15;animation-name:footerCanopyLeafSway2;animation-duration:6s;animation-delay:-5.4s}
 .footer-leaf--1{top:9%;left:57%;width:6.2%;aspect-ratio:33/15;animation-name:footerLeafFall1;animation-duration:11s;animation-delay:-3s}
 .footer-leaf--2{top:15%;left:71%;width:5.2%;aspect-ratio:2/1;animation-name:footerLeafFall2;animation-duration:12.5s;animation-delay:-5.6s}
 .footer-leaf--3{top:19%;left:45%;width:5.7%;aspect-ratio:2/1;animation-name:footerLeafFall3;animation-duration:11.8s;animation-delay:-1.4s}
@@ -177,10 +180,9 @@
 .footer-ground-leaf--4{bottom:5.4%;left:70%;width:5.4%;aspect-ratio:33/15;transform:rotate(20deg)}
 .footer-ground-leaf--5{bottom:2.2%;left:79%;width:4.1%;aspect-ratio:2/1;transform:rotate(-24deg)}
 .footer-ground-leaf--6{bottom:6.8%;left:87%;width:4.7%;aspect-ratio:2/1;transform:rotate(9deg)}
-@keyframes footerCanopySway{0%,100%{transform:translate3d(0,0,0) rotate(0deg)}28%{transform:translate3d(-1.15%,.34%,0) rotate(2.25deg)}56%{transform:translate3d(-2.05%,.58%,0) rotate(3.9deg)}78%{transform:translate3d(-.82%,.24%,0) rotate(1.55deg)}}
-@keyframes footerCanopyLeafSway1{0%,100%{transform:translate3d(0,0,0) rotate(-3deg)}30%{transform:translate3d(-10%,4%,0) rotate(7deg)}62%{transform:translate3d(8%,-3%,0) rotate(-8deg)}}
-@keyframes footerCanopyLeafSway2{0%,100%{transform:translate3d(0,0,0) rotate(4deg)}34%{transform:translate3d(12%,-5%,0) rotate(-7deg)}70%{transform:translate3d(-8%,4%,0) rotate(9deg)}}
-@keyframes footerCanopyLeafSway3{0%,100%{transform:translate3d(0,0,0) rotate(-2deg)}38%{transform:translate3d(-7%,-5%,0) rotate(8deg)}74%{transform:translate3d(11%,3%,0) rotate(-6deg)}}
+@keyframes footerCanopyLeafSway1{0%,100%{transform:translate3d(0,0,0) rotate(-4deg)}30%{transform:translate3d(-18%,7%,0) rotate(12deg)}62%{transform:translate3d(14%,-5%,0) rotate(-13deg)}}
+@keyframes footerCanopyLeafSway2{0%,100%{transform:translate3d(0,0,0) rotate(5deg)}34%{transform:translate3d(19%,-8%,0) rotate(-12deg)}70%{transform:translate3d(-14%,7%,0) rotate(14deg)}}
+@keyframes footerCanopyLeafSway3{0%,100%{transform:translate3d(0,0,0) rotate(-3deg)}38%{transform:translate3d(-13%,-8%,0) rotate(13deg)}74%{transform:translate3d(18%,6%,0) rotate(-11deg)}}
 @keyframes footerLeafFall1{0%{top:9%;left:57%;transform:rotate(0deg)}20%{top:32%;left:44%;transform:rotate(-41deg)}40%{top:55%;left:33%;transform:rotate(34deg)}60%{top:77%;left:15%;transform:rotate(-56deg)}80%{top:96%;left:1%;transform:rotate(27deg)}100%{top:111%;left:-18%;transform:rotate(-10deg)}}
 @keyframes footerLeafFall2{0%{top:15%;left:71%;transform:rotate(0deg)}22%{top:37%;left:58%;transform:rotate(36deg)}44%{top:60%;left:43%;transform:rotate(-39deg)}66%{top:80%;left:25%;transform:rotate(46deg)}86%{top:98%;left:10%;transform:rotate(-29deg)}100%{top:112%;left:-4%;transform:rotate(7deg)}}
 @keyframes footerLeafFall3{0%{top:19%;left:45%;transform:rotate(0deg)}24%{top:40%;left:31%;transform:rotate(-34deg)}48%{top:63%;left:17%;transform:rotate(41deg)}72%{top:84%;left:-2%;transform:rotate(-48deg)}90%{top:101%;left:-18%;transform:rotate(22deg)}100%{top:110%;left:-35%;transform:rotate(-12deg)}}
