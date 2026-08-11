@@ -29,7 +29,14 @@
     "social_facebook": "https://www.facebook.com/ArriveAruba",
     "contact_email": "info@arrivearuba.com",
     "official_domain": "https://www.arrivearuba.com/",
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "14060646107696862457": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      }
+    }
   },
   "presets": {
     "Arrive Aruba": {}

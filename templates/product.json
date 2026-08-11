@@ -32,10 +32,41 @@
             "heading": "Returns",
             "content": "<p>Add the returns and exchanges policy here.</p>"
           }
+        },
+        "judge_me_reviews_review_snippet_widget_iXNTUd": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_snippet_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "reviews_selection": "auto",
+            "products": [],
+            "filter_pinned": false,
+            "filter_featured": false,
+            "filter_custom_tags": "",
+            "min_star_rating": "inherit",
+            "show_review_media": true,
+            "max_reviews": 5,
+            "review_length": "medium",
+            "text_size": "medium",
+            "max_width": 1100,
+            "max_image_size": "small",
+            "arrows_visibility": "always_shown",
+            "transition_speed": 5,
+            "corner_styling": "inherit",
+            "text_color": "",
+            "card_color": "",
+            "stars_color": "",
+            "arrows_color": "",
+            "arrows_background_color": ""
+          }
         }
       },
-      "block_order": ["size-fit", "delivery", "returns"],
+      "block_order": [
+        "size-fit",
+        "delivery",
+        "returns",
+        "judge_me_reviews_review_snippet_widget_iXNTUd"
+      ],
       "settings": {
+        "default_back_collection": "",
         "show_vendor": false,
         "show_description": true,
         "show_quantity_selector": false,
@@ -50,22 +81,6 @@
         "media_fit": "contain"
       }
     },
-    "reviews": {
-      "type": "product-reviews",
-      "blocks": {},
-      "block_order": [],
-      "settings": {
-        "eyebrow": "Island stories",
-        "heading": "Worn, remembered, shared.",
-        "launch_eyebrow": "First arrivals",
-        "launch_heading": "Be among the first to wear Arrive Aruba.",
-        "launch_text": "<p>Our first island stories are still being lived. Discover the collection, then return to share where your Arrive piece took you.</p>",
-        "launch_button_label": "Discover the first collection",
-        "launch_button_link": "shopify://collections/all",
-        "editor_heading": "Connect your reviews app",
-        "editor_text": "Add the review widget as an app block in this section. This setup note is visible only in the theme editor."
-      }
-    },
     "recommendations": {
       "type": "product-recommendations",
       "settings": {
@@ -74,7 +89,15 @@
         "products_to_show": 3,
         "intent": "related"
       }
+    },
+    "178647492805e121bc": {
+      "type": "apps",
+      "settings": {}
     }
   },
-  "order": ["main-product", "reviews", "recommendations"]
+  "order": [
+    "main-product",
+    "recommendations",
+    "178647492805e121bc"
+  ]
 }
