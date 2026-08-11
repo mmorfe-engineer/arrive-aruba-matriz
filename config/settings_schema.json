@@ -1,1 +1,61 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Arrive Aruba",
+    "theme_version": "1.0.0",
+    "theme_author": "Martin Morfe",
+    "theme_documentation_url": "https://github.com/morfemartin/Web_Arrive-Aruba",
+    "theme_support_url": "mailto:info@arrivearuba.com"
+  },
+  {
+    "name": "t:settings_schema.brand.name",
+    "settings": [
+      { "type": "image_picker", "id": "logo", "label": "t:settings_schema.brand.logo" },
+      { "type": "image_picker", "id": "logo_inverse", "label": "t:settings_schema.brand.logo_inverse" },
+      { "type": "image_picker", "id": "favicon", "label": "t:settings_schema.brand.favicon" },
+      { "type": "image_picker", "id": "social_image", "label": "t:settings_schema.brand.social_image" },
+      { "type": "range", "id": "logo_width", "min": 96, "max": 240, "step": 4, "unit": "px", "default": 156, "label": "t:settings_schema.brand.logo_width" }
+    ]
+  },
+  {
+    "name": "t:settings_schema.colors.name",
+    "settings": [
+      { "type": "color", "id": "color_sapphire", "default": "#386395", "label": "t:settings_schema.colors.sapphire" },
+      { "type": "color", "id": "color_sapphire_dark", "default": "#23405E", "label": "t:settings_schema.colors.sapphire_dark" },
+      { "type": "color", "id": "color_navy", "default": "#07111C", "label": "t:settings_schema.colors.navy" },
+      { "type": "color", "id": "color_lake", "default": "#5F8BB8", "label": "t:settings_schema.colors.lake" },
+      { "type": "color", "id": "color_cream", "default": "#F0F0E5", "label": "t:settings_schema.colors.cream" },
+      { "type": "color", "id": "color_orange", "default": "#F5A169", "label": "t:settings_schema.colors.orange" },
+      { "type": "color", "id": "color_green", "default": "#92AF88", "label": "t:settings_schema.colors.green" },
+      { "type": "color", "id": "color_ink", "default": "#17202A", "label": "t:settings_schema.colors.ink" }
+    ]
+  },
+  {
+    "name": "t:settings_schema.typography.name",
+    "settings": [
+      { "type": "checkbox", "id": "use_brand_body_font", "default": true, "label": "t:settings_schema.typography.use_brand_body" },
+      { "type": "font_picker", "id": "type_body_font", "default": "work_sans_n4", "label": "t:settings_schema.typography.body" }
+    ]
+  },
+  {
+    "name": "t:settings_schema.layout.name",
+    "settings": [
+      { "type": "range", "id": "page_width", "min": 960, "max": 1800, "step": 20, "unit": "px", "default": 1440, "label": "t:settings_schema.layout.page_width" },
+      { "type": "range", "id": "control_radius", "min": 0, "max": 20, "step": 1, "unit": "px", "default": 0, "label": "t:settings_schema.layout.control_radius" },
+      { "type": "checkbox", "id": "enable_motion", "default": true, "label": "t:settings_schema.layout.motion" }
+    ]
+  },
+  {
+    "name": "t:settings_schema.social.name",
+    "settings": [
+      { "type": "url", "id": "social_instagram", "label": "t:settings_schema.social.instagram" },
+      { "type": "url", "id": "social_facebook", "label": "t:settings_schema.social.facebook" },
+      { "type": "url", "id": "social_tiktok", "label": "t:settings_schema.social.tiktok" },
+      { "type": "url", "id": "social_x", "label": "t:settings_schema.social.x" },
+      { "type": "url", "id": "social_pinterest", "label": "t:settings_schema.social.pinterest" },
+      { "type": "url", "id": "social_whatsapp", "label": "t:settings_schema.social.whatsapp" },
+      { "type": "text", "id": "contact_email", "label": "t:settings_schema.social.contact_email" },
+      { "type": "url", "id": "official_domain", "label": "t:settings_schema.social.official_domain" }
+    ]
+  }
+]

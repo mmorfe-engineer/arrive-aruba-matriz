@@ -17,7 +17,7 @@
     "404": { "eyebrow": "404", "title": "This shore could not be found.", "text": "The page may have moved or no longer exists.", "button": "Return home" }
   },
   "header": { "open_menu": "Open menu", "main_menu": "Main menu", "search": "Search" },
-  "footer": { "rights": "All rights reserved." },
+  "footer": { "rights": "All rights reserved.", "socials": "Arrive Aruba social links" },
   "customer": { "account": "Account" },
   "localization": { "country": "Country and currency", "language": "Language" },
   "wishlist": { "title": "Saved pieces", "toggle": "Save {{ product }}", "updated": "Saved pieces updated", "empty": "No saved pieces yet.", "explore": "Explore the collection", "remove": "Remove {{ product }}" },

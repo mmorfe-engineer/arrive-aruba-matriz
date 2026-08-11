@@ -23,6 +23,12 @@
     "page_width": 1440,
     "control_radius": 0,
     "enable_motion": true,
+    "social_instagram": "https://www.instagram.com/arrive_aruba/",
+    "social_tiktok": "https://www.tiktok.com/@arrive_aruba",
+    "social_x": "https://x.com/arrive_aruba",
+    "social_facebook": "https://www.facebook.com/ArriveAruba",
+    "contact_email": "info@arrivearuba.com",
+    "official_domain": "https://www.arrivearuba.com/",
     "content_for_index": []
   },
   "presets": {
