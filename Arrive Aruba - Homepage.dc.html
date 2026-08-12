@@ -2,29 +2,26 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preload" as="image" href="preview-assets/media/arrive-aruba-hero-poster.jpg" fetchpriority="high">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F0F0E5" media="(min-width: 761px)">
+<link rel="preload" as="image" href="preview-assets/figma-hero/atmosphere-desktop.png" fetchpriority="high">
+<link rel="preload" as="image" href="preview-assets/figma-hero/window-desktop.png" fetchpriority="high">
+<link rel="stylesheet" href="./figma-hero.css">
 <script src="./support.js" defer></script>
 </head>
 <body>
-<div id="aa-static-hero-fallback" style="position:fixed;inset:0;z-index:2147483000;background:#03070b;color:#F0F0E5;overflow:hidden;font-family:Georgia,serif;">
-  <img src="preview-assets/media/arrive-aruba-hero-poster.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 35%;transform:scale(1.08);opacity:0.82;" />
-  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(3,7,11,0.82) 0%,rgba(3,7,11,0.38) 48%,rgba(3,7,11,0.72) 100%);"></div>
-  <img src="preview-assets/brand/logo-negative.webp" alt="Arrive Aruba" style="position:absolute;top:28px;left:50%;width:132px;height:auto;transform:translateX(-50%);" />
-  <div style="position:absolute;left:24px;right:24px;top:50%;transform:translateY(-44%);text-align:center;">
-    <p style="margin:0 0 26px;font-family:Arial,sans-serif;font-size:9px;letter-spacing:0.42em;text-transform:uppercase;color:rgba(240,240,229,0.56);">Aruba · Resortwear · Est. 2024</p>
-    <img src="preview-assets/brand/variable-3.svg" alt="" style="width:min(170px,44vw);height:auto;filter:brightness(0) invert(1);opacity:0.94;" />
-    <p style="margin:34px 0 0;font-size:clamp(20px,5vw,28px);line-height:1.35;color:rgba(240,240,229,0.9);">Take home what you felt.</p>
-  </div>
-</div>
+<div id="aa-static-hero-fallback" hidden aria-hidden="true" style="display:none!important;"></div>
 <x-dc>
 <helmet>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F0F0E5" media="(min-width: 761px)" />
   <title>ARRIVE ARUBA — Take Home What You Felt</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-  <link rel="preload" as="image" href="preview-assets/media/arrive-aruba-hero-poster.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="preview-assets/figma-hero/atmosphere-desktop.png" fetchpriority="high" />
+  <link rel="preload" as="image" href="preview-assets/figma-hero/window-desktop.png" fetchpriority="high" />
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="figma-hero.css" />
   <script src="cart-store.js"></script>
   <style>
     .aa-profile-row { display:flex; align-items:center; gap:14px; width:100%; padding:18px 4px; background:none; border:none; border-bottom:1px solid rgba(56,99,149,0.14); cursor:pointer; text-align:left; color:#23405e; transition:opacity 0.18s ease; }
@@ -37,7 +34,7 @@
     @font-face { font-family:'ITC Legacy Serif'; src:url('preview-assets/fonts/ITC-Legacy-Serif-Book-Italic.otf') format('opentype'); font-weight:400; font-style:italic; font-display:swap; }
     @font-face { font-family:'Port Blair Alternate'; src:url('preview-assets/fonts/Port-Blair-Alternate.otf') format('opentype'); font-weight:400; font-style:normal; font-display:swap; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; background-color: #F0F0E5; }
     body { font-family: 'Geologica', sans-serif; background: #F0F0E5; color: #1a1a1a; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
     input::placeholder { color: rgba(240,240,229,0.35); font-family: 'Geologica', sans-serif; font-size: 13px; font-weight: 300; letter-spacing: 0.06em; }
@@ -404,8 +401,8 @@
   </style>
 </helmet>
 
-<!-- ─── FIXED NAV ─────────────────────────────────────── -->
-<nav id="aa-nav" data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:100;height:74px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;transition:background 0.5s ease,border-bottom 0.5s ease;">
+<!-- ─── FIXED NAV (post-journey chrome; hidden over hero journey) ─── -->
+<nav id="aa-nav" data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:100;height:74px;padding:0 22px;display:none;align-items:center;justify-content:space-between;transition:background 0.5s ease,border-bottom 0.5s ease;">
 
   <div style="display:flex;align-items:center;gap:14px;">
     <button id="aa-profile-btn" aria-label="Account" class="aa-header-action" onClick="{{ openProfile }}" style="padding:4px;">
@@ -635,38 +632,62 @@
   </div>
 </div>
 
-<!-- ─── HERO ──────────────────────────────────────────── -->
-<section data-screen-label="01 Hero" style="position:relative;height:100vh;min-height:100svh;min-height:100dvh;overflow:hidden;display:flex;align-items:center;justify-content:center;">
-  <img class="aa-hero-media aa-hero-poster" src="preview-assets/media/arrive-aruba-hero-poster.jpg" alt="" aria-hidden="true" decoding="async" fetchpriority="high" width="1080" height="608" />
-  <video class="aa-hero-media aa-hero-video" aria-label="Arrive Aruba island film" muted="muted" loop="loop" playsinline="playsinline" webkit-playsinline="webkit-playsinline" preload="none" data-mobile-src="preview-assets/media/arrive-aruba-hero-mobile-autoplay.mp4" data-desktop-src="preview-assets/media/arrive-aruba-hero-sound-fast.mp4" data-mobile-sound-src="preview-assets/media/arrive-aruba-hero-mobile-sound-fast.mp4"></video>
-  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(7,18,30,0.35) 0%,rgba(7,18,30,0.12) 40%,rgba(7,18,30,0.75) 100%);z-index:1;"></div>
+<!-- ─── FASE A: FigmaHeroShell (scroll=0) · JourneyMotionLayer inert ─── -->
+<section class="aa-figma-hero" data-screen-label="01 Hero" data-figma-hero-shell aria-label="Arrive Aruba hero">
+  <!-- Background layer — cover/art-direct only; never drives FG scale -->
+  <div class="aa-figma-hero__bg-layer" aria-hidden="true">
+    <img
+      class="aa-figma-hero__bg aa-figma-hero__bg--desktop"
+      src="preview-assets/figma-hero/atmosphere-desktop.png"
+      alt=""
+      decoding="async"
+      fetchpriority="high"
+      width="1440"
+      height="900"
+    />
+    <img
+      class="aa-figma-hero__bg aa-figma-hero__bg--mobile"
+      src="preview-assets/figma-hero/atmosphere-mobile.png"
+      alt=""
+      decoding="async"
+      fetchpriority="high"
+      width="1440"
+      height="900"
+    />
+    <div class="aa-figma-hero__scrim"></div>
+    <div class="aa-figma-hero__haze"></div>
+  </div>
 
-  <div style="position:relative;z-index:10;text-align:center;padding:0 28px;max-width:500px;width:100%;">
-    <p data-hero="label" style="font-family:'Geologica',sans-serif;font-weight:300;font-size:9px;letter-spacing:0.42em;color:rgba(240,240,229,0.5);text-transform:uppercase;margin-bottom:26px;">Aruba · Resortwear · Est. 2024</p>
+  <!-- Bottom seam dissolve → Cannoli Cream (static overlay only) -->
+  <div class="aa-figma-hero__seam-fade" aria-hidden="true"></div>
 
-    <h1 data-hero="title" aria-label="Arrive Aruba" style="position:relative;margin:0 auto 30px;width:100%;max-width:250px;height:clamp(118px,30vw,238px);line-height:0;display:flex;align-items:center;justify-content:center;">
-      <img class="aa-hero-mark-anim" data-hero-mark-anim data-src="preview-assets/media/arrive-a-mark-alpha-animated.png" alt="" aria-hidden="true" loading="lazy" decoding="async" width="320" height="320" />
-      <span class="aa-hero-mark-static" data-hero-mark-fallback aria-hidden="true"></span>
-    </h1>
-
-    <p data-hero="tag" style="font-family:'Port Blair Alternate',serif;font-size:clamp(20px,5vw,28px);color:rgba(240,240,229,0.88);letter-spacing:0.03em;line-height:1.4;margin-bottom:52px;">Take home what you felt. ✦</p>
-
-    <div data-hero="ctas" style="display:flex;flex-direction:column;gap:12px;align-items:center;">
-      <a href="#shop" style="display:inline-block;background:#F0F0E5;color:#2c4f78;font-family:'Geologica',sans-serif;font-weight:500;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 48px;min-width:238px;text-align:center;border:1px solid #F0F0E5;transition:background 0.25s ease,color 0.25s ease;" style-hover="background:transparent;color:#F0F0E5;">Shop the Collection</a>
-      <a href="#story" style="display:inline-block;color:#F0F0E5;font-family:'Geologica',sans-serif;font-weight:300;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;padding:16px 48px;min-width:238px;text-align:center;border:1px solid rgba(240,240,229,0.28);transition:border-color 0.3s ease;" style-hover="border-color:rgba(240,240,229,0.7);">Discover the Island</a>
+  <!-- Foreground layer — independent responsive layout, no global scale -->
+  <div class="aa-figma-hero__fg-layer">
+    <a class="aa-figma-hero__logo" href="index.html?view=web" aria-label="Arrive Aruba home">
+      <img src="preview-assets/figma-hero/logo-desktop.png" alt="Arrive Aruba" width="124" height="83" decoding="async" />
+    </a>
+    <nav class="aa-figma-hero__nav" aria-label="Primary">
+      <a class="aa-figma-hero__nav-link aa-figma-hero__nav-link--active" href="index.html?view=web">HOME</a>
+      <a class="aa-figma-hero__nav-link" href="#menu" onClick="{{ toggleNav }}" aria-label="Open menu">MENU</a>
+    </nav>
+    <div class="aa-figma-hero__window" data-window-initial aria-hidden="true">
+      <img src="preview-assets/figma-hero/window-desktop.png" alt="" width="468" height="644" decoding="async" fetchpriority="high" />
+    </div>
+    <div class="aa-figma-hero__copy">
+      <p class="aa-figma-hero__display">What you felt</p>
+      <p class="aa-figma-hero__emotion">when you arrived, take it home.</p>
+      <a class="aa-figma-hero__cta" href="#shop">SKIP TO SHOP</a>
     </div>
   </div>
 
-  <div data-hero="scroll" style="position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:0;">
-    <div style="width:1px;height:52px;background:rgba(240,240,229,0.15);position:relative;overflow:hidden;">
-      <div style="position:absolute;top:0;left:0;right:0;height:55%;background:rgba(240,240,229,0.75);animation:aa-scroll-line 2.1s ease-in-out infinite;"></div>
-    </div>
-  </div>
-
-  <button id="aa-sound-toggle" type="button" aria-label="Turn hero sound on" aria-pressed="false" style="position:absolute;right:22px;bottom:28px;z-index:12;min-height:34px;padding:9px 12px;border:1px solid rgba(240,240,229,0.24);background:rgba(5,12,18,0.14);color:rgba(240,240,229,0.72);font-family:'Geologica',sans-serif;font-size:9px;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:color 0.2s ease,border-color 0.2s ease,background 0.2s ease;">Sound off</button>
-  <div class="aa-hero-curtain" data-hero-curtain aria-hidden="true">
-    <img src="preview-assets/brand/logo-negative.webp" alt="" width="500" height="260" decoding="async" />
-  </div>
+  <!-- Phase B only — kept ported, hidden/inert at scroll = 0 -->
+  <div
+    class="aa-journey-motion-layer"
+    data-journey-motion-layer
+    hidden
+    aria-hidden="true"
+    data-manifest="preview-assets/journey-organic/manifest.json?v=3-hq1"
+  ></div>
 </section>
 
 <!-- ─── SHOP BY CATEGORY ──────────────────────────────── -->
@@ -969,142 +990,10 @@ class Component extends DCLogic {
   DEFAULT_PROFILE = { displayName:'Patrick Hennessy', email:'patrickhennessy@gmail.com', phone:'+00 111 222 333 444', dob:'10/11/1987', nationality:'American', address:'12/ A Street Name' };
 
   componentDidMount() {
-    // ── Hero entrance — the black reveal is intentionally time-boxed.
-    //    Media readiness should improve polish, not block the first view. ──
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const heroVideo = document.querySelector('[data-screen-label="01 Hero"] video');
-    const soundToggle = document.getElementById('aa-sound-toggle');
-    const heroMarkAnim = document.querySelector('[data-hero-mark-anim]');
-    const heroMarkFallback = document.querySelector('[data-hero-mark-fallback]');
-    const heroCurtain = document.querySelector('[data-hero-curtain]');
-    const revealHeroCurtain = () => {
-      if (!heroCurtain || heroCurtain.classList.contains('is-hidden')) return;
-      heroCurtain.classList.add('is-hidden');
-    };
-    window.setTimeout(revealHeroCurtain, reduce ? 120 : 760);
-    if (heroMarkAnim && heroMarkFallback) {
-      const isMobileMark = window.matchMedia && window.matchMedia('(max-width: 520px)').matches;
-      const revealHeroMark = () => {
-        heroMarkFallback.style.display = 'none';
-        heroMarkAnim.classList.add('is-visible');
-      };
-      const keepStaticHeroMark = () => {
-        heroMarkAnim.classList.remove('is-visible');
-        heroMarkFallback.style.display = 'block';
-      };
-      if (reduce || isMobileMark) {
-        keepStaticHeroMark();
-      } else if (heroMarkAnim.complete && heroMarkAnim.naturalWidth > 0) {
-        revealHeroMark();
-      } else {
-        if (!heroMarkAnim.src && heroMarkAnim.dataset.src) heroMarkAnim.src = heroMarkAnim.dataset.src;
-        heroMarkAnim.addEventListener('load', revealHeroMark, { once: true });
-        heroMarkAnim.addEventListener('error', keepStaticHeroMark, { once: true });
-        if (heroMarkAnim.decode) heroMarkAnim.decode().then(revealHeroMark).catch(() => {});
-      }
-    }
-    if (heroVideo) {
-      heroVideo.muted = true;
-      heroVideo.defaultMuted = true;
-      heroVideo.playsInline = true;
-      heroVideo.setAttribute('muted', '');
-      heroVideo.setAttribute('playsinline', '');
-      heroVideo.setAttribute('webkit-playsinline', '');
-      heroVideo.removeAttribute('controls');
-      heroVideo.disableRemotePlayback = true;
-      heroVideo.volume = 0.82;
-      const isMobileHero = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
-      const initialHeroSrc = isMobileHero ? heroVideo.dataset.mobileSrc : heroVideo.dataset.desktopSrc;
-      const revealHeroVideo = () => {
-        heroVideo.classList.add('is-ready');
-      };
-      const playHero = () => {
-        if (!heroVideo.src && initialHeroSrc) {
-          heroVideo.src = initialHeroSrc;
-          heroVideo.load();
-        }
-        const playPromise = heroVideo.play();
-        if (playPromise && playPromise.then) {
-          playPromise.then(revealHeroVideo).catch(() => {
-            heroVideo.classList.remove('is-ready');
-          });
-        } else if (heroVideo.readyState >= 2) {
-          revealHeroVideo();
-        }
-      };
-      heroVideo.addEventListener('playing', revealHeroVideo, { once: true });
-      heroVideo.addEventListener('canplay', () => {
-        if (!heroVideo.paused) revealHeroVideo();
-      }, { once: true });
-      if (!reduce) {
-        window.setTimeout(playHero, isMobileHero ? 120 : 0);
-        document.addEventListener('visibilitychange', playHero, { once: true });
-        document.addEventListener('touchstart', playHero, { once: true, passive: true });
-      }
-      if (soundToggle) {
-        const syncSoundToggle = () => {
-          const soundOn = !heroVideo.muted;
-          soundToggle.textContent = soundOn ? 'Sound on' : 'Sound off';
-          soundToggle.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
-          soundToggle.setAttribute('aria-label', soundOn ? 'Turn hero sound off' : 'Turn hero sound on');
-        };
-        const onSoundToggle = () => {
-          const turnSoundOn = heroVideo.muted;
-          const mobileSoundSrc = heroVideo.dataset.mobileSoundSrc;
-          if (turnSoundOn && isMobileHero && mobileSoundSrc && !heroVideo.currentSrc.includes(mobileSoundSrc)) {
-            const resumeAt = heroVideo.currentTime || 0;
-            heroVideo.src = mobileSoundSrc;
-            heroVideo.load();
-            heroVideo.addEventListener('loadedmetadata', () => {
-              if (Number.isFinite(resumeAt) && resumeAt > 0 && resumeAt < heroVideo.duration) heroVideo.currentTime = resumeAt;
-            }, { once: true });
-          }
-          heroVideo.muted = !turnSoundOn;
-          heroVideo.defaultMuted = !turnSoundOn;
-          if (turnSoundOn && heroVideo.ended) heroVideo.currentTime = 0;
-          const playPromise = heroVideo.play();
-          if (playPromise && playPromise.catch) {
-            playPromise
-              .then(syncSoundToggle)
-              .catch(() => {
-                heroVideo.muted = true;
-                heroVideo.defaultMuted = true;
-                playHero();
-                syncSoundToggle();
-              });
-          } else {
-            syncSoundToggle();
-          }
-          syncSoundToggle();
-        };
-        soundToggle.addEventListener('click', onSoundToggle);
-        this._onSoundToggle = onSoundToggle;
-        this._soundToggle = soundToggle;
-        syncSoundToggle();
-      }
-    }
-    if (!reduce) {
-      const HERO = [
-        ['[data-hero="label"]',  80],
-        ['[data-hero="title"]',  240],
-        ['[data-hero="tag"]',    420],
-        ['[data-hero="ctas"]',   620],
-        ['[data-hero="scroll"]', 860],
-      ];
-      HERO.forEach(([sel]) => {
-        const el = document.querySelector(sel);
-        if (!el) return;
-        el.style.transform  = 'translateY(18px)';
-        el.style.transition = 'transform 0.9s cubic-bezier(0.22,0.61,0.36,1)';
-      });
-      requestAnimationFrame(() => {
-        HERO.forEach(([sel, delay]) => {
-          const el = document.querySelector(sel);
-          if (!el) return;
-          setTimeout(() => { el.style.transform = 'translateY(0)'; }, delay);
-        });
-      });
-    }
+
+    // ── Phase A: FigmaHeroShell only. JourneyMotionLayer stays inert. ──
+    // Phase B will mount __AAOrganicJourneyRuntime after parity approval.
 
     // ── Scroll reveals — transform-only lift. Resting state is fully
     //    visible; the observer only nudges the element up from a slight
@@ -1130,7 +1019,7 @@ class Component extends DCLogic {
     }
     this._obs = obs;
 
-    // ── Nav scroll color shift ──────────────────────────────────
+    // ── Post-journey chrome nav (hidden during sticky journey) ───────────
     const $nav   = document.getElementById('aa-nav');
     const $bars  = document.querySelectorAll('.aa-bar');
     const $wmW   = document.getElementById('aa-wm-white');
@@ -1144,6 +1033,7 @@ class Component extends DCLogic {
       const heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
       const past = heroBottom < 74;
       if ($nav) {
+        $nav.style.display = past ? 'flex' : 'none';
         $nav.style.background = past
           ? 'linear-gradient(to bottom, rgba(240,240,229,0.42) 0%, rgba(240,240,229,0.16) 54%, rgba(240,240,229,0) 100%)'
           : 'linear-gradient(to bottom, rgba(5,12,18,0.26) 0%, rgba(5,12,18,0) 100%)';
@@ -1161,6 +1051,7 @@ class Component extends DCLogic {
     this._onScroll = onScroll;
     onScroll();
 
+    // ── Saved products — static prototype now, Shopify-ready later.
     // ── Saved products — static prototype now, Shopify-ready later.
     //    Buttons carry data-product-* so this can map to product handles,
     //    variant IDs, customer metafields, or a wishlist app in theme code.
@@ -1309,7 +1200,6 @@ class Component extends DCLogic {
   componentWillUnmount() {
     if (this._obs)      this._obs.disconnect();
     if (this._onScroll) window.removeEventListener('scroll', this._onScroll);
-    if (this._soundToggle && this._onSoundToggle) this._soundToggle.removeEventListener('click', this._onSoundToggle);
     if (this._savedHandlers) this._savedHandlers.forEach(([target, event, handler]) => target.removeEventListener(event, handler));
     if (this._onSavedKeydown) document.removeEventListener('keydown', this._onSavedKeydown);
     if (this._unsubCart) this._unsubCart();
