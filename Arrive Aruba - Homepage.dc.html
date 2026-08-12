@@ -5,8 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F0F0E5" media="(min-width: 761px)">
 <link rel="preload" as="image" href="preview-assets/figma-hero/atmosphere-desktop.png" fetchpriority="high">
-<link rel="preload" as="image" href="preview-assets/figma-hero/window-desktop.png" fetchpriority="high">
+<link rel="preload" as="image" href="preview-assets/journey-organic/mobile/poster.webp" fetchpriority="high">
 <link rel="stylesheet" href="./figma-hero.css">
+<link rel="stylesheet" href="./journey-organic.css?v=homepage-journey1">
 <script src="./support.js" defer></script>
 </head>
 <body>
@@ -19,9 +20,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
   <link rel="preload" as="image" href="preview-assets/figma-hero/atmosphere-desktop.png" fetchpriority="high" />
-  <link rel="preload" as="image" href="preview-assets/figma-hero/window-desktop.png" fetchpriority="high" />
+  <link rel="preload" as="image" href="preview-assets/journey-organic/mobile/poster.webp" fetchpriority="high" />
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="figma-hero.css" />
+  <link rel="stylesheet" href="journey-organic.css?v=homepage-journey1" />
+  <script src="journey-organic.js?v=homepage-journey1" defer></script>
   <script src="cart-store.js"></script>
   <style>
     .aa-profile-row { display:flex; align-items:center; gap:14px; width:100%; padding:18px 4px; background:none; border:none; border-bottom:1px solid rgba(56,99,149,0.14); cursor:pointer; text-align:left; color:#23405e; transition:opacity 0.18s ease; }
@@ -632,62 +635,81 @@
   </div>
 </div>
 
-<!-- ─── FASE A: FigmaHeroShell (scroll=0) · JourneyMotionLayer inert ─── -->
-<section class="aa-figma-hero" data-screen-label="01 Hero" data-figma-hero-shell aria-label="Arrive Aruba hero">
-  <!-- Background layer — cover/art-direct only; never drives FG scale -->
-  <div class="aa-figma-hero__bg-layer" aria-hidden="true">
-    <img
-      class="aa-figma-hero__bg aa-figma-hero__bg--desktop"
-      src="preview-assets/figma-hero/atmosphere-desktop.png"
-      alt=""
-      decoding="async"
-      fetchpriority="high"
-      width="1440"
-      height="900"
-    />
-    <img
-      class="aa-figma-hero__bg aa-figma-hero__bg--mobile"
-      src="preview-assets/figma-hero/atmosphere-mobile.png"
-      alt=""
-      decoding="async"
-      fetchpriority="high"
-      width="1440"
-      height="900"
-    />
-    <div class="aa-figma-hero__scrim"></div>
-    <div class="aa-figma-hero__haze"></div>
-  </div>
-
-  <!-- Bottom seam dissolve → Cannoli Cream (static overlay only) -->
-  <div class="aa-figma-hero__seam-fade" aria-hidden="true"></div>
-
-  <!-- Foreground layer — independent responsive layout, no global scale -->
-  <div class="aa-figma-hero__fg-layer">
-    <a class="aa-figma-hero__logo" href="index.html?view=web" aria-label="Arrive Aruba home">
-      <img src="preview-assets/figma-hero/logo-desktop.png" alt="Arrive Aruba" width="124" height="83" decoding="async" />
-    </a>
-    <nav class="aa-figma-hero__nav" aria-label="Primary">
-      <a class="aa-figma-hero__nav-link aa-figma-hero__nav-link--active" href="index.html?view=web">HOME</a>
-      <a class="aa-figma-hero__nav-link" href="#menu" onClick="{{ toggleNav }}" aria-label="Open menu">MENU</a>
-    </nav>
-    <div class="aa-figma-hero__window" data-window-initial aria-hidden="true">
-      <img src="preview-assets/figma-hero/window-desktop.png" alt="" width="468" height="644" decoding="async" fetchpriority="high" />
+<!-- ─── Hero: Figma shell + Journey Organic canvas in window slot ─── -->
+<section
+  class="aa-figma-hero aruba-scroll-section"
+  data-screen-label="01 Hero"
+  data-figma-hero-shell
+  data-journey-organic
+  data-journey-lock-scale
+  data-manifest="preview-assets/journey-organic/manifest.json?v=3-hq1"
+  data-fallback-poster="preview-assets/journey-organic/mobile/poster.webp?v=3-hq1"
+  data-scroll-length="500"
+  aria-label="Arrive Aruba hero"
+>
+  <div class="aa-figma-hero__sticky">
+    <!-- Background layer — cover/art-direct only; never drives FG scale -->
+    <div class="aa-figma-hero__bg-layer" aria-hidden="true">
+      <img
+        class="aa-figma-hero__bg aa-figma-hero__bg--desktop"
+        src="preview-assets/figma-hero/atmosphere-desktop.png"
+        alt=""
+        decoding="async"
+        fetchpriority="high"
+        width="1440"
+        height="900"
+      />
+      <img
+        class="aa-figma-hero__bg aa-figma-hero__bg--mobile"
+        src="preview-assets/figma-hero/atmosphere-mobile.png"
+        alt=""
+        decoding="async"
+        fetchpriority="high"
+        width="1440"
+        height="900"
+      />
+      <div class="aa-figma-hero__scrim"></div>
+      <div class="aa-figma-hero__haze"></div>
     </div>
-    <div class="aa-figma-hero__copy">
-      <p class="aa-figma-hero__display">What you felt</p>
-      <p class="aa-figma-hero__emotion">when you arrived, take it home.</p>
-      <a class="aa-figma-hero__cta" href="#shop">SKIP TO SHOP</a>
+
+    <!-- Bottom seam dissolve → Cannoli Cream (static overlay only) -->
+    <div class="aa-figma-hero__seam-fade" aria-hidden="true"></div>
+
+    <!-- Foreground layer — independent responsive layout, no global scale -->
+    <div class="aa-figma-hero__fg-layer">
+      <a class="aa-figma-hero__logo" href="index.html?view=web" aria-label="Arrive Aruba home">
+        <img src="preview-assets/figma-hero/logo-desktop.png" alt="Arrive Aruba" width="124" height="83" decoding="async" />
+      </a>
+      <nav class="aa-figma-hero__nav" aria-label="Primary">
+        <a class="aa-figma-hero__nav-link aa-figma-hero__nav-link--active" href="index.html?view=web">HOME</a>
+        <a class="aa-figma-hero__nav-link" href="#menu" onClick="{{ toggleNav }}" aria-label="Open menu">MENU</a>
+      </nav>
+
+      <!-- Journey Organic: only visual source for the window -->
+      <div class="aa-figma-hero__window" aria-hidden="true">
+        <div class="aa-organic-visual" data-journey-visual>
+          <img
+            class="aa-organic-visual__poster"
+            data-journey-poster
+            src="preview-assets/journey-organic/mobile/poster.webp?v=3-hq1"
+            alt=""
+            decoding="async"
+            fetchpriority="high"
+            width="509"
+            height="700"
+          />
+          <canvas class="aa-organic-visual__canvas" data-journey-canvas></canvas>
+          <img class="aa-organic-visual__final" data-journey-final alt="" decoding="async" hidden />
+        </div>
+      </div>
+
+      <div class="aa-figma-hero__copy">
+        <p class="aa-figma-hero__display">What you felt</p>
+        <p class="aa-figma-hero__emotion">when you arrived, take it home.</p>
+        <a class="aa-figma-hero__cta" href="#shop">SKIP TO SHOP</a>
+      </div>
     </div>
   </div>
-
-  <!-- Phase B only — kept ported, hidden/inert at scroll = 0 -->
-  <div
-    class="aa-journey-motion-layer"
-    data-journey-motion-layer
-    hidden
-    aria-hidden="true"
-    data-manifest="preview-assets/journey-organic/manifest.json?v=3-hq1"
-  ></div>
 </section>
 
 <!-- ─── SHOP BY CATEGORY ──────────────────────────────── -->
