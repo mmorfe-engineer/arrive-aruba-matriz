@@ -16,6 +16,10 @@ This repository contains the Arrive Aruba digital flagship, built on the officia
 
 All pages open directly in a browser — no build step.
 
+## LIVE PREVIEW
+
+[Arrive Aruba — Live Preview](https://morfemartin.github.io/Web_Arrive-Aruba/Arrive%20Aruba%20-%20Homepage.dc.html)
+
 ## Publish on GitHub Pages
 
 1. **Create a repo** at https://github.com/new (e.g. `arrive-aruba`), public.
