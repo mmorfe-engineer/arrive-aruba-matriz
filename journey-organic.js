@@ -796,11 +796,24 @@
     var beforeY = window.scrollY;
     var beforeShopTop = shop ? shop.getBoundingClientRect().top + beforeY : 0;
     var openFrame = this.returnStartFrame();
+    var mobileReturn = compactQuery.matches;
 
     this.returnBanner = true;
     this.root.setAttribute("data-return-banner", "true");
-    this.root.style.height = this.stableVh + "px";
-    this.root.style.minHeight = this.stableVh + "px";
+    if (mobileReturn) {
+      /*
+        Keep the original scroll track on touch devices. Collapsing more than
+        four viewports while a finger-scroll still has momentum makes Safari
+        and Chrome fight the document correction, which reads as a shake and
+        a jump. The Journey remains visually frozen open, but its geometry is
+        stable until the visitor reaches the top.
+      */
+      this.root.setAttribute("data-mobile-return", "true");
+      this.root.style.setProperty("--aa-return-track-height", this.root.style.height);
+    } else {
+      this.root.style.height = this.stableVh + "px";
+      this.root.style.minHeight = this.stableVh + "px";
+    }
 
     this.requestFrame(openFrame);
     if (this.poster) {
@@ -822,8 +835,8 @@
     }
     if (this.canvas) this.canvas.style.opacity = "0";
 
-    /* Preserve the exact visible content while removing the long scroll track. */
-    if (shop) {
+    /* Desktop removes the track, so compensate once. Mobile never mutates it. */
+    if (shop && !mobileReturn) {
       var afterShopTop = shop.getBoundingClientRect().top + beforeY;
       var removedBeforeShop = beforeShopTop - afterShopTop;
       window.scrollTo(0, Math.max(0, beforeY - removedBeforeShop));
@@ -847,9 +860,11 @@
     this.replayFromReturn = true;
     this.hasCompleted = false;
     this.root.removeAttribute("data-return-banner");
+    this.root.removeAttribute("data-mobile-return");
     this.root.setAttribute("data-replay-from-return", "true");
     this.root.style.height = scrollTrackPx(this.root, this.stableVh) + "px";
     this.root.style.minHeight = "";
+    this.root.style.removeProperty("--aa-return-track-height");
     this.lastScaleCss = "";
     this.currentScale = 1;
     this.applyVisualScale(1);
@@ -926,13 +941,15 @@
     var heightDelta = Math.abs(height - this.lastInnerH);
     /* Mobile URL-bar: ignore height-only chatter entirely on homepage. */
     var heightThreshold = this.lockScale ? 120 : (compactQuery.matches ? 72 : 48);
-    var meaningful = force === true || widthDelta >= 1 || (!this.lockScale && heightDelta >= heightThreshold);
+    /* Browser chrome can report 1–3px width chatter during a touch scroll. */
+    var widthThreshold = this.lockScale && compactQuery.matches ? 8 : 1;
+    var meaningful = force === true || widthDelta >= widthThreshold || (!this.lockScale && heightDelta >= heightThreshold);
 
     if (!meaningful) return;
 
     this.lastInnerW = width;
     this.lastInnerH = height;
-    if (force === true || widthDelta >= 1) {
+    if (force === true || widthDelta >= widthThreshold) {
       this.stableVh = height;
     }
 

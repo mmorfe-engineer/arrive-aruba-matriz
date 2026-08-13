@@ -251,6 +251,18 @@
     animation: aa-cloud-warm-pan 44s linear infinite;
     animation-delay: -23s;
   }
+
+  /*
+    Mobile GPUs repaint object-position animations while the sticky portal is
+    being scaled. Keep the same atmosphere, but pause its decorative drift
+    during the scrub so touch scrolling has one compositor-heavy job only.
+  */
+  @media (max-width: 760px) {
+    .aa-figma-hero[data-journey-organic] .aa-cloud-atmosphere,
+    .aa-figma-hero[data-journey-organic] .aa-cloud-atmosphere * {
+      animation-play-state: paused !important;
+    }
+  }
 }
 
 /* Continuous object-position drift — same amplitude envelope, soft turnaround */
@@ -1124,16 +1136,32 @@
   .aa-figma-hero__sticky {
     position: sticky;
     top: 0;
-    height: var(--aa-comp-h);
-    min-height: var(--aa-comp-h);
+    height: 100svh;
+    min-height: 100svh;
     overflow: hidden;
   }
 
-  @media (min-height: 813px) {
-    .aa-figma-hero__sticky {
-      height: max(812px, 100svh);
-      min-height: 812px;
-    }
+  /*
+    Mobile return state: freeze the open portal without collapsing the long
+    scroll track underneath an active touch gesture. This prevents the page
+    from shaking or jumping while the visitor scrolls back to the banner.
+  */
+  .aa-figma-hero[data-return-banner="true"][data-mobile-return="true"] {
+    height: var(--aa-return-track-height, 500svh) !important;
+    min-height: var(--aa-return-track-height, 500svh) !important;
+    overflow: visible !important;
+    overflow-x: clip !important;
+  }
+
+  .aa-figma-hero[data-return-banner="true"][data-mobile-return="true"] .aa-figma-hero__sticky {
+    position: sticky !important;
+    top: 0 !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
+  }
+
+  .aa-figma-hero[data-return-banner="true"][data-mobile-return="true"] + #shop {
+    margin-top: -100svh !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
