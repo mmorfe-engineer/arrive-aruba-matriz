@@ -673,7 +673,7 @@
   z-index: 6;
   left: 50%;
   top: 50%;
-  translate: -50% -50%;
+  transform: translate3d(-50%, -50%, 0);
   width: min(var(--aa-window-max-w), 26.4vw);
   max-width: var(--aa-window-max-w);
   aspect-ratio: var(--aa-window-ratio);
@@ -701,6 +701,8 @@
   z-index: 6;
   /* Clip spritesheet edges; the scaled SLOT may exit sticky edges (Estados 3–4). */
   overflow: hidden;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 /* Aperture-local bloom: the window itself overexposes before the page turns cream. */
@@ -1241,12 +1243,19 @@
   .aa-figma-hero__window {
     left: 50%;
     top: var(--aa-mobile-window-top);
-    translate: -50% -50%;
+    transform: translate3d(-50%, -50%, 0);
     /* Height-based cap uses svh, never width-% (that shrank the window) */
     width: var(--aa-mobile-window-w);
     max-height: min(374px, calc(100svh - 250px));
     aspect-ratio: 243 / 334;
     height: auto;
+    filter: none;
+  }
+
+  .aa-figma-hero__window .aa-organic-visual {
+    /* The bloom overlay supplies the final exposure without a full-frame filter repaint. */
+    filter: none !important;
+    will-change: auto;
   }
 
   .aa-figma-hero__copy {

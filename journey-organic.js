@@ -117,6 +117,8 @@
     this.returnBanner = false;
     this.replayFromReturn = false;
     this.lastPageScrollY = window.scrollY;
+    this.sectionTop = root.getBoundingClientRect().top + window.scrollY;
+    this.cachedPortalFillScale = 0;
 
     this.tick = this.tick.bind(this);
     this.onVisibility = this.onVisibility.bind(this);
@@ -269,6 +271,7 @@
     this.visual.style.setProperty("--aa-final-opacity", "0");
     this.currentScale = 1;
     this.targetScale = 1;
+    this.cachedPortalFillScale = 0;
     this.pendingFrame = 0;
     this.lastDrawnFrame = -1;
     this.lastDrawnSheet = -1;
@@ -315,7 +318,11 @@
       var aperture = (this.config && this.config.aperture) || { x: 0.12, y: 0.12, width: 0.76, height: 0.76 };
       var originX = ((aperture.x + aperture.width / 2) * 100).toFixed(3) + "%";
       var originY = ((aperture.y + aperture.height / 2) * 100).toFixed(3) + "%";
-      this.portal.style.setProperty("transform", "scale(" + css + ")", "important");
+      this.portal.style.setProperty(
+        "transform",
+        "translate3d(-50%, -50%, 0) scale(" + css + ")",
+        "important"
+      );
       this.portal.style.setProperty("transform-origin", originX + " " + originY, "important");
       this.portal.style.setProperty("--aa-portal-scale", css);
       this.root.setAttribute("data-portal-scale", css);
@@ -331,6 +338,7 @@
   OrganicJourney.prototype.portalFillScale = function () {
     /* Aperture geometry → viewport fill (storyboard Estados 3–4). */
     if (!this.portal) return 1;
+    if (this.cachedPortalFillScale > 0) return this.cachedPortalFillScale;
     var layoutW = this.portal.offsetWidth || 1;
     var layoutH = this.portal.offsetHeight || 1;
     var aperture = (this.config && this.config.aperture) || { width: 0.76, height: 0.76 };
@@ -340,7 +348,8 @@
     var viewH = this.stableVh || window.innerHeight;
     var fill = Math.max(viewW / apertureW, viewH / apertureH) * 1.03;
     /* Floor only — no small fixed caps that leave a centered “card”. */
-    return Math.max(1.35, fill);
+    this.cachedPortalFillScale = Math.max(1.35, fill);
+    return this.cachedPortalFillScale;
   };
 
   OrganicJourney.prototype.cameraMaxScale = function () {
@@ -683,11 +692,15 @@
    * Scroll → progress (section-relative, not raw window.scrollY).
    */
   OrganicJourney.prototype.scrollMetrics = function () {
-    var rect = this.root.getBoundingClientRect();
     var viewportHeight = this.lockScale ? this.stableVh : window.innerHeight;
-    var usableScroll = Math.max(1, rect.height - viewportHeight);
-    /* Integer scroll px — fractional getBoundingClientRect causes frame flicker on mobile. */
-    var sectionScroll = Math.max(0, Math.round(-rect.top));
+    var rootHeight = this.root.offsetHeight;
+    var usableScroll = Math.max(1, rootHeight - viewportHeight);
+    /*
+      scrollY is compositor-owned and monotonic during a touch gesture. Reading
+      getBoundingClientRect here forced layout after every transform write and
+      made Safari alternate between neighboring subpixels.
+    */
+    var sectionScroll = Math.max(0, Math.round(window.scrollY - this.sectionTop));
     var progress = clamp(sectionScroll / usableScroll, 0, 1);
     return {
       sectionScroll: sectionScroll,
@@ -954,11 +967,13 @@
     }
 
     this.targetScale = 1;
+    this.cachedPortalFillScale = 0;
     this.lastScaleCss = "";
     this.lastDrawnFrame = -1;
     this.lastDrawnSheet = -1;
     if (!this.staticMode) {
       this.root.style.height = scrollTrackPx(this.root, this.stableVh) + "px";
+      this.sectionTop = this.root.getBoundingClientRect().top + window.scrollY;
       this.bindVariant(this.pickVariantKey(), false);
     } else {
       this.renderStatic();
