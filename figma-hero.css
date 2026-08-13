@@ -69,6 +69,23 @@
     height: 100%;
     min-height: inherit;
   }
+
+  .aa-cloud-atmosphere__base,
+  .aa-cloud-atmosphere__distant,
+  .aa-cloud-atmosphere__mist,
+  .aa-cloud-atmosphere__warm,
+  .aa-cloud-atmosphere .aa-figma-hero__bg {
+    animation: none !important;
+    filter: none;
+    opacity: 1;
+    transform: none !important;
+  }
+
+  .aa-cloud-atmosphere__distant,
+  .aa-cloud-atmosphere__mist,
+  .aa-cloud-atmosphere__warm {
+    display: none !important;
+  }
 }
 
 /* ─── Background layer ─── */
@@ -95,6 +112,310 @@
     rgba(0, 0, 0, 0.45) 92%,
     transparent 100%
   );
+}
+
+/*
+  Living cloud atmosphere — CSS only, outside Journey.
+  Same approved plate only. No video/GIF/JS/scroll coupling.
+  Depth = same plate treated as far (soft/blurred) vs near (clearer),
+  drifting on independent paths — not a whole-frame Ken Burns.
+*/
+.aa-cloud-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aa-cloud-atmosphere__base,
+.aa-cloud-atmosphere__distant,
+.aa-cloud-atmosphere__mist,
+.aa-cloud-atmosphere__warm {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aa-cloud-atmosphere__base {
+  z-index: 0;
+}
+
+.aa-cloud-atmosphere__distant {
+  z-index: 1;
+  /* Far plane: soft / less defined */
+  opacity: 0.34;
+  filter: blur(4.5px) contrast(0.94) saturate(0.88) brightness(1.02);
+}
+
+.aa-cloud-atmosphere__mist {
+  z-index: 2;
+  /* Softer lower air — same plate, bottom emphasis */
+  opacity: 0.28;
+  filter: blur(1.5px) contrast(0.97) saturate(0.92) brightness(1.04);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 52%,
+    rgba(0, 0, 0, 0.2) 66%,
+    rgba(0, 0, 0, 0.65) 82%,
+    #000 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    transparent 52%,
+    rgba(0, 0, 0, 0.2) 66%,
+    rgba(0, 0, 0, 0.65) 82%,
+    #000 100%
+  );
+}
+
+.aa-cloud-atmosphere__warm {
+  z-index: 3;
+  opacity: 0.18;
+  mix-blend-mode: soft-light;
+  filter: contrast(1.02) saturate(1.05) brightness(1.04);
+  -webkit-mask-image: radial-gradient(
+    ellipse 72% 90% at 90% 40%,
+    #000 0%,
+    rgba(0, 0, 0, 0.65) 38%,
+    transparent 70%
+  );
+  mask-image: radial-gradient(
+    ellipse 72% 90% at 90% 40%,
+    #000 0%,
+    rgba(0, 0, 0, 0.65) 38%,
+    transparent 70%
+  );
+}
+
+.aa-cloud-atmosphere .aa-figma-hero__bg {
+  position: absolute;
+  max-width: none;
+  object-fit: cover;
+  will-change: object-position, opacity;
+}
+
+/* Desktop: oversize plate so object-position drift never shows empty edges */
+.aa-cloud-atmosphere .aa-figma-hero__bg--desktop {
+  inset: -8%;
+  width: 116%;
+  height: 116%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /*
+   * Organic atmospheric flow:
+   * - linear timing (no ease-in-out stop/start at ends)
+   * - multi-waypoint paths (velocity encoded in spacing)
+   * - soft apex passage (no dwell / no hard reverse)
+   * - phase offsets so layers never reverse in sync
+   */
+  .aa-cloud-atmosphere__base .aa-figma-hero__bg {
+    animation: aa-cloud-base-pan 38s linear infinite;
+    animation-delay: -6s;
+  }
+
+  .aa-cloud-atmosphere__distant .aa-figma-hero__bg {
+    animation: aa-cloud-far-pan 54s linear infinite;
+    animation-delay: -19s;
+  }
+
+  .aa-cloud-atmosphere__distant {
+    animation: aa-cloud-far-veil 54s linear infinite;
+    animation-delay: -19s;
+  }
+
+  .aa-cloud-atmosphere__mist .aa-figma-hero__bg {
+    animation: aa-cloud-near-pan 32s linear infinite;
+    animation-delay: -11s;
+  }
+
+  .aa-cloud-atmosphere__mist {
+    animation: aa-cloud-near-veil 32s linear infinite;
+    animation-delay: -11s;
+  }
+
+  .aa-cloud-atmosphere__warm {
+    animation: aa-cloud-warm-breathe 44s linear infinite;
+    animation-delay: -23s;
+  }
+
+  .aa-cloud-atmosphere__warm .aa-figma-hero__bg {
+    animation: aa-cloud-warm-pan 44s linear infinite;
+    animation-delay: -23s;
+  }
+}
+
+/* Continuous object-position drift — same amplitude envelope, soft turnaround */
+@keyframes aa-cloud-base-pan {
+  0% {
+    object-position: 50% 46%;
+  }
+  14% {
+    object-position: 47.2% 48.2%;
+  }
+  30% {
+    object-position: 42.4% 51.8%;
+  }
+  44% {
+    object-position: 39.1% 54.6%;
+  }
+  50% {
+    object-position: 38% 56%;
+  }
+  56% {
+    object-position: 39.2% 54.8%;
+  }
+  70% {
+    object-position: 43.6% 51.2%;
+  }
+  86% {
+    object-position: 47.8% 47.8%;
+  }
+  100% {
+    object-position: 50% 46%;
+  }
+}
+
+@keyframes aa-cloud-far-pan {
+  0% {
+    object-position: 56% 49%;
+  }
+  16% {
+    object-position: 59.2% 47.2%;
+  }
+  32% {
+    object-position: 64.6% 44.1%;
+  }
+  46% {
+    object-position: 68.4% 41.8%;
+  }
+  50% {
+    object-position: 70% 41%;
+  }
+  54% {
+    object-position: 68.6% 41.9%;
+  }
+  68% {
+    object-position: 63.8% 44.6%;
+  }
+  84% {
+    object-position: 58.6% 47.6%;
+  }
+  100% {
+    object-position: 56% 49%;
+  }
+}
+
+@keyframes aa-cloud-far-veil {
+  0% {
+    opacity: 0.28;
+  }
+  22% {
+    opacity: 0.31;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  78% {
+    opacity: 0.32;
+  }
+  100% {
+    opacity: 0.28;
+  }
+}
+
+@keyframes aa-cloud-near-pan {
+  0% {
+    object-position: 46% 58%;
+  }
+  18% {
+    object-position: 50.4% 59.6%;
+  }
+  36% {
+    object-position: 56.8% 61.8%;
+  }
+  48% {
+    object-position: 60.6% 63.4%;
+  }
+  50% {
+    object-position: 62% 64%;
+  }
+  52% {
+    object-position: 60.8% 63.5%;
+  }
+  66% {
+    object-position: 55.2% 61.2%;
+  }
+  84% {
+    object-position: 49.2% 59.2%;
+  }
+  100% {
+    object-position: 46% 58%;
+  }
+}
+
+@keyframes aa-cloud-near-veil {
+  0% {
+    opacity: 0.22;
+  }
+  24% {
+    opacity: 0.26;
+  }
+  50% {
+    opacity: 0.32;
+  }
+  76% {
+    opacity: 0.25;
+  }
+  100% {
+    opacity: 0.22;
+  }
+}
+
+@keyframes aa-cloud-warm-pan {
+  0% {
+    object-position: 70% 40%;
+  }
+  20% {
+    object-position: 72.4% 41.6%;
+  }
+  40% {
+    object-position: 76.2% 44.2%;
+  }
+  50% {
+    object-position: 80% 47%;
+  }
+  60% {
+    object-position: 76.6% 44.6%;
+  }
+  80% {
+    object-position: 72.2% 41.4%;
+  }
+  100% {
+    object-position: 70% 40%;
+  }
+}
+
+@keyframes aa-cloud-warm-breathe {
+  0% {
+    opacity: 0.15;
+  }
+  28% {
+    opacity: 0.19;
+  }
+  50% {
+    opacity: 0.24;
+  }
+  72% {
+    opacity: 0.18;
+  }
+  100% {
+    opacity: 0.15;
+  }
 }
 
 .aa-figma-hero__bg {
@@ -528,6 +849,14 @@
     height: 100%;
     object-fit: cover;
     object-position: 50% 38%;
+  }
+
+  /* Slight overscan only inside atmosphere so object-position can drift */
+  .aa-cloud-atmosphere .aa-figma-hero__bg--mobile {
+    left: calc((-180 / 375 * 100%) - 7%);
+    top: -5%;
+    width: calc((735 / 375 * 100%) + 14%);
+    height: 110%;
   }
 
   /* Mobile scrim closer to Figma 158:265, then seam-fade handles cream */
