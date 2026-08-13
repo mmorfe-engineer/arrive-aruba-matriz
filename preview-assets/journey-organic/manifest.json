@@ -13,6 +13,7 @@
     ]
   },
   "frames": {
+    "returnStart": 56,
     "shadeOpen": 72,
     "whiteoutStart": 84,
     "final": 144

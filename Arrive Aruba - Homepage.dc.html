@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#F0F0E5" media="(min-width: 761px)">
 <link rel="preload" as="image" href="preview-assets/figma-hero/atmosphere-desktop.png" fetchpriority="high">
 <link rel="preload" as="image" href="preview-assets/journey-organic/mobile/poster.webp" fetchpriority="high">
-<link rel="stylesheet" href="./figma-hero.css">
+<link rel="stylesheet" href="./figma-hero.css?v=cta-glass-collection-glow2">
 <link rel="stylesheet" href="./journey-organic.css?v=homepage-journey1">
 <script src="./support.js" defer></script>
 </head>
@@ -22,9 +22,9 @@
   <link rel="preload" as="image" href="preview-assets/figma-hero/atmosphere-desktop.png" fetchpriority="high" />
   <link rel="preload" as="image" href="preview-assets/journey-organic/mobile/poster.webp" fetchpriority="high" />
   <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="figma-hero.css" />
+  <link rel="stylesheet" href="figma-hero.css?v=cta-glass-collection-glow2" />
   <link rel="stylesheet" href="journey-organic.css?v=homepage-journey1" />
-  <script src="journey-organic.js?v=homepage-journey1" defer></script>
+  <script src="journey-organic.js?v=return-video-frame-56c" defer></script>
   <script src="cart-store.js"></script>
   <style>
     .aa-profile-row { display:flex; align-items:center; gap:14px; width:100%; padding:18px 4px; background:none; border:none; border-bottom:1px solid rgba(56,99,149,0.14); cursor:pointer; text-align:left; color:#23405e; transition:opacity 0.18s ease; }
@@ -404,8 +404,8 @@
   </style>
 </helmet>
 
-<!-- ─── FIXED NAV (post-journey chrome; hidden over hero journey) ─── -->
-<nav id="aa-nav" data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:100;height:74px;padding:0 22px;display:none;align-items:center;justify-content:space-between;transition:background 0.5s ease,border-bottom 0.5s ease;">
+<!-- ─── FIXED NAV (original full-site chrome, also visible over Journey) ─── -->
+<nav id="aa-nav" data-screen-label="Nav" style="position:fixed;top:0;left:0;right:0;z-index:100;height:74px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;transition:background 0.5s ease,border-bottom 0.5s ease;">
 
   <div style="display:flex;align-items:center;gap:14px;">
     <button id="aa-profile-btn" aria-label="Account" class="aa-header-action" onClick="{{ openProfile }}" style="padding:4px;">
@@ -734,6 +734,15 @@
     <!-- Bottom seam dissolve → Cannoli Cream (static overlay only) -->
     <div class="aa-figma-hero__seam-fade" aria-hidden="true"></div>
 
+    <!-- Existing cloud plate reused for a lightweight, scroll-linked descent. -->
+    <div class="aa-cloud-descent" aria-hidden="true">
+      <picture class="aa-cloud-descent__plane">
+        <source media="(max-width: 760px)" srcset="preview-assets/figma-hero/atmosphere-mobile.png" />
+        <img src="preview-assets/figma-hero/atmosphere-desktop.png" alt="" decoding="async" width="1440" height="900" />
+      </picture>
+      <div class="aa-cloud-descent__mist"></div>
+    </div>
+
     <!-- Foreground layer — independent responsive layout, no global scale -->
     <div class="aa-figma-hero__fg-layer">
       <a class="aa-figma-hero__logo" href="index.html?view=web" aria-label="Arrive Aruba home">
@@ -758,14 +767,31 @@
             height="700"
           />
           <canvas class="aa-organic-visual__canvas" data-journey-canvas></canvas>
+          <video
+            class="aa-organic-visual__return-loop"
+            data-journey-return-loop
+            src="preview-assets/journey-organic/return-loop-v3.webm?v=1"
+            poster="preview-assets/journey-organic/return-still-v3.webp?v=1"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-hidden="true"
+            width="484"
+            height="666"
+          ></video>
           <img class="aa-organic-visual__final" data-journey-final alt="" decoding="async" hidden />
         </div>
       </div>
 
       <div class="aa-figma-hero__copy">
-        <p class="aa-figma-hero__display">What you felt</p>
-        <p class="aa-figma-hero__emotion">when you arrived, take it home.</p>
-        <a class="aa-figma-hero__cta" href="#shop">SKIP TO SHOP</a>
+        <p class="aa-figma-hero__display">Take home</p>
+        <p class="aa-figma-hero__emotion">What you felt.</p>
+        <a class="aa-figma-hero__cta" href="#shop">
+          <span class="aa-figma-hero__cta-label aa-figma-hero__cta-label--initial">SKIP TO SHOP</span>
+          <span class="aa-figma-hero__cta-label aa-figma-hero__cta-label--return">SHOP THE COLLECTION</span>
+        </a>
       </div>
     </div>
   </div>
@@ -1114,7 +1140,7 @@ class Component extends DCLogic {
       const heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
       const past = heroBottom < 74;
       if ($nav) {
-        $nav.style.display = past ? 'flex' : 'none';
+        $nav.style.display = 'flex';
         $nav.style.background = past
           ? 'linear-gradient(to bottom, rgba(240,240,229,0.42) 0%, rgba(240,240,229,0.16) 54%, rgba(240,240,229,0) 100%)'
           : 'linear-gradient(to bottom, rgba(5,12,18,0.26) 0%, rgba(5,12,18,0) 100%)';

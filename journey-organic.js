@@ -76,10 +76,14 @@
     this.visual = root.querySelector("[data-journey-visual]");
     this.canvas = root.querySelector("[data-journey-canvas]");
     this.poster = root.querySelector("[data-journey-poster]");
+    this.returnLoop = root.querySelector("[data-journey-return-loop]");
     this.finalImage = root.querySelector("[data-journey-final]");
     this.copy = root.querySelector("[data-journey-copy]");
     this.status = root.querySelector("[data-journey-status]");
     this.clouds = Array.prototype.slice.call(root.querySelectorAll(".aa-organic-cloud"));
+    this.cloudDescent = root.querySelector(".aa-cloud-descent");
+    this.cloudDescentPlane = root.querySelector(".aa-cloud-descent__plane");
+    this.cloudDescentMist = root.querySelector(".aa-cloud-descent__mist");
     this.lockScale = root.hasAttribute("data-journey-lock-scale");
     this.context = this.canvas ? this.canvas.getContext("2d", {
       alpha: true,
@@ -107,7 +111,12 @@
     this.lastInnerH = window.innerHeight;
     this.lastDrawnFrame = -1;
     this.lastDrawnSheet = -1;
+    this.lastRequestedFrame = 0;
     this.lastScaleCss = "";
+    this.hasCompleted = false;
+    this.returnBanner = false;
+    this.replayFromReturn = false;
+    this.lastPageScrollY = window.scrollY;
 
     this.tick = this.tick.bind(this);
     this.onVisibility = this.onVisibility.bind(this);
@@ -127,6 +136,8 @@
       this.visual.style.setProperty("--aa-final-opacity", "0");
     }
     this.applyPortalWhite(0);
+    this.applyPortalExposure(0);
+    this.applyCloudDescent(0);
     this.root.style.setProperty("--aa-progress", "0");
 
     this.visibilityObserver = new IntersectionObserver(this.onVisibility, { rootMargin: "100% 0px" });
@@ -261,6 +272,7 @@
     this.pendingFrame = 0;
     this.lastDrawnFrame = -1;
     this.lastDrawnSheet = -1;
+    this.lastRequestedFrame = 0;
 
     if (this.staticMode) {
       this.root.style.height = "100dvh";
@@ -275,6 +287,7 @@
     /* Explicit first paint path: frame 0 only. */
     this.requestFrame(0);
     this.loadSheet(0);
+    if (this.variant.clip.sheets.length > 1) this.loadSheet(1);
     loadImage(this.finalImage.src).catch(function () {});
     this.renderProgress(this.progress());
   };
@@ -367,9 +380,27 @@
       return 1 + (approachEnd - 1) * t;
     }
     var enterT = this.portalEnterProgress(metrics);
-    /* Reach full aperture fill by ~enterT 0.4 (Estado 4), then hold before white. */
-    var enterEase = ease(clamp(enterT / 0.4, 0, 1));
+    /* Deliberate camera push: fill later so the wheel remains perceptibly in control. */
+    var enterEase = ease(clamp(enterT / 0.64, 0, 1));
     return approachEnd + (fill - approachEnd) * enterEase;
+  };
+
+  /**
+   * Exposure bloom born inside the aperture before the full-page white handoff.
+   * It deliberately leads whiteout, so entering the light causes the transition.
+   */
+  OrganicJourney.prototype.portalExposureForScroll = function (metrics) {
+    if (!this.lockScale || metrics.sectionScroll <= 0) return 0;
+    var enterProgress = this.portalEnterProgress(metrics);
+    var exposure = ease(clamp((enterProgress - 0.60) / 0.30, 0, 1));
+    return Math.round(exposure * 1000) / 1000;
+  };
+
+  OrganicJourney.prototype.cloudDescentForScroll = function (metrics) {
+    if (!this.lockScale || metrics.sectionScroll <= 0) return 0;
+    var enterProgress = this.portalEnterProgress(metrics);
+    var descent = clamp((enterProgress - 0.86) / 0.14, 0, 1);
+    return Math.round(descent * 1000) / 1000;
   };
 
   /**
@@ -389,14 +420,16 @@
 
     var enterProgress = this.portalEnterProgress(metrics);
 
-    /* White starts after Estado 4 (~enterT 0.55); completes at enter end. */
-    var whiteFromScroll = ease(clamp((enterProgress - 0.55) / 0.45, 0, 1));
+    /* Short flash, then release into the cloud descent instead of holding white. */
+    var flashIn = ease(clamp((enterProgress - 0.78) / 0.10, 0, 1));
+    var flashOut = ease(clamp((enterProgress - 0.88) / 0.12, 0, 1));
+    var whiteFromScroll = flashIn * (1 - flashOut * 0.96);
     var whiteFromFrame = ease(
       clamp((frame - whiteStartFrame) / Math.max(1, maxFrame - whiteStartFrame), 0, 1)
     );
     /* Prefer scroll timing so white never starts before landscape fill. */
     var white = whiteFromScroll;
-    if (enterProgress >= 0.55) {
+    if (enterProgress >= 0.78) {
       white = Math.max(whiteFromScroll, whiteFromFrame * whiteFromScroll);
     }
     return Math.round(white * 1000) / 1000;
@@ -428,6 +461,36 @@
     this.root.setAttribute("data-portal-white", css);
   };
 
+  OrganicJourney.prototype.applyPortalExposure = function (exposure) {
+    var css = clamp(Number(exposure) || 0, 0, 1).toFixed(3);
+    if (this.sticky) this.sticky.style.setProperty("--aa-portal-exposure", css);
+    this.root.style.setProperty("--aa-portal-exposure", css);
+    this.root.setAttribute("data-portal-exposure", css);
+  };
+
+  OrganicJourney.prototype.applyCloudDescent = function (descent) {
+    var value = clamp(Number(descent) || 0, 0, 1);
+    var css = value.toFixed(3);
+    this.root.style.setProperty("--aa-cloud-descent", css);
+    this.root.setAttribute("data-cloud-descent", css);
+
+    if (this.cloudDescent) {
+      var cream = ease(clamp((value - 0.62) / 0.38, 0, 1));
+      this.cloudDescent.style.opacity = Math.min(1, value * 1.65).toFixed(3);
+      this.cloudDescent.style.backgroundColor = "rgba(240, 240, 229, " + (cream * 0.22).toFixed(3) + ")";
+    }
+    if (this.cloudDescentPlane) {
+      this.cloudDescentPlane.style.opacity = (1 - ease(clamp((value - 0.84) / 0.16, 0, 1))).toFixed(3);
+      this.cloudDescentPlane.style.transform = "translate3d(0," +
+        (42 - 118 * value).toFixed(2) + "vh,0) scale(" +
+        (1.12 + 0.42 * value).toFixed(3) + ")";
+    }
+    if (this.cloudDescentMist) {
+      this.cloudDescentMist.style.opacity = ((1 - value) * 0.82).toFixed(3);
+      this.cloudDescentMist.style.transform = "scale(" + (0.92 + value * 0.30).toFixed(3) + ")";
+    }
+  };
+
   OrganicJourney.prototype.applyPortalChrome = function (chrome) {
     var css = clamp(Number(chrome) || 0, 0, 1).toFixed(3);
     this.root.style.setProperty("--aa-chrome-opacity", css);
@@ -435,9 +498,13 @@
   };
 
   OrganicJourney.prototype.renderProgress = function (progress) {
-    if (!this.variant || this.staticMode) return;
+    if (!this.variant || this.staticMode || this.returnBanner) return;
     var metrics = this.scrollMetrics();
+    var showReturnLoop = this.replayFromReturn && metrics.sectionScroll <= 2;
+    if (this.returnLoop) this.returnLoop.style.opacity = showReturnLoop ? "1" : "0";
+    if (this.canvas) this.canvas.style.opacity = showReturnLoop ? "0" : "1";
     progress = metrics.progress;
+    if (this.lockScale && progress >= 0.995) this.hasCompleted = true;
 
     var timeline = this.config.timeline;
     var frame = this.frameForScroll(metrics);
@@ -446,14 +513,18 @@
     var zoomProgress = ease((progress - timeline.zoomStart) / (timeline.zoomEnd - timeline.zoomStart));
     var finalOpacity = ease((progress - timeline.finalSwap) / 0.08);
     var portalWhite = 0;
+    var portalExposure = 0;
+    var cloudDescent = 0;
 
     /* At true start, lock scale/final so there is no open/white flash. */
     if (progress <= 0.0001 || metrics.sectionScroll <= 0) {
       zoomProgress = 0;
       finalOpacity = 0;
       portalWhite = 0;
-      frame = 0;
-      this.requestFrame(0);
+      portalExposure = 0;
+      cloudDescent = 0;
+      frame = this.replayFromReturn ? this.returnStartFrame() : 0;
+      this.requestFrame(frame);
     }
 
     var portalChrome = 1;
@@ -462,9 +533,13 @@
       this.targetScale = this.portalFillScale();
       if (progress <= 0.0001 || metrics.sectionScroll <= 0) this.currentScale = 1;
       portalWhite = this.portalWhiteForScroll(metrics, Math.round(frame));
+      portalExposure = this.portalExposureForScroll(metrics);
+      cloudDescent = this.cloudDescentForScroll(metrics);
       portalChrome = this.portalChromeForScroll(metrics, portalWhite);
       if (progress <= 0.0001 || metrics.sectionScroll <= 0) {
         portalWhite = 0;
+        portalExposure = 0;
+        cloudDescent = 0;
         portalChrome = 1;
       }
       /* Slot final.webp stays under the full-bleed veil; keep it muted. */
@@ -476,6 +551,8 @@
 
     this.applyVisualScale(this.currentScale);
     this.applyPortalWhite(portalWhite);
+    this.applyPortalExposure(portalExposure);
+    this.applyCloudDescent(cloudDescent);
     this.applyPortalChrome(portalChrome);
     this.visual.style.setProperty("--aa-final-opacity", finalOpacity.toFixed(4));
     this.root.style.setProperty("--aa-progress", progress.toFixed(5));
@@ -562,6 +639,8 @@
     var max = this.variant.clip.frameCount - 1;
     var frame = clamp(Math.round(frameIndex), 0, max);
     var target = this.sheetForFrame(frame);
+    var direction = frame >= this.lastRequestedFrame ? 1 : -1;
+    this.lastRequestedFrame = frame;
     this.pendingFrame = frame;
     this.currentSheetIndex = target.index;
     if (this.loadedSheets.has(target.index)) {
@@ -569,6 +648,9 @@
       this.prefetchNeighbors(target.index);
     } else {
       this.loadSheet(target.index);
+      /* Start the next likely network request before the scrub crosses its seam. */
+      var ahead = target.index + direction;
+      if (ahead >= 0 && ahead < this.variant.clip.sheets.length) this.loadSheet(ahead);
     }
   };
 
@@ -639,16 +721,40 @@
     }
     landscapeScroll = Math.max(metrics.viewportHeight * 0.75, landscapeScroll);
 
-    if (metrics.sectionScroll <= 0) return 0;
+    var startFrame = this.replayFromReturn ? this.returnStartFrame() : 0;
+
+    if (metrics.sectionScroll <= 0) return startFrame;
 
     if (metrics.sectionScroll < landscapeScroll) {
-      var t = ease(metrics.sectionScroll / landscapeScroll);
-      return t * landscapeFrame;
+      /* Direct wheel-to-frame mapping avoids the fast middle burst of smoothstep. */
+      var t = clamp(metrics.sectionScroll / landscapeScroll, 0, 1);
+      return startFrame + t * (landscapeFrame - startFrame);
     }
 
     var remain = Math.max(1, metrics.usableScroll - landscapeScroll);
     var t2 = ease((metrics.sectionScroll - landscapeScroll) / remain);
     return landscapeFrame + t2 * (maxFrame - landscapeFrame);
+  };
+
+  OrganicJourney.prototype.returnStartFrame = function () {
+    if (!this.variant) return 56;
+    var maxFrame = this.variant.clip.frameCount - 1;
+    var configured = Number(this.config.frames && this.config.frames.returnStart);
+    if (!Number.isFinite(configured) || configured <= 0) configured = 56;
+    return clamp(Math.round(configured), 1, maxFrame - 1);
+  };
+
+  OrganicJourney.prototype.playReturnVideo = function () {
+    var video = this.returnLoop;
+    if (!video || typeof video.play !== "function") return;
+    video.muted = true;
+    video.playsInline = true;
+    video.playbackRate = 0.35;
+    video.play().catch(function () {});
+    requestAnimationFrame(function () {
+      if (!video.isConnected) return;
+      video.play().catch(function () {});
+    });
   };
 
   OrganicJourney.prototype.calculateTargetScale = function () {
@@ -670,6 +776,8 @@
     this.visual.style.setProperty("--aa-final-opacity", "0");
     this.applyVisualScale(1);
     this.applyPortalWhite(0);
+    this.applyPortalExposure(0);
+    this.applyCloudDescent(0);
     this.applyPortalChrome(1);
     this.root.style.setProperty("--aa-copy-opacity", "1");
   };
@@ -681,8 +789,102 @@
     /* One-shot RAF only — no perpetual loop (mobile jitter source). */
   };
 
+  OrganicJourney.prototype.collapseToReturnBanner = function () {
+    if (!this.lockScale || this.returnBanner || !this.variant) return;
+
+    var shop = this.root.nextElementSibling;
+    var beforeY = window.scrollY;
+    var beforeShopTop = shop ? shop.getBoundingClientRect().top + beforeY : 0;
+    var openFrame = this.returnStartFrame();
+
+    this.returnBanner = true;
+    this.root.setAttribute("data-return-banner", "true");
+    this.root.style.height = this.stableVh + "px";
+    this.root.style.minHeight = this.stableVh + "px";
+
+    this.requestFrame(openFrame);
+    if (this.poster) {
+      var openStill = this.variant.staticStill || this.variant.finalStill;
+      if (openStill && openStill.src) this.poster.src = this.assetUrl(openStill.src);
+      this.poster.style.opacity = "1";
+    }
+    if (this.canvas) this.canvas.style.opacity = "0";
+    this.applyVisualScale(1);
+    this.applyPortalWhite(0);
+    this.applyPortalExposure(0);
+    this.applyCloudDescent(0);
+    this.applyPortalChrome(1);
+    if (this.visual) this.visual.style.setProperty("--aa-final-opacity", "0");
+    this.root.style.setProperty("--aa-progress", "0");
+    if (this.returnLoop) {
+      this.returnLoop.style.opacity = "1";
+      this.playReturnVideo();
+    }
+    if (this.canvas) this.canvas.style.opacity = "0";
+
+    /* Preserve the exact visible content while removing the long scroll track. */
+    if (shop) {
+      var afterShopTop = shop.getBoundingClientRect().top + beforeY;
+      var removedBeforeShop = beforeShopTop - afterShopTop;
+      window.scrollTo(0, Math.max(0, beforeY - removedBeforeShop));
+      this.lastPageScrollY = window.scrollY;
+    }
+
+    var self = this;
+    var openSheet = this.sheetForFrame(openFrame);
+    this.loadSheet(openSheet.index).then(function () {
+      if (!self.returnBanner || self.destroyed) return;
+      self.drawFrame(openFrame);
+      if (self.poster) self.poster.style.opacity = "0";
+    });
+  };
+
+  OrganicJourney.prototype.rearmFromReturnBanner = function () {
+    if (!this.returnBanner || !this.variant) return;
+
+    var startFrame = this.returnStartFrame();
+    this.returnBanner = false;
+    this.replayFromReturn = true;
+    this.hasCompleted = false;
+    this.root.removeAttribute("data-return-banner");
+    this.root.setAttribute("data-replay-from-return", "true");
+    this.root.style.height = scrollTrackPx(this.root, this.stableVh) + "px";
+    this.root.style.minHeight = "";
+    this.lastScaleCss = "";
+    this.currentScale = 1;
+    this.applyVisualScale(1);
+    this.applyPortalWhite(0);
+    this.applyPortalExposure(0);
+    this.applyCloudDescent(0);
+    this.applyPortalChrome(1);
+    this.root.style.setProperty("--aa-progress", "0");
+    this.requestFrame(startFrame);
+    if (this.returnLoop) {
+      this.returnLoop.style.opacity = "1";
+      this.playReturnVideo();
+    }
+    if (this.canvas) this.canvas.style.opacity = "0";
+    this.lastPageScrollY = window.scrollY;
+  };
+
   OrganicJourney.prototype.onScroll = function () {
     if (this.destroyed || this.staticMode || !this.variant) return;
+    var pageY = window.scrollY;
+    var isReturning = pageY < this.lastPageScrollY - 1;
+    this.lastPageScrollY = pageY;
+
+    if (this.lockScale && this.hasCompleted && !this.returnBanner && isReturning) {
+      this.collapseToReturnBanner();
+      return;
+    }
+    if (this.returnBanner) {
+      if (pageY <= 2) this.rearmFromReturnBanner();
+      return;
+    }
+    if (this.replayFromReturn && pageY > 2 && this.returnLoop) {
+      this.returnLoop.style.opacity = "0";
+      if (this.canvas) this.canvas.style.opacity = "1";
+    }
     this.active = true;
     /* Coalesce all scroll events into a single pending rAF paint. */
     if (!this.raf) this.raf = requestAnimationFrame(this.tick);
@@ -690,6 +892,7 @@
 
   OrganicJourney.prototype.onVisibility = function (entries) {
     this.active = entries.some(function (entry) { return entry.isIntersecting; });
+    if (this.active && (this.returnBanner || this.replayFromReturn)) this.playReturnVideo();
     if (this.active && !this.raf && !this.staticMode && this.variant) {
       this.raf = requestAnimationFrame(this.tick);
     }
@@ -756,6 +959,8 @@
       this.applyVisualScale(1);
     }
     this.applyPortalWhite(0);
+    this.applyPortalExposure(0);
+    this.applyCloudDescent(0);
     this.applyPortalChrome(1);
     this.root.style.setProperty("--aa-copy-opacity", "1");
   };

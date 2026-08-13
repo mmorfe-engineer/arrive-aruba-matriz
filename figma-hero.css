@@ -86,6 +86,10 @@
   .aa-cloud-atmosphere__warm {
     display: none !important;
   }
+
+  .aa-cloud-descent {
+    display: none !important;
+  }
 }
 
 /* ─── Background layer ─── */
@@ -514,9 +518,71 @@
 
 /* Shop starts in the same cream — no hard edge / no layout shift of FG */
 .aa-figma-hero + #shop {
-  margin-top: 0 !important;
-  padding-top: 76px !important;
+  position: relative;
+  z-index: 40;
+  margin-top: -100svh !important;
+  padding-top: clamp(26px, 4svh, 42px) !important;
   background: #f0f0e5 !important;
+}
+
+/* After Journey has been experienced, reverse navigation uses a normal banner. */
+.aa-figma-hero[data-return-banner="true"] {
+  height: 100svh !important;
+  min-height: 100svh !important;
+  overflow: hidden !important;
+}
+
+.aa-figma-hero[data-return-banner="true"] .aa-figma-hero__sticky {
+  position: relative !important;
+  top: auto !important;
+  height: 100svh !important;
+  min-height: 100svh !important;
+}
+
+.aa-figma-hero[data-return-banner="true"] .aa-cloud-descent {
+  display: none !important;
+}
+
+.aa-figma-hero[data-return-banner="true"] .aa-figma-hero__sticky::before,
+.aa-figma-hero[data-return-banner="true"] .aa-figma-hero__sticky::after {
+  opacity: 0 !important;
+}
+
+.aa-figma-hero[data-return-banner="true"] + #shop {
+  margin-top: 0 !important;
+}
+
+.aa-organic-visual__return-loop {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.aa-figma-hero[data-return-banner="true"] .aa-organic-visual__canvas {
+  opacity: 0 !important;
+}
+
+/* Shop rises through the last cloud pass instead of waiting below a white viewport. */
+.aa-figma-hero + #shop::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 28svh;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(240, 240, 229, 0) 0%,
+    rgba(240, 240, 229, 0.08) 20%,
+    rgba(240, 240, 229, 0.42) 58%,
+    #f0f0e5 100%
+  );
 }
 
 /* ─── Foreground layer ─── */
@@ -529,7 +595,7 @@
 
 .aa-figma-hero__logo {
   position: absolute;
-  z-index: 5;
+  z-index: 8;
   left: clamp(28px, 6.94vw, 100px);
   top: 44px;
   width: clamp(78px, 8.61vw, 124px);
@@ -548,7 +614,7 @@
 
 .aa-figma-hero__nav {
   position: absolute;
-  z-index: 5;
+  z-index: 8;
   top: 74px;
   right: clamp(28px, 5.8vw, 84px);
   display: flex;
@@ -592,7 +658,7 @@
 */
 .aa-figma-hero__window {
   position: absolute;
-  z-index: 2;
+  z-index: 6;
   left: 50%;
   top: 50%;
   translate: -50% -50%;
@@ -620,14 +686,101 @@
 .aa-figma-hero[data-journey-organic] .aa-figma-hero__window {
   transform-origin: center center;
   will-change: transform;
+  z-index: 6;
   /* Clip spritesheet edges; the scaled SLOT may exit sticky edges (Estados 3–4). */
   overflow: hidden;
+}
+
+/* Aperture-local bloom: the window itself overexposes before the page turns cream. */
+.aa-figma-hero[data-journey-organic] .aa-figma-hero__window::after {
+  content: "";
+  position: absolute;
+  inset: 7% 8%;
+  z-index: 5;
+  border-radius: 46% / 36%;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 47%, rgba(255, 255, 255, 0.98) 0%, rgba(250, 249, 239, 0.86) 32%, rgba(240, 240, 229, 0.36) 66%, transparent 88%);
+  opacity: calc(var(--aa-portal-exposure, 0) * 0.94);
+  transform: scale(calc(0.82 + var(--aa-portal-exposure, 0) * 0.24));
+  transform-origin: center;
+  will-change: transform, opacity;
 }
 
 .aa-figma-hero[data-journey-organic] .aa-figma-hero__sticky {
   /* Viewport clip only — portal can grow past layout box without page x-scroll. */
   overflow: hidden;
   --aa-portal-white: 0;
+  --aa-portal-exposure: 0;
+  --aa-cloud-descent: 0;
+}
+
+/*
+  Final descent through clouds. One continuous plate crosses the camera so
+  there is no center seam; only transform and opacity follow the scroll.
+*/
+.aa-cloud-descent {
+  position: absolute;
+  inset: 0;
+  z-index: 31;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  background-color: rgba(240, 240, 229, 0);
+  background-image: linear-gradient(
+    to bottom,
+    rgba(240, 240, 229, 0) 0%,
+    rgba(240, 240, 229, 0.08) 58%,
+    rgba(240, 240, 229, 0.32) 100%
+  );
+}
+
+.aa-cloud-descent__plane {
+  position: absolute;
+  inset: -18%;
+  overflow: hidden;
+  opacity: 1;
+  transform: translate3d(0, 42vh, 0) scale(1.12);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.28) 10%,
+    #000 25%,
+    #000 72%,
+    rgba(0, 0, 0, 0.32) 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 0, 0, 0.28) 10%,
+    #000 25%,
+    #000 72%,
+    rgba(0, 0, 0, 0.32) 90%,
+    transparent 100%
+  );
+  will-change: transform, opacity;
+}
+
+.aa-cloud-descent__plane img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 50% 72%;
+  filter: blur(15px) brightness(1.16) saturate(0.76);
+  transform: scaleY(1.13);
+}
+
+.aa-cloud-descent__mist {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 48%, rgba(255, 255, 255, 0.70), rgba(240, 240, 229, 0.18) 48%, transparent 76%);
+  opacity: 0.82;
+  transform: scale(0.92);
+  will-change: transform, opacity;
 }
 
 .aa-figma-hero[data-journey-organic] .aa-figma-hero__fg-layer {
@@ -645,11 +798,48 @@
   opacity: var(--aa-chrome-opacity, 1);
 }
 
+/* The complete original header now owns Journey navigation. */
+.aa-figma-hero[data-journey-organic] .aa-figma-hero__logo,
+.aa-figma-hero[data-journey-organic] .aa-figma-hero__nav {
+  display: none !important;
+}
+
+@media (max-width: 640px) {
+  #aa-nav {
+    height: 68px !important;
+    padding-inline: 16px !important;
+  }
+
+  #aa-wm {
+    width: 132px !important;
+    height: 43px !important;
+  }
+
+  #aa-nav > div:last-child {
+    gap: 12px !important;
+  }
+}
+
 /*
-  Portal whiteout veil (homepage).
-  Storyboard Estado 5: progressive cream wash after landscape fill.
+  Portal exposure + whiteout (homepage).
+  Exposure blooms from the aperture first; cream then completes the handoff.
   Color matches #shop Cannoli Cream for continuous handoff to the next scene.
 */
+.aa-figma-hero[data-journey-organic] .aa-figma-hero__sticky::before {
+  content: "";
+  position: absolute;
+  inset: -8%;
+  z-index: 29;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 54% 64% at 50% 48%, rgba(255, 255, 255, 0.88) 0%, rgba(250, 249, 239, 0.56) 34%, rgba(240, 240, 229, 0.18) 62%, transparent 82%);
+  mix-blend-mode: screen;
+  opacity: calc(var(--aa-portal-exposure, 0) * 0.52);
+  transform: scale(calc(0.84 + var(--aa-portal-exposure, 0) * 0.18));
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
 .aa-figma-hero[data-journey-organic] .aa-figma-hero__sticky::after {
   content: "";
   position: absolute;
@@ -679,12 +869,17 @@
   transform: none !important;
   transform-origin: center center;
   will-change: auto;
-  filter: none;
+  filter:
+    brightness(calc(1 + var(--aa-portal-exposure, 0) * 1.15))
+    saturate(calc(1 - var(--aa-portal-exposure, 0) * 0.28))
+    contrast(calc(1 - var(--aa-portal-exposure, 0) * 0.08));
+  will-change: filter;
 }
 
 .aa-figma-hero__window .aa-organic-visual__poster,
 .aa-figma-hero__window .aa-organic-visual__canvas,
-.aa-figma-hero__window .aa-organic-visual__final {
+.aa-figma-hero__window .aa-organic-visual__final,
+.aa-figma-hero__window .aa-organic-visual__return-loop {
   position: absolute;
   inset: 0;
   display: block;
@@ -714,7 +909,7 @@
 
 .aa-figma-hero__copy {
   position: absolute;
-  z-index: 5;
+  z-index: 4;
   left: clamp(28px, 5.55vw, 80px);
   top: 42%;
   translate: 0 -40%;
@@ -722,7 +917,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: 6px;
   color: var(--aa-cream);
   text-shadow: 0 1px 18px rgba(7, 18, 30, 0.18);
 }
@@ -730,37 +925,47 @@
 .aa-figma-hero__display {
   margin: 0;
   width: 100%;
-  font-family: "Port Blair Alternate", cursive;
+  font-family: "ITC Legacy Serif", Georgia, serif;
   font-weight: 400;
-  font-style: normal;
-  font-size: clamp(52px, 7.4vw, 108px);
+  font-style: italic;
+  font-size: clamp(38px, 4.9vw, 76px);
   letter-spacing: -0.01em;
-  line-height: 1;
+  line-height: 1.02;
 }
 
 .aa-figma-hero__emotion {
   margin: 0;
   width: 100%;
-  font-family: "ITC Legacy Serif", Georgia, serif;
+  font-family: "Port Blair Alternate", cursive;
   font-weight: 400;
-  font-style: italic;
-  font-size: clamp(16px, 1.55vw, 23px);
-  line-height: 1.12;
+  font-style: normal;
+  font-size: clamp(41px, 6.67vw, 97px);
+  letter-spacing: -0.01em;
+  line-height: 0.98;
+  transform: translate(clamp(13px, 1.52vw, 23px), clamp(-10px, -0.8vw, -6px));
 }
 
 .aa-figma-hero__cta {
   box-sizing: border-box;
+  position: relative;
   width: 164px;
   height: 42px;
   margin-top: 14px;
+  margin-left: clamp(42px, 4vw, 58px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 16px 30px;
   border: 0;
   border-radius: 999px;
-  background: #386395;
-  color: var(--aa-cream);
+  background:
+    linear-gradient(112deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.025) 34%, rgba(255, 255, 255, 0.006) 63%, rgba(240, 240, 229, 0.055) 100%),
+    radial-gradient(86px 32px at 22% -4%, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.045) 48%, transparent 76%),
+    radial-gradient(110px 46px at 88% 112%, rgba(56, 99, 149, 0.055) 0%, transparent 72%),
+    rgba(240, 240, 229, 0.01);
+  background-clip: padding-box;
+  background-blend-mode: screen, soft-light, normal, normal;
+  color: #386395;
   font-family: "Geologica", system-ui, sans-serif;
   font-size: 10px;
   font-weight: 600;
@@ -770,8 +975,114 @@
   text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
-  box-shadow: none;
+  text-shadow: 0 1px 10px rgba(255, 255, 255, 0.72);
+  -webkit-backdrop-filter: blur(12px) saturate(1.62) contrast(1.04) brightness(1.035);
+  backdrop-filter: blur(12px) saturate(1.62) contrast(1.04) brightness(1.035);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.54),
+    inset 0 -1px 0 rgba(35, 64, 94, 0.11),
+    inset 1px 0 0 rgba(255, 255, 255, 0.14),
+    inset -1px 0 0 rgba(255, 255, 255, 0.06),
+    0 7px 12px rgba(7, 18, 30, 0.075),
+    0 1px 2px rgba(255, 255, 255, 0.12);
   flex-shrink: 0;
+  isolation: isolate;
+}
+
+.aa-figma-hero__cta::before {
+  content: "";
+  position: absolute;
+  inset: -8px -6px;
+}
+
+.aa-figma-hero__cta::after {
+  content: "";
+  position: absolute;
+  inset: 2px 3px;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(126deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.04) 25%, transparent 26% 70%, rgba(255, 255, 255, 0.09) 100%),
+    radial-gradient(30px 10px at 31% 22%, rgba(255, 255, 255, 0.38), transparent 74%);
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.14);
+  mix-blend-mode: screen;
+  opacity: 0.58;
+  pointer-events: none;
+}
+
+.aa-figma-hero__cta-label {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.aa-figma-hero__cta-label--return {
+  display: none;
+}
+
+/* Once the Journey has been experienced, commerce becomes the primary action. */
+.aa-figma-hero[data-return-banner="true"] .aa-figma-hero__cta,
+.aa-figma-hero[data-replay-from-return="true"] .aa-figma-hero__cta {
+  width: 218px;
+  height: 42px;
+  padding: 0 25px;
+  border-radius: 999px;
+  color: #23405e;
+  text-shadow: 0 1px 10px rgba(255, 255, 255, 0.72);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 0 rgba(35, 64, 94, 0.12),
+    inset 1px 0 0 rgba(255, 255, 255, 0.16),
+    inset -1px 0 0 rgba(255, 255, 255, 0.08),
+    0 0 14px rgba(245, 161, 105, 0.52),
+    0 0 34px rgba(245, 161, 105, 0.26),
+    0 7px 12px rgba(35, 64, 94, 0.10);
+  animation: aa-collection-glow 3.8s cubic-bezier(0.16, 1, 0.3, 1) infinite alternate;
+}
+
+.aa-figma-hero[data-return-banner="true"] .aa-figma-hero__cta::after,
+.aa-figma-hero[data-replay-from-return="true"] .aa-figma-hero__cta::after {
+  inset: 2px 3px;
+  border-radius: inherit;
+  background:
+    linear-gradient(126deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.04) 25%, transparent 26% 70%, rgba(245, 161, 105, 0.10) 100%),
+    radial-gradient(30px 10px at 31% 22%, rgba(255, 255, 255, 0.38), transparent 74%);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.14);
+  opacity: 0.68;
+}
+
+.aa-figma-hero[data-return-banner="true"] .aa-figma-hero__cta-label--initial,
+.aa-figma-hero[data-replay-from-return="true"] .aa-figma-hero__cta-label--initial {
+  display: none;
+}
+
+.aa-figma-hero[data-return-banner="true"] .aa-figma-hero__cta-label--return,
+.aa-figma-hero[data-replay-from-return="true"] .aa-figma-hero__cta-label--return {
+  display: block;
+}
+
+@keyframes aa-collection-glow {
+  from {
+    box-shadow:
+      inset 0 1.5px 0 rgba(255, 255, 255, 0.62),
+      inset 0 -1px 0 rgba(35, 64, 94, 0.12),
+      inset 1px 0 0 rgba(255, 255, 255, 0.16),
+      inset -1px 0 0 rgba(255, 255, 255, 0.08),
+      0 0 11px rgba(245, 161, 105, 0.40),
+      0 0 24px rgba(245, 161, 105, 0.18),
+      0 7px 12px rgba(35, 64, 94, 0.10);
+  }
+  to {
+    box-shadow:
+      inset 0 1.5px 0 rgba(255, 255, 255, 0.62),
+      inset 0 -1px 0 rgba(35, 64, 94, 0.12),
+      inset 1px 0 0 rgba(255, 255, 255, 0.16),
+      inset -1px 0 0 rgba(255, 255, 255, 0.08),
+      0 0 17px rgba(245, 161, 105, 0.62),
+      0 0 40px rgba(245, 161, 105, 0.30),
+      0 7px 12px rgba(35, 64, 94, 0.10);
+  }
 }
 
 .aa-figma-hero__cta:focus-visible {
@@ -790,7 +1101,15 @@
   */
   .aa-figma-hero {
     --aa-comp-h: 812px;
-    --aa-window-max-w: 214px;
+    /* Keep the approved 375px composition, then grow gently on wider phones. */
+    --aa-window-max-w: clamp(246px, 54vw, 272px);
+    --aa-mobile-window-top: 44%;
+    --aa-mobile-window-h: calc(var(--aa-mobile-window-w) * 334 / 243);
+    --aa-mobile-window-w: min(
+      var(--aa-window-max-w),
+      65.7vw,
+      calc((100svh - 250px) * 243 / 334)
+    );
     --aa-window-ratio: 243 / 334;
     --aa-safe-top: max(96px, 11svh);
     --aa-safe-bottom: max(210px, 26svh);
@@ -893,77 +1212,90 @@
 
   .aa-figma-hero__window {
     left: 50%;
-    top: 34%;
+    top: var(--aa-mobile-window-top);
     translate: -50% -50%;
     /* Height-based cap uses svh, never width-% (that shrank the window) */
-    width: min(
-      var(--aa-window-max-w),
-      57.1vw,
-      calc((100svh - 300px) * 243 / 334)
-    );
-    max-height: min(294px, calc(100svh - 300px));
+    width: var(--aa-mobile-window-w);
+    max-height: min(374px, calc(100svh - 250px));
     aspect-ratio: 243 / 334;
     height: auto;
   }
 
-  /* Image 1 layout — copy bottom-anchored (not Figma absolute y=470) */
   .aa-figma-hero__copy {
-    left: 28px;
-    right: 28px;
-    top: auto;
-    bottom: max(88px, 10svh);
-    translate: none;
-    width: auto;
-    max-width: 320px;
-    gap: 8px;
+    left: 50%;
+    right: auto;
+    top: calc(var(--aa-mobile-window-top) - (var(--aa-mobile-window-h) / 2) - 64px);
+    bottom: auto;
+    translate: -50% 0;
+    width: min(88vw, 360px);
+    max-width: none;
+    min-height: calc(var(--aa-mobile-window-h) + 178px);
+    align-items: center;
+    gap: 0;
     text-shadow: 0 2px 18px rgba(7, 18, 30, 0.35);
+    pointer-events: none;
   }
 
-  /* Image 3 visual scale only — Port Blair Alternate */
   .aa-figma-hero__display {
-    font-family: "Port Blair Alternate", cursive;
+    font-family: "ITC Legacy Serif", Georgia, serif;
     font-weight: 400;
-    font-style: normal;
-    font-size: 70px;
-    letter-spacing: -0.7px;
-    line-height: 1;
+    font-style: italic;
+    font-size: clamp(48px, 12.6vw, 52px);
+    letter-spacing: -0.35px;
+    line-height: 1.08;
     height: auto;
-    width: auto;
+    width: 100%;
     max-width: 100%;
     color: #f0f0e5;
     white-space: nowrap;
     overflow: visible;
-    /* Micro balance: lift title+subtitle group 15px; CTA stays */
-    transform: translateY(-15px);
+    text-align: center;
+    transform: none;
   }
 
-  /* Emotion · ITC Legacy Book Italic
-     Figma 158:272 docs 32/1.16/0 — Image 1 circled visual is smaller editorial one-liner */
   .aa-figma-hero__emotion {
-    font-family: "ITC Legacy Serif", Georgia, serif;
+    position: absolute;
+    left: 50%;
+    top: calc(var(--aa-mobile-window-h) + 76px);
+    font-family: "Port Blair Alternate", cursive;
     font-weight: 400;
-    font-style: italic;
-    font-size: 20px;
-    letter-spacing: 0;
-    line-height: 1.16;
+    font-style: normal;
+    font-size: clamp(66px, 17.8vw, 71px);
+    letter-spacing: -0.55px;
+    line-height: 1;
     height: auto;
     min-height: 0;
-    width: 100%;
+    width: auto;
     max-width: 320px;
     color: #f0f0e5;
     white-space: nowrap;
-    transform: translateY(-15px);
+    transform: translateX(-50%);
   }
 
   /* Image 1 CTA spacing */
   .aa-figma-hero__cta {
-    margin-top: 18px;
-    position: relative;
+    position: absolute;
+    left: 50%;
+    top: calc(var(--aa-mobile-window-h) + 184px);
+    bottom: auto;
+    translate: -50% 0;
+    margin-top: 0;
+    margin-left: 0;
+    width: 158px;
+    height: 40px;
+    pointer-events: auto;
   }
 
-  .aa-figma-hero__cta::before {
-    content: "";
-    position: absolute;
-    inset: -8px -6px;
+  .aa-figma-hero[data-return-banner="true"] .aa-figma-hero__cta,
+  .aa-figma-hero[data-replay-from-return="true"] .aa-figma-hero__cta {
+    width: min(210px, 72vw);
+    height: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aa-figma-hero[data-return-banner="true"] .aa-figma-hero__cta,
+  .aa-figma-hero[data-replay-from-return="true"] .aa-figma-hero__cta {
+    animation: none;
   }
 }
