@@ -137,6 +137,8 @@
     this.mobileGestureTarget = null;
     this.mobilePointerId = null;
     this.mobilePointerY = 0;
+    /* Slightly amplify travel so the long cinematic track does not feel heavy. */
+    this.mobileGestureGain = 1.28;
 
     this.tick = this.tick.bind(this);
     this.onVisibility = this.onVisibility.bind(this);
@@ -933,7 +935,7 @@
 
   OrganicJourney.prototype.applyMobileGestureDelta = function (delta) {
     if (!this.virtualGestureMode || !this.variant || this.destroyed) return;
-    delta = Number(delta) || 0;
+    delta = (Number(delta) || 0) * this.mobileGestureGain;
     if (Math.abs(delta) < 0.01) return;
 
     var metrics = this.scrollMetrics();
