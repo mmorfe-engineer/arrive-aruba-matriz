@@ -92,6 +92,7 @@
     this.cloudDescent = root.querySelector(".aa-cloud-descent");
     this.cloudDescentPlane = root.querySelector(".aa-cloud-descent__plane");
     this.cloudDescentMist = root.querySelector(".aa-cloud-descent__mist");
+    this.cta = root.querySelector(".aa-figma-hero__cta");
     this.lockScale = root.hasAttribute("data-journey-lock-scale");
     this.context = this.canvas ? this.canvas.getContext("2d", {
       alpha: true,
@@ -128,6 +129,7 @@
     this.lastPageScrollY = window.scrollY;
     this.sectionTop = root.getBoundingClientRect().top + window.scrollY;
     this.cachedPortalFillScale = 0;
+    this.mobileNormalizer = null;
 
     this.tick = this.tick.bind(this);
     this.onVisibility = this.onVisibility.bind(this);
@@ -135,6 +137,7 @@
     this.onBreakpoint = this.onBreakpoint.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.onOrientation = this.onOrientation.bind(this);
+    this.onSkip = this.onSkip.bind(this);
 
     root.style.height = scrollTrackPx(root, this.stableVh) + "px";
 
@@ -167,6 +170,7 @@
     }
     window.addEventListener("scroll", this.onScroll, { passive: true });
     window.addEventListener("orientationchange", this.onOrientation);
+    if (this.cta) this.cta.addEventListener("click", this.onSkip);
 
     if (compactQuery.addEventListener) {
       compactQuery.addEventListener("change", this.onBreakpoint);
@@ -300,8 +304,16 @@
 
     /* Explicit first paint path: frame 0 only. */
     this.requestFrame(0);
-    this.loadSheet(0);
-    if (this.variant.clip.sheets.length > 1) this.loadSheet(1);
+    var initialLoads = [this.loadSheet(0)];
+    if (this.variant.clip.sheets.length > 1) initialLoads.push(this.loadSheet(1));
+    /* Three decoded mobile sheets stay below the image budget and absorb fast drags. */
+    if (this.lockScale && compactQuery.matches && this.variant.clip.sheets.length > 2) {
+      initialLoads.push(this.loadSheet(2));
+    }
+    var self = this;
+    Promise.all(initialLoads).then(function () {
+      if (!self.destroyed) self.enableMobileNormalizer();
+    });
     loadImage(this.finalImage.src).catch(function () {});
     this.renderProgress(this.progress());
   };
@@ -547,7 +559,10 @@
       (this.lastDrawnFrame >= 0 ? "canvas" : "poster")
     );
     progress = metrics.progress;
-    if (this.lockScale && progress >= 0.995) this.hasCompleted = true;
+    if (this.lockScale && progress >= 0.995) {
+      this.hasCompleted = true;
+      this.disableMobileNormalizer();
+    }
 
     var timeline = this.config.timeline;
     var frame = this.frameForScroll(metrics);
@@ -657,7 +672,8 @@
 
   OrganicJourney.prototype.trimMemory = function (center) {
     var self = this;
-    var windowSize = clamp(Number(this.variant.slidingWindow) || 3, 1, 3);
+    var windowSize = this.lockScale && compactQuery.matches ? 3 :
+      clamp(Number(this.variant.slidingWindow) || 3, 1, 3);
     var keep = new Set([center]);
     for (var distance = 1; keep.size < windowSize; distance += 1) {
       if (center + distance < this.variant.clip.sheets.length) keep.add(center + distance);
@@ -808,6 +824,43 @@
     return Boolean(this.returnLoop && !compactQuery.matches);
   };
 
+  /**
+   * Native mobile scrolling may paint on a different thread from JavaScript.
+   * ScrollTrigger.normalizeScroll uses Observer to apply touch deltas on the
+   * JS thread, in the same refresh cycle as the canvas frame. It is enabled
+   * only for the intro and released as soon as the Journey ends.
+   */
+  OrganicJourney.prototype.enableMobileNormalizer = function () {
+    if (
+      !this.lockScale || !compactQuery.matches || this.staticMode ||
+      this.hasCompleted || this.returnBanner || this.mobileNormalizer ||
+      !window.gsap || !window.ScrollTrigger ||
+      typeof window.ScrollTrigger.normalizeScroll !== "function"
+    ) return;
+
+    window.gsap.registerPlugin(window.ScrollTrigger);
+    window.ScrollTrigger.config({ ignoreMobileResize: true });
+    this.mobileNormalizer = window.ScrollTrigger.normalizeScroll({
+      allowNestedScroll: true,
+      lockAxis: true,
+      momentum: function () { return 0; },
+      type: "touch,wheel,pointer"
+    });
+    this.root.setAttribute("data-mobile-input", "normalized");
+  };
+
+  OrganicJourney.prototype.disableMobileNormalizer = function () {
+    if (window.ScrollTrigger && typeof window.ScrollTrigger.normalizeScroll === "function") {
+      window.ScrollTrigger.normalizeScroll(false);
+    }
+    this.mobileNormalizer = null;
+    this.root.removeAttribute("data-mobile-input");
+  };
+
+  OrganicJourney.prototype.onSkip = function () {
+    this.disableMobileNormalizer();
+  };
+
   OrganicJourney.prototype.playReturnVideo = function () {
     var video = this.returnLoop;
     if (!video || typeof video.play !== "function") return;
@@ -868,6 +921,7 @@
     var mobileReturn = compactQuery.matches;
 
     this.returnBanner = true;
+    this.disableMobileNormalizer();
     this.root.setAttribute("data-return-banner", "true");
     if (mobileReturn) {
       /*
@@ -944,6 +998,7 @@
       this.returnLoop.pause();
     }
     this.lastPageScrollY = window.scrollY;
+    this.enableMobileNormalizer();
   };
 
   OrganicJourney.prototype.onScroll = function () {
@@ -976,6 +1031,9 @@
     if (this.active && !this.raf && !this.staticMode && this.variant) {
       this.raf = requestAnimationFrame(this.tick);
     }
+    if (this.active && this.variant && !this.hasCompleted && !this.returnBanner) {
+      this.enableMobileNormalizer();
+    }
     if (!this.active && this.raf) {
       cancelAnimationFrame(this.raf);
       this.raf = 0;
@@ -988,6 +1046,7 @@
 
   OrganicJourney.prototype.onBreakpoint = function () {
     if (!this.config || this.staticMode) return;
+    this.disableMobileNormalizer();
     this.bindVariant(this.pickVariantKey(), false);
   };
 
@@ -1033,6 +1092,7 @@
   };
 
   OrganicJourney.prototype.fallback = function (message) {
+    this.disableMobileNormalizer();
     this.staticMode = true;
     this.root.dataset.state = "fallback";
     this.root.style.height = "100dvh";
@@ -1059,6 +1119,8 @@
     window.removeEventListener("scroll", this.onScroll);
     window.removeEventListener("orientationchange", this.onOrientation);
     window.removeEventListener("resize", this.onResize);
+    if (this.cta) this.cta.removeEventListener("click", this.onSkip);
+    this.disableMobileNormalizer();
     if (compactQuery.removeEventListener) {
       compactQuery.removeEventListener("change", this.onBreakpoint);
     } else if (compactQuery.removeListener) {
