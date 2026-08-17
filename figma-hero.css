@@ -699,6 +699,43 @@
   overscroll-behavior-x: none;
 }
 
+/*
+  Mobile Journey gesture lock:
+  the page stays physically still while touch deltas drive virtual progress.
+  Keeping the sticky scene fixed prevents iOS browser chrome and the visual
+  viewport from moving the whole composition between canvas frames.
+*/
+@media (max-width: 760px) {
+  html.aa-journey-gesture-lock,
+  body.aa-journey-gesture-lock {
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+    scroll-behavior: auto !important;
+    touch-action: pinch-zoom !important;
+  }
+
+  body.aa-journey-gesture-lock {
+    position: fixed !important;
+    inset: 0 !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+
+  .aa-figma-hero[data-mobile-input="captured"] {
+    touch-action: pinch-zoom !important;
+    overscroll-behavior: none !important;
+  }
+
+  .aa-figma-hero[data-mobile-input="captured"] .aa-figma-hero__sticky {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100svh !important;
+    min-height: 100svh !important;
+  }
+}
+
 .aa-figma-hero[data-journey-organic] .aa-figma-hero__window {
   transform-origin: center center;
   will-change: transform;

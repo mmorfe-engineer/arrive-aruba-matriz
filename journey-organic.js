@@ -129,7 +129,14 @@
     this.lastPageScrollY = window.scrollY;
     this.sectionTop = root.getBoundingClientRect().top + window.scrollY;
     this.cachedPortalFillScale = 0;
-    this.mobileNormalizer = null;
+    this.mobileObserver = null;
+    this.virtualGestureMode = false;
+    this.virtualSectionScroll = 0;
+    this.mobileGestureComplete = false;
+    this.mobileSectionTop = this.sectionTop;
+    this.mobileGestureTarget = null;
+    this.mobilePointerId = null;
+    this.mobilePointerY = 0;
 
     this.tick = this.tick.bind(this);
     this.onVisibility = this.onVisibility.bind(this);
@@ -138,6 +145,9 @@
     this.onScroll = this.onScroll.bind(this);
     this.onOrientation = this.onOrientation.bind(this);
     this.onSkip = this.onSkip.bind(this);
+    this.onMobilePointerDown = this.onMobilePointerDown.bind(this);
+    this.onMobilePointerMove = this.onMobilePointerMove.bind(this);
+    this.onMobilePointerEnd = this.onMobilePointerEnd.bind(this);
 
     root.style.height = scrollTrackPx(root, this.stableVh) + "px";
 
@@ -301,6 +311,8 @@
     }
 
     this.root.style.height = scrollTrackPx(this.root, this.stableVh) + "px";
+    /* Capture mobile input before image decoding so an early swipe cannot move the page. */
+    this.enableMobileGesture();
 
     /* Explicit first paint path: frame 0 only. */
     this.requestFrame(0);
@@ -312,7 +324,7 @@
     }
     var self = this;
     Promise.all(initialLoads).then(function () {
-      if (!self.destroyed) self.enableMobileNormalizer();
+      if (!self.destroyed) self.enableMobileGesture();
     });
     loadImage(this.finalImage.src).catch(function () {});
     this.renderProgress(this.progress());
@@ -561,7 +573,7 @@
     progress = metrics.progress;
     if (this.lockScale && progress >= 0.995) {
       this.hasCompleted = true;
-      this.disableMobileNormalizer();
+      this.mobileGestureComplete = true;
     }
 
     var timeline = this.config.timeline;
@@ -763,7 +775,9 @@
       getBoundingClientRect here forced layout after every transform write and
       made Safari alternate between neighboring subpixels.
     */
-    var sectionScroll = Math.max(0, Math.round(window.scrollY - this.sectionTop));
+    var sectionScroll = this.virtualGestureMode && this.lockScale && compactQuery.matches ?
+      clamp(this.virtualSectionScroll, 0, usableScroll) :
+      Math.max(0, Math.round(window.scrollY - this.sectionTop));
     var progress = clamp(sectionScroll / usableScroll, 0, 1);
     return {
       sectionScroll: sectionScroll,
@@ -825,40 +839,172 @@
   };
 
   /**
-   * Native mobile scrolling may paint on a different thread from JavaScript.
-   * ScrollTrigger.normalizeScroll uses Observer to apply touch deltas on the
-   * JS thread, in the same refresh cycle as the canvas frame. It is enabled
-   * only for the intro and released as soon as the Journey ends.
+   * The intro uses virtual gesture progress on mobile: the document remains
+   * physically fixed at scrollY=0 while Observer maps finger/wheel deltas to
+   * the Journey timeline. This avoids Safari's visual viewport, address bar
+   * and native scroll thread moving the entire page between animation frames.
    */
-  OrganicJourney.prototype.enableMobileNormalizer = function () {
+  OrganicJourney.prototype.enableMobileGesture = function () {
     if (
       !this.lockScale || !compactQuery.matches || this.staticMode ||
-      this.hasCompleted || this.returnBanner || this.mobileNormalizer ||
+      this.hasCompleted || this.returnBanner || this.mobileObserver ||
+      window.scrollY > 2 ||
       !window.gsap || !window.ScrollTrigger ||
-      typeof window.ScrollTrigger.normalizeScroll !== "function"
+      typeof window.ScrollTrigger.observe !== "function"
     ) return;
 
     window.gsap.registerPlugin(window.ScrollTrigger);
     window.ScrollTrigger.config({ ignoreMobileResize: true });
-    this.mobileNormalizer = window.ScrollTrigger.normalizeScroll({
-      allowNestedScroll: true,
+    if (typeof window.ScrollTrigger.normalizeScroll === "function") {
+      window.ScrollTrigger.normalizeScroll(false);
+    }
+
+    this.virtualGestureMode = true;
+    this.virtualSectionScroll = 0;
+    this.mobileGestureComplete = false;
+    this.mobileSectionTop = this.sectionTop;
+    document.documentElement.classList.add("aa-journey-gesture-lock");
+    document.body.classList.add("aa-journey-gesture-lock");
+
+    var self = this;
+    this.mobileGestureTarget = this.sticky || this.root;
+    this.mobileGestureTarget.addEventListener("pointerdown", this.onMobilePointerDown, { passive: false });
+    this.mobileGestureTarget.addEventListener("pointermove", this.onMobilePointerMove, { passive: false });
+    this.mobileGestureTarget.addEventListener("pointerup", this.onMobilePointerEnd, { passive: false });
+    this.mobileGestureTarget.addEventListener("pointercancel", this.onMobilePointerEnd, { passive: false });
+
+    /* Observer remains for trackpads/mouse wheels in narrow desktop previews. */
+    this.mobileObserver = window.ScrollTrigger.observe({
+      target: this.mobileGestureTarget,
+      type: "wheel",
+      preventDefault: true,
+      allowClicks: true,
       lockAxis: true,
-      momentum: function () { return 0; },
-      type: "touch,wheel,pointer"
+      tolerance: 0,
+      debounce: true,
+      onChangeY: function (observer) {
+        self.applyMobileGestureDelta(Number(observer.deltaY) || 0);
+      },
+      onStop: function () {
+        if (self.mobileGestureComplete) self.finishMobileGesture();
+      },
+      onStopDelay: 0.12
     });
-    this.root.setAttribute("data-mobile-input", "normalized");
+    this.root.setAttribute("data-mobile-input", "captured");
   };
 
-  OrganicJourney.prototype.disableMobileNormalizer = function () {
+  OrganicJourney.prototype.onMobilePointerDown = function (event) {
+    if (!this.virtualGestureMode || this.mobilePointerId !== null || event.isPrimary === false) return;
+    if (event.button !== undefined && event.button !== 0) return;
+    if (event.target && event.target.closest && event.target.closest("a,button,input,select,textarea")) return;
+
+    this.mobilePointerId = event.pointerId;
+    this.mobilePointerY = event.clientY;
+    if (this.mobileGestureTarget && this.mobileGestureTarget.setPointerCapture) {
+      try { this.mobileGestureTarget.setPointerCapture(event.pointerId); } catch (error) {}
+    }
+    event.preventDefault();
+  };
+
+  OrganicJourney.prototype.onMobilePointerMove = function (event) {
+    if (!this.virtualGestureMode || event.pointerId !== this.mobilePointerId) return;
+    var delta = this.mobilePointerY - event.clientY;
+    this.mobilePointerY = event.clientY;
+    event.preventDefault();
+    this.applyMobileGestureDelta(delta);
+  };
+
+  OrganicJourney.prototype.onMobilePointerEnd = function (event) {
+    if (event.pointerId !== this.mobilePointerId) return;
+    if (this.mobileGestureTarget && this.mobileGestureTarget.releasePointerCapture) {
+      try { this.mobileGestureTarget.releasePointerCapture(event.pointerId); } catch (error) {}
+    }
+    this.mobilePointerId = null;
+    event.preventDefault();
+    if (this.mobileGestureComplete) {
+      if (this.raf) {
+        cancelAnimationFrame(this.raf);
+        this.raf = 0;
+      }
+      this.renderProgress(this.progress());
+      this.finishMobileGesture();
+    }
+  };
+
+  OrganicJourney.prototype.applyMobileGestureDelta = function (delta) {
+    if (!this.virtualGestureMode || !this.variant || this.destroyed) return;
+    delta = Number(delta) || 0;
+    if (Math.abs(delta) < 0.01) return;
+
+    var metrics = this.scrollMetrics();
+    this.virtualSectionScroll = clamp(
+      this.virtualSectionScroll + delta,
+      0,
+      metrics.usableScroll
+    );
+    if (this.virtualSectionScroll / metrics.usableScroll >= 0.995) {
+      this.mobileGestureComplete = true;
+      this.hasCompleted = true;
+    }
+    this.active = true;
+    if (!this.raf) this.raf = requestAnimationFrame(this.tick);
+  };
+
+  OrganicJourney.prototype.finishMobileGesture = function () {
+    if (!this.virtualGestureMode || !this.mobileGestureComplete) return;
+    var metrics = this.scrollMetrics();
+    var targetY = Math.round(Math.max(0, this.mobileSectionTop) + metrics.usableScroll);
+    this.disableMobileGesture(targetY);
+  };
+
+  OrganicJourney.prototype.disableMobileGesture = function (handoffY) {
+    if (this.mobileObserver) {
+      this.mobileObserver.kill();
+      this.mobileObserver = null;
+    }
+    if (this.mobileGestureTarget) {
+      this.mobileGestureTarget.removeEventListener("pointerdown", this.onMobilePointerDown);
+      this.mobileGestureTarget.removeEventListener("pointermove", this.onMobilePointerMove);
+      this.mobileGestureTarget.removeEventListener("pointerup", this.onMobilePointerEnd);
+      this.mobileGestureTarget.removeEventListener("pointercancel", this.onMobilePointerEnd);
+      if (this.mobilePointerId !== null && this.mobileGestureTarget.releasePointerCapture) {
+        try { this.mobileGestureTarget.releasePointerCapture(this.mobilePointerId); } catch (error) {}
+      }
+    }
+    this.mobileGestureTarget = null;
+    this.mobilePointerId = null;
     if (window.ScrollTrigger && typeof window.ScrollTrigger.normalizeScroll === "function") {
       window.ScrollTrigger.normalizeScroll(false);
     }
-    this.mobileNormalizer = null;
+    var hasHandoff = Number.isFinite(handoffY);
+    var previousScrollBehavior = document.documentElement.style.scrollBehavior;
+    if (hasHandoff) {
+      /* The page stylesheet uses smooth scrolling; the hidden handoff must be atomic. */
+      document.documentElement.style.scrollBehavior = "auto";
+      window.scrollTo(0, handoffY);
+    }
+    document.documentElement.classList.remove("aa-journey-gesture-lock");
+    document.body.classList.remove("aa-journey-gesture-lock");
+    this.virtualGestureMode = false;
+    this.virtualSectionScroll = 0;
+    this.mobileGestureComplete = false;
     this.root.removeAttribute("data-mobile-input");
+
+    if (hasHandoff) {
+      var self = this;
+      this.lastPageScrollY = handoffY;
+      requestAnimationFrame(function () {
+        if (self.destroyed) return;
+        window.scrollTo(0, handoffY);
+        self.lastPageScrollY = window.scrollY;
+        self.renderProgress(self.progress());
+        document.documentElement.style.scrollBehavior = previousScrollBehavior;
+      });
+    }
   };
 
   OrganicJourney.prototype.onSkip = function () {
-    this.disableMobileNormalizer();
+    this.disableMobileGesture();
   };
 
   OrganicJourney.prototype.playReturnVideo = function () {
@@ -921,7 +1067,7 @@
     var mobileReturn = compactQuery.matches;
 
     this.returnBanner = true;
-    this.disableMobileNormalizer();
+    this.disableMobileGesture();
     this.root.setAttribute("data-return-banner", "true");
     if (mobileReturn) {
       /*
@@ -976,6 +1122,8 @@
     this.returnBanner = false;
     this.replayFromReturn = true;
     this.hasCompleted = false;
+    this.mobileGestureComplete = false;
+    this.virtualSectionScroll = 0;
     this.root.removeAttribute("data-return-banner");
     this.root.removeAttribute("data-mobile-return");
     this.root.setAttribute("data-replay-from-return", "true");
@@ -998,11 +1146,13 @@
       this.returnLoop.pause();
     }
     this.lastPageScrollY = window.scrollY;
-    this.enableMobileNormalizer();
+    this.enableMobileGesture();
   };
 
   OrganicJourney.prototype.onScroll = function () {
     if (this.destroyed || this.staticMode || !this.variant) return;
+    /* During the intro the document is fixed; only virtual gesture progress moves. */
+    if (this.virtualGestureMode) return;
     var pageY = window.scrollY;
     var isReturning = pageY < this.lastPageScrollY - 1;
     this.lastPageScrollY = pageY;
@@ -1032,7 +1182,7 @@
       this.raf = requestAnimationFrame(this.tick);
     }
     if (this.active && this.variant && !this.hasCompleted && !this.returnBanner) {
-      this.enableMobileNormalizer();
+      this.enableMobileGesture();
     }
     if (!this.active && this.raf) {
       cancelAnimationFrame(this.raf);
@@ -1046,7 +1196,7 @@
 
   OrganicJourney.prototype.onBreakpoint = function () {
     if (!this.config || this.staticMode) return;
-    this.disableMobileNormalizer();
+    this.disableMobileGesture();
     this.bindVariant(this.pickVariantKey(), false);
   };
 
@@ -1059,6 +1209,8 @@
 
   OrganicJourney.prototype.onResize = function (force) {
     if (!this.config) return;
+    /* Locking body overflow can change desktop-emulated scrollbar width. */
+    if (this.virtualGestureMode && force !== true) return;
     var width = window.innerWidth;
     var height = window.innerHeight;
     var widthDelta = Math.abs(width - this.lastInnerW);
@@ -1092,7 +1244,7 @@
   };
 
   OrganicJourney.prototype.fallback = function (message) {
-    this.disableMobileNormalizer();
+    this.disableMobileGesture();
     this.staticMode = true;
     this.root.dataset.state = "fallback";
     this.root.style.height = "100dvh";
@@ -1120,7 +1272,7 @@
     window.removeEventListener("orientationchange", this.onOrientation);
     window.removeEventListener("resize", this.onResize);
     if (this.cta) this.cta.removeEventListener("click", this.onSkip);
-    this.disableMobileNormalizer();
+    this.disableMobileGesture();
     if (compactQuery.removeEventListener) {
       compactQuery.removeEventListener("change", this.onBreakpoint);
     } else if (compactQuery.removeListener) {
