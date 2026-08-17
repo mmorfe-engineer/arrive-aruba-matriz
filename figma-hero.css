@@ -709,7 +709,7 @@
   html.aa-journey-gesture-lock,
   body.aa-journey-gesture-lock {
     width: 100% !important;
-    height: 100% !important;
+    height: var(--aa-journey-vvh, 100svh) !important;
     overflow: hidden !important;
     overscroll-behavior: none !important;
     scroll-behavior: auto !important;
@@ -731,8 +731,8 @@
     position: fixed !important;
     inset: 0 !important;
     width: 100% !important;
-    height: 100svh !important;
-    min-height: 100svh !important;
+    height: var(--aa-journey-vvh, 100svh) !important;
+    min-height: var(--aa-journey-vvh, 100svh) !important;
   }
 }
 
@@ -1213,7 +1213,7 @@
     --aa-mobile-window-w: min(
       var(--aa-window-max-w),
       65.7vw,
-      calc((100svh - 250px) * 243 / 334)
+      calc((var(--aa-journey-vvh, 100svh) - 250px) * 243 / 334)
     );
     --aa-window-ratio: 243 / 334;
     --aa-safe-top: max(96px, 11svh);
@@ -1229,8 +1229,8 @@
   .aa-figma-hero__sticky {
     position: sticky;
     top: 0;
-    height: 100svh;
-    min-height: 100svh;
+    height: var(--aa-journey-vvh, 100svh);
+    min-height: var(--aa-journey-vvh, 100svh);
     overflow: hidden;
   }
 
@@ -1249,12 +1249,12 @@
   .aa-figma-hero[data-return-banner="true"][data-mobile-return="true"] .aa-figma-hero__sticky {
     position: sticky !important;
     top: 0 !important;
-    height: 100svh !important;
-    min-height: 100svh !important;
+    height: var(--aa-journey-vvh, 100svh) !important;
+    min-height: var(--aa-journey-vvh, 100svh) !important;
   }
 
   .aa-figma-hero[data-return-banner="true"][data-mobile-return="true"] + #shop {
-    margin-top: -100svh !important;
+    margin-top: calc(-1 * var(--aa-journey-vvh, 100svh)) !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1337,7 +1337,7 @@
     transform: translate3d(-50%, -50%, 0);
     /* Height-based cap uses svh, never width-% (that shrank the window) */
     width: var(--aa-mobile-window-w);
-    max-height: min(374px, calc(100svh - 250px));
+    max-height: min(374px, calc(var(--aa-journey-vvh, 100svh) - 250px));
     aspect-ratio: 243 / 334;
     height: var(--aa-mobile-window-h);
     filter: none;
@@ -1453,6 +1453,31 @@
   }
 
   .aa-figma-hero__cta {
+    top: calc(var(--aa-mobile-window-h) + 156px);
+  }
+}
+
+/* Browser chrome can make visualViewport short without changing CSS media height. */
+@media (max-width: 760px) {
+  .aa-figma-hero[data-mobile-short-viewport] {
+    --aa-mobile-window-top: 47%;
+    --aa-mobile-window-w: min(58vw, 226px);
+  }
+
+  .aa-figma-hero[data-mobile-short-viewport] .aa-figma-hero__copy {
+    top: calc(var(--aa-mobile-window-top) - (var(--aa-mobile-window-h) / 2) - 56px);
+    min-height: calc(var(--aa-mobile-window-h) + 160px);
+  }
+
+  .aa-figma-hero[data-mobile-short-viewport] .aa-figma-hero__display {
+    font-size: clamp(42px, 12vw, 46px);
+  }
+
+  .aa-figma-hero[data-mobile-short-viewport] .aa-figma-hero__emotion {
+    font-size: clamp(54px, 16vw, 60px);
+  }
+
+  .aa-figma-hero[data-mobile-short-viewport] .aa-figma-hero__cta {
     top: calc(var(--aa-mobile-window-h) + 156px);
   }
 }

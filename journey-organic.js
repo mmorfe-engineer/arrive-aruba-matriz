@@ -40,6 +40,13 @@
     return Boolean(connection.saveData || /(^|-)slow-2g|(^|-)2g|(^|-)3g/.test(connection.effectiveType || ""));
   }
 
+  function visibleViewportHeight() {
+    var visual = window.visualViewport;
+    var measured = visual && Number(visual.height);
+    if (!Number.isFinite(measured) || measured < 1) measured = window.innerHeight;
+    return Math.max(1, Math.round(Math.min(window.innerHeight, measured)));
+  }
+
   function scrollTrackPx(root, viewportHeight) {
     /*
       Desktop keeps the long cinematic track. On touch screens the same 500vh
@@ -115,7 +122,7 @@
     this.raf = 0;
     this.staticMode = reduceMotion.matches || connectionIsSlow();
     /* Homepage: freeze vh so mobile URL-bar show/hide cannot retarget progress/frames. */
-    this.stableVh = window.innerHeight;
+    this.stableVh = visibleViewportHeight();
     this.lastInnerW = window.innerWidth;
     this.lastInnerH = window.innerHeight;
     this.lastDrawnFrame = -1;
@@ -152,6 +159,7 @@
     this.onMobilePointerEnd = this.onMobilePointerEnd.bind(this);
 
     root.style.height = scrollTrackPx(root, this.stableVh) + "px";
+    this.syncMobileViewport();
 
     /* Closed poster first — never final/open still as the first paint. */
     if (root.dataset.fallbackPoster && this.poster) {
@@ -840,6 +848,18 @@
     return Boolean(this.returnLoop && !compactQuery.matches);
   };
 
+  OrganicJourney.prototype.syncMobileViewport = function () {
+    if (!this.lockScale || !compactQuery.matches) {
+      this.root.removeAttribute("data-mobile-short-viewport");
+      document.documentElement.style.removeProperty("--aa-journey-vvh");
+      return;
+    }
+    var height = visibleViewportHeight();
+    this.stableVh = height;
+    document.documentElement.style.setProperty("--aa-journey-vvh", height + "px");
+    this.root.toggleAttribute("data-mobile-short-viewport", height <= 700);
+  };
+
   /**
    * The intro uses virtual gesture progress on mobile: the document remains
    * physically fixed at scrollY=0 while Observer maps finger/wheel deltas to
@@ -861,6 +881,8 @@
       window.ScrollTrigger.normalizeScroll(false);
     }
 
+    this.syncMobileViewport();
+    this.root.style.height = scrollTrackPx(this.root, this.stableVh) + "px";
     this.virtualGestureMode = true;
     this.virtualSectionScroll = 0;
     this.mobileGestureComplete = false;
@@ -1203,7 +1225,8 @@
   };
 
   OrganicJourney.prototype.onOrientation = function () {
-    this.stableVh = window.innerHeight;
+    this.stableVh = visibleViewportHeight();
+    this.syncMobileViewport();
     this.lastInnerW = window.innerWidth;
     this.lastInnerH = window.innerHeight;
     this.onResize(true);
@@ -1228,7 +1251,8 @@
     this.lastInnerW = width;
     this.lastInnerH = height;
     if (force === true || widthDelta >= widthThreshold) {
-      this.stableVh = height;
+      this.stableVh = visibleViewportHeight();
+      this.syncMobileViewport();
     }
 
     this.targetScale = 1;
