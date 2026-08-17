@@ -41,9 +41,16 @@
   }
 
   function scrollTrackPx(root, viewportHeight) {
-    /* data-scroll-length is CSS vh units (100 = one viewport). Need >= ~400 so
-       usable scroll can reach the 2.5*innerHeight landscape gate. */
-    var length = clamp(Number(root.dataset.scrollLength) || 500, 400, 600);
+    /*
+      Desktop keeps the long cinematic track. On touch screens the same 500vh
+      felt resistant: the finger travelled five screens before completing one
+      gesture. A 400vh track keeps the full sequence while making the canvas
+      respond much closer to 1:1 with native pan-y.
+    */
+    var requested = Number(root.dataset.scrollLength) || 500;
+    var isTouchJourney = root.hasAttribute("data-journey-lock-scale") && compactQuery.matches;
+    if (isTouchJourney) requested = Math.min(requested, 400);
+    var length = clamp(requested, isTouchJourney ? 360 : 400, 600);
     var vh = viewportHeight || window.innerHeight;
     return Math.round((length / 100) * vh);
   }
@@ -370,7 +377,9 @@
   };
 
   OrganicJourney.prototype.shadeScrollGate = function (metrics) {
-    var landscapeScroll = metrics.viewportHeight * 2.5;
+    /* Mobile reaches the open-landscape phase sooner, without accelerating frames. */
+    var gateViewports = this.lockScale && compactQuery.matches ? 1.8 : 2.5;
+    var landscapeScroll = metrics.viewportHeight * gateViewports;
     if (landscapeScroll > metrics.usableScroll * 0.6) {
       landscapeScroll = metrics.usableScroll * 0.45;
     }
@@ -522,7 +531,7 @@
   OrganicJourney.prototype.renderProgress = function (progress) {
     if (!this.variant || this.staticMode || this.returnBanner) return;
     var metrics = this.scrollMetrics();
-    var showReturnLoop = this.replayFromReturn && metrics.sectionScroll <= 2;
+    var showReturnLoop = this.usesReturnVideo() && this.replayFromReturn && metrics.sectionScroll <= 2;
     this.setVisualSource(showReturnLoop ? "return" : (this.lastDrawnFrame >= 0 ? "canvas" : "poster"));
     progress = metrics.progress;
     if (this.lockScale && progress >= 0.995) this.hasCompleted = true;
@@ -752,12 +761,7 @@
     }
     landscapeFrame = clamp(landscapeFrame, 1, maxFrame - 1);
 
-    var landscapeScroll = metrics.viewportHeight * 2.5;
-    /* Keep headroom so the second phase always has scroll room. */
-    if (landscapeScroll > metrics.usableScroll * 0.6) {
-      landscapeScroll = metrics.usableScroll * 0.45;
-    }
-    landscapeScroll = Math.max(metrics.viewportHeight * 0.75, landscapeScroll);
+    var landscapeScroll = this.shadeScrollGate(metrics);
 
     var startFrame = this.replayFromReturn ? this.returnStartFrame() : 0;
 
@@ -782,9 +786,22 @@
     return clamp(Math.round(configured), 1, maxFrame - 1);
   };
 
+  OrganicJourney.prototype.usesReturnVideo = function () {
+    /*
+      return-loop-v3 has an opaque black plate and starts a second video
+      compositor. Mobile reuses the already-decoded high-quality canvas frame:
+      no black bars, no decoder hand-off and no source flicker while touching.
+    */
+    return Boolean(this.returnLoop && !compactQuery.matches);
+  };
+
   OrganicJourney.prototype.playReturnVideo = function () {
     var video = this.returnLoop;
     if (!video || typeof video.play !== "function") return;
+    if (!this.usesReturnVideo()) {
+      video.pause();
+      return;
+    }
     video.muted = true;
     video.playsInline = true;
     video.playbackRate = 0.35;
@@ -855,7 +872,7 @@
     }
 
     this.requestFrame(openFrame);
-    this.setVisualSource("return");
+    this.setVisualSource(this.usesReturnVideo() ? "return" : "canvas");
     this.applyVisualScale(1);
     this.applyPortalWhite(0);
     this.applyPortalExposure(0);
@@ -863,8 +880,10 @@
     this.applyPortalChrome(1);
     if (this.visual) this.visual.style.setProperty("--aa-final-opacity", "0");
     this.root.style.setProperty("--aa-progress", "0");
-    if (this.returnLoop) {
+    if (this.usesReturnVideo()) {
       this.playReturnVideo();
+    } else if (this.returnLoop) {
+      this.returnLoop.pause();
     }
 
     /* Desktop removes the track, so compensate once. Mobile never mutates it. */
@@ -905,9 +924,11 @@
     this.applyPortalChrome(1);
     this.root.style.setProperty("--aa-progress", "0");
     this.requestFrame(startFrame);
-    this.setVisualSource("return");
-    if (this.returnLoop) {
+    this.setVisualSource(this.usesReturnVideo() ? "return" : "canvas");
+    if (this.usesReturnVideo()) {
       this.playReturnVideo();
+    } else if (this.returnLoop) {
+      this.returnLoop.pause();
     }
     this.lastPageScrollY = window.scrollY;
   };
@@ -926,7 +947,7 @@
       if (pageY <= 2) this.rearmFromReturnBanner();
       return;
     }
-    if (this.replayFromReturn && pageY > 2) {
+    if (this.replayFromReturn && pageY > 2 && this.usesReturnVideo()) {
       this.setVisualSource("canvas");
     }
     this.active = true;
@@ -936,7 +957,9 @@
 
   OrganicJourney.prototype.onVisibility = function (entries) {
     this.active = entries.some(function (entry) { return entry.isIntersecting; });
-    if (this.active && (this.returnBanner || this.replayFromReturn)) this.playReturnVideo();
+    if (this.active && (this.returnBanner || this.replayFromReturn) && this.usesReturnVideo()) {
+      this.playReturnVideo();
+    }
     if (this.active && !this.raf && !this.staticMode && this.variant) {
       this.raf = requestAnimationFrame(this.tick);
     }

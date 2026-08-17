@@ -695,6 +695,8 @@
 .aa-figma-hero[data-journey-organic] {
   --aa-chrome-opacity: 1;
   overflow-x: clip;
+  touch-action: pan-y;
+  overscroll-behavior-x: none;
 }
 
 .aa-figma-hero[data-journey-organic] .aa-figma-hero__window {
@@ -729,6 +731,24 @@
   --aa-portal-white: 0;
   --aa-portal-exposure: 0;
   --aa-cloud-descent: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 640px) {
+  /*
+    The mobile return state is a high-quality canvas frame. The WebM contains
+    an opaque black backing and its decoder/compositor hand-off caused the
+    visible bars and shake on iOS/Chromium touch scrolling.
+  */
+  .aa-figma-hero[data-journey-organic] .aa-organic-visual__return-loop {
+    display: none !important;
+  }
+
+  .aa-figma-hero[data-journey-organic] .aa-figma-hero__window {
+    contain: layout paint;
+  }
 }
 
 /*
@@ -1153,8 +1173,8 @@
     --aa-window-ratio: 243 / 334;
     --aa-safe-top: max(96px, 11svh);
     --aa-safe-bottom: max(210px, 26svh);
-    height: 500vh;
-    min-height: 500vh;
+    height: 400svh;
+    min-height: 400svh;
     overflow: visible;
     overflow-x: clip;
     /* Under the plate only while loading — never a flat sky hex bar */
