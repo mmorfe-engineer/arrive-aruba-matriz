@@ -16,7 +16,7 @@
 
   var instances = new WeakMap();
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var compactQuery = window.matchMedia("(max-width: 640px)");
+  var compactQuery = window.matchMedia("(max-width: 760px)");
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
@@ -84,6 +84,7 @@
     this.canvas = root.querySelector("[data-journey-canvas]");
     this.poster = root.querySelector("[data-journey-poster]");
     this.returnLoop = root.querySelector("[data-journey-return-loop]");
+    this.returnStill = root.querySelector("[data-journey-return-still]");
     this.finalImage = root.querySelector("[data-journey-final]");
     this.copy = root.querySelector("[data-journey-copy]");
     this.status = root.querySelector("[data-journey-status]");
@@ -347,7 +348,7 @@
 
   OrganicJourney.prototype.setVisualSource = function (source) {
     if (!this.visual) return;
-    if (source !== "poster" && source !== "canvas" && source !== "return") {
+    if (source !== "poster" && source !== "canvas" && source !== "return" && source !== "still") {
       source = "poster";
     }
     if (source === this.visualSource && this.visual.dataset.visualSource === source) return;
@@ -403,9 +404,16 @@
       Estado 1–2 (pre-gate): perceptible push-in while window stays in clouds.
       Estado 3–4 (post-gate): grow to real aperture fill so frame exits edges.
     */
-    var approachEnd = Math.min(1.55, 1 + (fill - 1) * 0.1);
+    var touchOpening = this.lockScale && compactQuery.matches;
+    var approachEnd = touchOpening ? 1 : Math.min(1.55, 1 + (fill - 1) * 0.1);
     var gate = this.shadeScrollGate(metrics);
     if (metrics.sectionScroll <= 0) return 1;
+    /*
+      Touch phase 1 is only the blind opening. Keeping the portal at scale 1
+      prevents the first downward gesture from making the whole window dip or
+      drift before the blind has visibly started.
+    */
+    if (this.lockScale && compactQuery.matches && metrics.sectionScroll < gate) return 1;
     if (metrics.sectionScroll < gate) {
       var t = ease(metrics.sectionScroll / gate);
       return 1 + (approachEnd - 1) * t;
@@ -532,7 +540,12 @@
     if (!this.variant || this.staticMode || this.returnBanner) return;
     var metrics = this.scrollMetrics();
     var showReturnLoop = this.usesReturnVideo() && this.replayFromReturn && metrics.sectionScroll <= 2;
-    this.setVisualSource(showReturnLoop ? "return" : (this.lastDrawnFrame >= 0 ? "canvas" : "poster"));
+    var showReturnStill = compactQuery.matches && this.replayFromReturn && metrics.sectionScroll <= 28;
+    this.setVisualSource(
+      showReturnLoop ? "return" :
+      showReturnStill ? "still" :
+      (this.lastDrawnFrame >= 0 ? "canvas" : "poster")
+    );
     progress = metrics.progress;
     if (this.lockScale && progress >= 0.995) this.hasCompleted = true;
 
@@ -717,7 +730,7 @@
     );
     this.lastDrawnFrame = frameIndex;
     this.lastDrawnSheet = target.index;
-    if (!this.returnBanner && this.visualSource !== "return") {
+    if (!this.returnBanner && this.visualSource !== "return" && this.visualSource !== "still") {
       this.setVisualSource("canvas");
     }
   };
@@ -872,7 +885,7 @@
     }
 
     this.requestFrame(openFrame);
-    this.setVisualSource(this.usesReturnVideo() ? "return" : "canvas");
+    this.setVisualSource(this.usesReturnVideo() ? "return" : "still");
     this.applyVisualScale(1);
     this.applyPortalWhite(0);
     this.applyPortalExposure(0);
@@ -924,7 +937,7 @@
     this.applyPortalChrome(1);
     this.root.style.setProperty("--aa-progress", "0");
     this.requestFrame(startFrame);
-    this.setVisualSource(this.usesReturnVideo() ? "return" : "canvas");
+    this.setVisualSource(this.usesReturnVideo() ? "return" : "still");
     if (this.usesReturnVideo()) {
       this.playReturnVideo();
     } else if (this.returnLoop) {

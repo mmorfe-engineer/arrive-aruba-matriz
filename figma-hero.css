@@ -731,12 +731,11 @@
   --aa-portal-white: 0;
   --aa-portal-exposure: 0;
   --aa-cloud-descent: 0;
-  transform: translateZ(0);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   /*
     The mobile return state is a high-quality canvas frame. The WebM contains
     an opaque black backing and its decoder/compositor hand-off caused the
@@ -746,8 +745,14 @@
     display: none !important;
   }
 
+  /* Avoid WebKit's black backing when filtering a transparent canvas layer. */
+  .aa-figma-hero[data-journey-organic] .aa-organic-visual {
+    filter: none !important;
+    will-change: auto !important;
+  }
+
   .aa-figma-hero[data-journey-organic] .aa-figma-hero__window {
-    contain: layout paint;
+    filter: none !important;
   }
 }
 
@@ -916,6 +921,7 @@
 .aa-figma-hero__window .aa-organic-visual__poster,
 .aa-figma-hero__window .aa-organic-visual__canvas,
 .aa-figma-hero__window .aa-organic-visual__final,
+.aa-figma-hero__window .aa-organic-visual__return-still,
 .aa-figma-hero__window .aa-organic-visual__return-loop {
   position: absolute;
   inset: 0;
@@ -937,6 +943,7 @@
 */
 .aa-figma-hero__window .aa-organic-visual[data-visual-source] > .aa-organic-visual__poster,
 .aa-figma-hero__window .aa-organic-visual[data-visual-source] > .aa-organic-visual__canvas,
+.aa-figma-hero__window .aa-organic-visual[data-visual-source] > .aa-organic-visual__return-still,
 .aa-figma-hero__window .aa-organic-visual[data-visual-source] > .aa-organic-visual__return-loop {
   opacity: 0 !important;
   visibility: hidden !important;
@@ -944,6 +951,7 @@
 
 .aa-figma-hero__window .aa-organic-visual[data-visual-source="poster"] > .aa-organic-visual__poster,
 .aa-figma-hero__window .aa-organic-visual[data-visual-source="canvas"] > .aa-organic-visual__canvas,
+.aa-figma-hero__window .aa-organic-visual[data-visual-source="still"] > .aa-organic-visual__return-still,
 .aa-figma-hero__window .aa-organic-visual[data-visual-source="return"] > .aa-organic-visual__return-loop {
   opacity: 1 !important;
   visibility: visible !important;
