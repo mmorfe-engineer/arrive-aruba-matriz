@@ -145,7 +145,7 @@
     this.mobilePointerId = null;
     this.mobilePointerY = 0;
     /* Slightly amplify travel so the long cinematic track does not feel heavy. */
-    this.mobileGestureGain = 1.28;
+    this.mobileGestureGain = 1.65;
 
     this.tick = this.tick.bind(this);
     this.onVisibility = this.onVisibility.bind(this);
