@@ -139,13 +139,20 @@
     this.mobileObserver = null;
     this.virtualGestureMode = false;
     this.virtualSectionScroll = 0;
+    /*
+      Visual progress is committed only after its spritesheet is decoded.
+      Keeping input and paint progress separate prevents a fast mobile drag
+      from showing the cream handoff over an older (often closed) frame.
+    */
+    this.visualSectionScroll = 0;
     this.mobileGestureComplete = false;
+    this.mobileFinishPending = false;
     this.mobileSectionTop = this.sectionTop;
     this.mobileGestureTarget = null;
     this.mobilePointerId = null;
     this.mobilePointerY = 0;
-    /* Slightly amplify travel so the long cinematic track does not feel heavy. */
-    this.mobileGestureGain = 1.65;
+    /* Responsive without outrunning image decoding on a cold mobile cache. */
+    this.mobileGestureGain = 1.45;
 
     this.tick = this.tick.bind(this);
     this.onVisibility = this.onVisibility.bind(this);
@@ -310,6 +317,8 @@
     this.lastDrawnFrame = -1;
     this.lastDrawnSheet = -1;
     this.lastRequestedFrame = 0;
+    this.visualSectionScroll = 0;
+    this.mobileFinishPending = false;
     this.setVisualSource("poster");
 
     if (this.staticMode) {
@@ -334,7 +343,10 @@
     }
     var self = this;
     Promise.all(initialLoads).then(function () {
-      if (!self.destroyed) self.enableMobileGesture();
+      if (!self.destroyed) {
+        self.enableMobileGesture();
+        self.warmSheetNetworkCache();
+      }
     });
     loadImage(this.finalImage.src).catch(function () {});
     this.renderProgress(this.progress());
@@ -572,7 +584,32 @@
 
   OrganicJourney.prototype.renderProgress = function (progress) {
     if (!this.variant || this.staticMode || this.returnBanner) return;
-    var metrics = this.scrollMetrics();
+    var desiredMetrics = this.scrollMetrics();
+    var desiredFrame = this.frameForScroll(desiredMetrics);
+    var desiredSheet = this.sheetForFrame(Math.round(desiredFrame));
+    var desiredFrameReady = this.loadedSheets.has(desiredSheet.index);
+
+    /* Start decoding immediately, but never let effects outrun the raster. */
+    this.requestFrame(desiredFrame);
+
+    var metrics = desiredMetrics;
+    if (this.lockScale) {
+      if (desiredFrameReady) {
+        this.visualSectionScroll = desiredMetrics.sectionScroll;
+      }
+      var committedScroll = clamp(
+        this.visualSectionScroll,
+        0,
+        desiredMetrics.usableScroll
+      );
+      metrics = {
+        sectionScroll: committedScroll,
+        usableScroll: desiredMetrics.usableScroll,
+        progress: clamp(committedScroll / desiredMetrics.usableScroll, 0, 1),
+        viewportHeight: desiredMetrics.viewportHeight
+      };
+    }
+
     var showReturnLoop = this.usesReturnVideo() && this.replayFromReturn && metrics.sectionScroll <= 2;
     var showReturnStill = compactQuery.matches && this.replayFromReturn && metrics.sectionScroll <= 28;
     this.setVisualSource(
@@ -581,14 +618,9 @@
       (this.lastDrawnFrame >= 0 ? "canvas" : "poster")
     );
     progress = metrics.progress;
-    if (this.lockScale && progress >= 0.995) {
-      this.hasCompleted = true;
-      this.mobileGestureComplete = true;
-    }
 
     var timeline = this.config.timeline;
     var frame = this.frameForScroll(metrics);
-    this.requestFrame(frame);
 
     var zoomProgress = ease((progress - timeline.zoomStart) / (timeline.zoomEnd - timeline.zoomStart));
     var finalOpacity = ease((progress - timeline.finalSwap) / 0.08);
@@ -680,6 +712,15 @@
           self.drawFrame(self.pendingFrame);
         }
         self.root.dataset.state = "ready";
+        /* Reconcile visual progress now that the requested frame can paint. */
+        if (!self.raf) self.raf = requestAnimationFrame(self.tick);
+        if (self.mobileFinishPending && self.mobilePointerId === null) {
+          requestAnimationFrame(function () {
+            if (self.destroyed || !self.mobileFinishPending) return;
+            self.renderProgress(self.progress());
+            self.finishMobileGesture();
+          });
+        }
         return bitmap;
       })
       .catch(function (error) {
@@ -690,6 +731,48 @@
 
     this.pendingSheets.set(index, promise);
     return promise;
+  };
+
+  /*
+    Warm the browser HTTP cache without decoding every 11 MB spritesheet.
+    Two quiet workers keep finger-driven playback fluid on a cold mobile load
+    while the decoded sliding window remains under the iOS memory budget.
+  */
+  OrganicJourney.prototype.warmSheetNetworkCache = function () {
+    if (
+      !this.lockScale || !compactQuery.matches || this.staticMode ||
+      connectionIsSlow() || !window.fetch || !this.variant
+    ) return;
+
+    var self = this;
+    var nextIndex = 3;
+    var total = this.variant.clip.sheets.length;
+
+    function warmNext() {
+      if (self.destroyed || nextIndex >= total) return;
+      var sheet = self.variant.clip.sheets[nextIndex];
+      nextIndex += 1;
+      fetch(self.assetUrl(sheet.src), {
+        credentials: "same-origin",
+        cache: "force-cache"
+      })
+        .then(function (response) {
+          if (!response.ok) return null;
+          return response.blob();
+        })
+        .catch(function () { return null; })
+        .then(warmNext);
+    }
+
+    var start = function () {
+      warmNext();
+      warmNext();
+    };
+    if (window.requestIdleCallback) {
+      window.requestIdleCallback(start, { timeout: 700 });
+    } else {
+      setTimeout(start, 120);
+    }
   };
 
   OrganicJourney.prototype.trimMemory = function (center) {
@@ -885,7 +968,9 @@
     this.root.style.height = scrollTrackPx(this.root, this.stableVh) + "px";
     this.virtualGestureMode = true;
     this.virtualSectionScroll = 0;
+    this.visualSectionScroll = 0;
     this.mobileGestureComplete = false;
+    this.mobileFinishPending = false;
     this.mobileSectionTop = this.sectionTop;
     document.documentElement.classList.add("aa-journey-gesture-lock");
     document.body.classList.add("aa-journey-gesture-lock");
@@ -977,7 +1062,28 @@
   OrganicJourney.prototype.finishMobileGesture = function () {
     if (!this.virtualGestureMode || !this.mobileGestureComplete) return;
     var metrics = this.scrollMetrics();
-    var targetY = Math.round(Math.max(0, this.mobileSectionTop) + metrics.usableScroll);
+    var finalFrame = this.variant.clip.frameCount - 1;
+    var finalSheet = this.sheetForFrame(finalFrame);
+    var finalReady = this.loadedSheets.has(finalSheet.index) &&
+      this.lastDrawnFrame === finalFrame &&
+      this.visualSectionScroll >= metrics.usableScroll * 0.995;
+
+    /*
+      Do not release the document into the cream section until the final
+      Journey frame and its matching effects have actually been painted.
+    */
+    if (!finalReady) {
+      this.mobileFinishPending = true;
+      this.requestFrame(finalFrame);
+      this.loadSheet(finalSheet.index);
+      return;
+    }
+
+    this.mobileFinishPending = false;
+    var nextSection = this.root.nextElementSibling;
+    var targetY = nextSection ?
+      Math.round(nextSection.getBoundingClientRect().top + window.scrollY) :
+      Math.round(Math.max(0, this.mobileSectionTop) + this.root.offsetHeight);
     this.disableMobileGesture(targetY);
   };
 
@@ -1011,7 +1117,9 @@
     document.body.classList.remove("aa-journey-gesture-lock");
     this.virtualGestureMode = false;
     this.virtualSectionScroll = 0;
+    this.visualSectionScroll = 0;
     this.mobileGestureComplete = false;
+    this.mobileFinishPending = false;
     this.root.removeAttribute("data-mobile-input");
 
     if (hasHandoff) {
@@ -1148,6 +1256,8 @@
     this.hasCompleted = false;
     this.mobileGestureComplete = false;
     this.virtualSectionScroll = 0;
+    this.visualSectionScroll = 0;
+    this.mobileFinishPending = false;
     this.root.removeAttribute("data-return-banner");
     this.root.removeAttribute("data-mobile-return");
     this.root.setAttribute("data-replay-from-return", "true");
