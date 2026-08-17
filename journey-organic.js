@@ -681,6 +681,16 @@
     if (!bitmap || !this.context) return;
     if (frameIndex === this.lastDrawnFrame && target.index === this.lastDrawnSheet) return;
     var sheet = target.sheet;
+    var cell = this.variant.cell;
+    /*
+      Some browsers briefly restore canvas to its intrinsic 300×150 size when
+      a file page is reloaded or its breakpoint changes. Reassert the render
+      buffer before every paint so the window can never be drawn flattened.
+    */
+    if (this.canvas.width !== cell.width || this.canvas.height !== cell.height) {
+      this.canvas.width = cell.width;
+      this.canvas.height = cell.height;
+    }
     var local = frameIndex - sheet.frameOffset;
     var sourceX = (local % sheet.columns) * this.variant.cell.width;
     var sourceY = Math.floor(local / sheet.columns) * this.variant.cell.height;

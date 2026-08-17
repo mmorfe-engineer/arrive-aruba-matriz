@@ -669,15 +669,17 @@
   No HTML shade / frame / landscape layers. No CSS open animation.
 */
 .aa-figma-hero__window {
+  --aa-window-w: min(var(--aa-window-max-w), 26.4vw);
   position: absolute;
   z-index: 6;
   left: 50%;
   top: 50%;
   transform: translate3d(-50%, -50%, 0);
-  width: min(var(--aa-window-max-w), 26.4vw);
+  width: var(--aa-window-w);
   max-width: var(--aa-window-max-w);
   aspect-ratio: var(--aa-window-ratio);
-  height: auto;
+  /* Never let a transient 300×150 canvas decide the portal's geometry. */
+  height: calc(var(--aa-window-w) * 1.3760683761);
   max-height: 72%;
   pointer-events: none;
   overflow: hidden;
@@ -879,6 +881,7 @@
   z-index: 1;
   width: 100%;
   height: 100%;
+  aspect-ratio: var(--aa-window-ratio);
   aspect-ratio: auto;
   transform: none !important;
   transform-origin: center center;
@@ -898,7 +901,10 @@
   inset: 0;
   display: block;
   width: 100%;
-  height: 100%;
+  height: 100% !important;
+  min-width: 100%;
+  min-height: 100%;
+  aspect-ratio: var(--aa-window-ratio);
   object-fit: contain;
   transform: none !important;
 }
@@ -1268,7 +1274,7 @@
     width: var(--aa-mobile-window-w);
     max-height: min(374px, calc(100svh - 250px));
     aspect-ratio: 243 / 334;
-    height: auto;
+    height: var(--aa-mobile-window-h);
     filter: none;
   }
 
