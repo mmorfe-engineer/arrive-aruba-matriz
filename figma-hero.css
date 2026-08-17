@@ -903,6 +903,26 @@
   transform: none !important;
 }
 
+/*
+  Only one raster source may paint the window at a time. The poster and canvas
+  are intentionally identical on frame 0, but a late spritesheet response or
+  breakpoint change can briefly put them on different frames. Enforcing the
+  source at the visual boundary prevents the doubled-window artifact.
+*/
+.aa-figma-hero__window .aa-organic-visual[data-visual-source] > .aa-organic-visual__poster,
+.aa-figma-hero__window .aa-organic-visual[data-visual-source] > .aa-organic-visual__canvas,
+.aa-figma-hero__window .aa-organic-visual[data-visual-source] > .aa-organic-visual__return-loop {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.aa-figma-hero__window .aa-organic-visual[data-visual-source="poster"] > .aa-organic-visual__poster,
+.aa-figma-hero__window .aa-organic-visual[data-visual-source="canvas"] > .aa-organic-visual__canvas,
+.aa-figma-hero__window .aa-organic-visual[data-visual-source="return"] > .aa-organic-visual__return-loop {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
 .aa-figma-hero__window .aa-organic-visual__final[hidden],
 .aa-figma-hero__window .aa-organic-visual__final:not([src]),
 .aa-figma-hero__window .aa-organic-visual__final[src=""] {
@@ -1334,5 +1354,34 @@
   .aa-figma-hero[data-return-banner="true"] .aa-figma-hero__cta,
   .aa-figma-hero[data-replay-from-return="true"] .aa-figma-hero__cta {
     animation: none;
+  }
+}
+
+/*
+  Short phones need a re-composed scene, not a scaled desktop stack. Keep the
+  navigation clear, preserve breathing room around the portal, and leave a
+  comfortable safe-area below the CTA on 568–640px tall viewports.
+*/
+@media (max-width: 760px) and (max-height: 640px) {
+  .aa-figma-hero {
+    --aa-mobile-window-top: 47%;
+    --aa-mobile-window-w: min(58vw, 226px);
+  }
+
+  .aa-figma-hero__copy {
+    top: calc(var(--aa-mobile-window-top) - (var(--aa-mobile-window-h) / 2) - 56px);
+    min-height: calc(var(--aa-mobile-window-h) + 160px);
+  }
+
+  .aa-figma-hero__display {
+    font-size: clamp(42px, 12vw, 46px);
+  }
+
+  .aa-figma-hero__emotion {
+    font-size: clamp(54px, 16vw, 60px);
+  }
+
+  .aa-figma-hero__cta {
+    top: calc(var(--aa-mobile-window-h) + 156px);
   }
 }

@@ -113,6 +113,7 @@
     this.lastDrawnSheet = -1;
     this.lastRequestedFrame = 0;
     this.lastScaleCss = "";
+    this.visualSource = "";
     this.hasCompleted = false;
     this.returnBanner = false;
     this.replayFromReturn = false;
@@ -141,6 +142,7 @@
     this.applyPortalExposure(0);
     this.applyCloudDescent(0);
     this.root.style.setProperty("--aa-progress", "0");
+    this.setVisualSource("poster");
 
     this.visibilityObserver = new IntersectionObserver(this.onVisibility, { rootMargin: "100% 0px" });
     this.visibilityObserver.observe(root);
@@ -276,6 +278,7 @@
     this.lastDrawnFrame = -1;
     this.lastDrawnSheet = -1;
     this.lastRequestedFrame = 0;
+    this.setVisualSource("poster");
 
     if (this.staticMode) {
       this.root.style.height = "100dvh";
@@ -333,6 +336,16 @@
     if (css === this.lastScaleCss) return;
     this.lastScaleCss = css;
     this.visual.style.setProperty("--aa-visual-scale", css);
+  };
+
+  OrganicJourney.prototype.setVisualSource = function (source) {
+    if (!this.visual) return;
+    if (source !== "poster" && source !== "canvas" && source !== "return") {
+      source = "poster";
+    }
+    if (source === this.visualSource && this.visual.dataset.visualSource === source) return;
+    this.visualSource = source;
+    this.visual.dataset.visualSource = source;
   };
 
   OrganicJourney.prototype.portalFillScale = function () {
@@ -510,8 +523,7 @@
     if (!this.variant || this.staticMode || this.returnBanner) return;
     var metrics = this.scrollMetrics();
     var showReturnLoop = this.replayFromReturn && metrics.sectionScroll <= 2;
-    if (this.returnLoop) this.returnLoop.style.opacity = showReturnLoop ? "1" : "0";
-    if (this.canvas) this.canvas.style.opacity = showReturnLoop ? "0" : "1";
+    this.setVisualSource(showReturnLoop ? "return" : (this.lastDrawnFrame >= 0 ? "canvas" : "poster"));
     progress = metrics.progress;
     if (this.lockScale && progress >= 0.995) this.hasCompleted = true;
 
@@ -686,6 +698,9 @@
     );
     this.lastDrawnFrame = frameIndex;
     this.lastDrawnSheet = target.index;
+    if (!this.returnBanner && this.visualSource !== "return") {
+      this.setVisualSource("canvas");
+    }
   };
 
   /**
@@ -786,6 +801,7 @@
     /* Closed start still — never open staticStill / final as reduced-motion default. */
     var still = this.variant.poster || this.variant.staticStill || this.variant.finalStill;
     this.poster.src = this.assetUrl(still && still.src);
+    this.setVisualSource("poster");
     this.visual.style.setProperty("--aa-final-opacity", "0");
     this.applyVisualScale(1);
     this.applyPortalWhite(0);
@@ -829,12 +845,7 @@
     }
 
     this.requestFrame(openFrame);
-    if (this.poster) {
-      var openStill = this.variant.staticStill || this.variant.finalStill;
-      if (openStill && openStill.src) this.poster.src = this.assetUrl(openStill.src);
-      this.poster.style.opacity = "1";
-    }
-    if (this.canvas) this.canvas.style.opacity = "0";
+    this.setVisualSource("return");
     this.applyVisualScale(1);
     this.applyPortalWhite(0);
     this.applyPortalExposure(0);
@@ -843,10 +854,8 @@
     if (this.visual) this.visual.style.setProperty("--aa-final-opacity", "0");
     this.root.style.setProperty("--aa-progress", "0");
     if (this.returnLoop) {
-      this.returnLoop.style.opacity = "1";
       this.playReturnVideo();
     }
-    if (this.canvas) this.canvas.style.opacity = "0";
 
     /* Desktop removes the track, so compensate once. Mobile never mutates it. */
     if (shop && !mobileReturn) {
@@ -861,7 +870,6 @@
     this.loadSheet(openSheet.index).then(function () {
       if (!self.returnBanner || self.destroyed) return;
       self.drawFrame(openFrame);
-      if (self.poster) self.poster.style.opacity = "0";
     });
   };
 
@@ -887,11 +895,10 @@
     this.applyPortalChrome(1);
     this.root.style.setProperty("--aa-progress", "0");
     this.requestFrame(startFrame);
+    this.setVisualSource("return");
     if (this.returnLoop) {
-      this.returnLoop.style.opacity = "1";
       this.playReturnVideo();
     }
-    if (this.canvas) this.canvas.style.opacity = "0";
     this.lastPageScrollY = window.scrollY;
   };
 
@@ -909,9 +916,8 @@
       if (pageY <= 2) this.rearmFromReturnBanner();
       return;
     }
-    if (this.replayFromReturn && pageY > 2 && this.returnLoop) {
-      this.returnLoop.style.opacity = "0";
-      if (this.canvas) this.canvas.style.opacity = "1";
+    if (this.replayFromReturn && pageY > 2) {
+      this.setVisualSource("canvas");
     }
     this.active = true;
     /* Coalesce all scroll events into a single pending rAF paint. */
@@ -986,6 +992,7 @@
     this.root.style.height = "100dvh";
     if (this.status) this.status.textContent = message || "A still view is available";
     if (this.root.dataset.fallbackPoster) this.poster.src = this.root.dataset.fallbackPoster;
+    this.setVisualSource("poster");
     if (this.visual) {
       this.visual.style.setProperty("--aa-final-opacity", "0");
       this.applyVisualScale(1);
