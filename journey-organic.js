@@ -37,7 +37,8 @@
   function connectionIsSlow() {
     var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     if (!connection) return false;
-    return Boolean(connection.saveData || /(^|-)slow-2g|(^|-)2g|(^|-)3g/.test(connection.effectiveType || ""));
+    /* 3G is common on real phones and can still run the cached sprite runtime. */
+    return Boolean(connection.saveData || /(^|-)slow-2g$|(^|-)2g$/.test(connection.effectiveType || ""));
   }
 
   function visibleViewportHeight() {
@@ -596,6 +597,28 @@
     if (this.lockScale) {
       if (desiredFrameReady) {
         this.visualSectionScroll = desiredMetrics.sectionScroll;
+      } else {
+        /*
+          A cold phone may not have the requested sheet yet. Paint the nearest
+          already-decoded frame immediately so the door still follows the
+          finger instead of looking broken while the exact sheet arrives.
+        */
+        var drawableFrame = this.closestLoadedFrame(desiredFrame);
+        if (drawableFrame !== null) {
+          this.drawFrame(drawableFrame);
+          var drawableScroll = this.sectionScrollForFrame(drawableFrame, desiredMetrics);
+          if (desiredMetrics.sectionScroll >= this.visualSectionScroll) {
+            this.visualSectionScroll = Math.max(
+              this.visualSectionScroll,
+              Math.min(desiredMetrics.sectionScroll, drawableScroll)
+            );
+          } else {
+            this.visualSectionScroll = Math.min(
+              this.visualSectionScroll,
+              Math.max(desiredMetrics.sectionScroll, drawableScroll)
+            );
+          }
+        }
       }
       var committedScroll = clamp(
         this.visualSectionScroll,
@@ -691,6 +714,58 @@
       }
     }
     return { index: sheets.length - 1, sheet: sheets[sheets.length - 1] };
+  };
+
+  OrganicJourney.prototype.closestLoadedFrame = function (frameIndex) {
+    if (!this.variant || !this.loadedSheets.size) return null;
+    var desired = clamp(
+      Math.round(frameIndex),
+      0,
+      this.variant.clip.frameCount - 1
+    );
+    var sheets = this.variant.clip.sheets;
+    var closest = null;
+    var closestDistance = Infinity;
+
+    this.loadedSheets.forEach(function (bitmap, index) {
+      if (!bitmap || !sheets[index]) return;
+      var sheet = sheets[index];
+      var start = sheet.frameOffset;
+      var end = start + sheet.frameCount - 1;
+      var candidate = clamp(desired, start, end);
+      var distance = Math.abs(candidate - desired);
+      if (distance < closestDistance) {
+        closest = candidate;
+        closestDistance = distance;
+      }
+    });
+
+    return closest;
+  };
+
+  OrganicJourney.prototype.sectionScrollForFrame = function (frameIndex, metrics) {
+    var low = 0;
+    var high = metrics.usableScroll;
+    var target = clamp(
+      Number(frameIndex) || 0,
+      0,
+      this.variant.clip.frameCount - 1
+    );
+
+    /* Invert the monotonic frame curve without introducing a second timeline. */
+    for (var iteration = 0; iteration < 14; iteration += 1) {
+      var middle = (low + high) / 2;
+      var probe = {
+        sectionScroll: middle,
+        usableScroll: metrics.usableScroll,
+        progress: middle / metrics.usableScroll,
+        viewportHeight: metrics.viewportHeight
+      };
+      if (this.frameForScroll(probe) < target) low = middle;
+      else high = middle;
+    }
+
+    return (low + high) / 2;
   };
 
   OrganicJourney.prototype.loadSheet = function (index) {
@@ -1169,8 +1244,8 @@
 
   OrganicJourney.prototype.renderStatic = function () {
     if (!this.variant) return;
-    /* Closed start still — never open staticStill / final as reduced-motion default. */
-    var still = this.variant.poster || this.variant.staticStill || this.variant.finalStill;
+    /* Reduced motion / Save Data must remain usable: show the open destination. */
+    var still = this.variant.staticStill || this.variant.finalStill || this.variant.poster;
     this.poster.src = this.assetUrl(still && still.src);
     this.setVisualSource("poster");
     this.visual.style.setProperty("--aa-final-opacity", "0");
