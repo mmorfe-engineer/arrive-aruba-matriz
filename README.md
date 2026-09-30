@@ -1,8 +1,8 @@
-# Arrive Aruba — Web & App
+<p align="center"><img src="docs/banner.svg" alt="Arrive Aruba — Web & App" width="100%"/></p>
 
 An editorial resortwear website and mobile app prototype inspired by the experience of arriving in Aruba. A portfolio project by [Martin Morfe](https://github.com/morfemartin).
 
-[Live website](https://morfemartin.github.io/Web_Arrive-Aruba/Arrive%20Aruba%20-%20Homepage.dc.html) · [Mobile app prototype](https://morfemartin.github.io/Web_Arrive-Aruba/Arrive%20Aruba%20-%20App.dc.html) · [Independent 3D / Journey project](https://github.com/morfemartin/Web_Arrive-Aruba-3D)
+[Live website](https://morfemartin.github.io/arrive-aruba-website/Arrive%20Aruba%20-%20Homepage.dc.html) · [Mobile app prototype](https://morfemartin.github.io/arrive-aruba-website/Arrive%20Aruba%20-%20App.dc.html) · [Independent 3D / Journey project](https://github.com/morfemartin/arrive-aruba-3d-journey)
 
 ![Arrive Aruba homepage — desktop](docs/screenshots/homepage-desktop.png)
 
@@ -21,12 +21,11 @@ The repository demonstrates responsive interface development, translation of bra
 - [Design system](./_ds/arrive-aruba-design-system-4dc78757-60e4-49ce-82d5-c2f33f185275/readme.md), including tokens and typography.
 - [Architecture and repository scope](docs/ARCHITECTURE.md).
 
-<details>
-<summary>Mobile homepage screenshot</summary>
-
-![Arrive Aruba homepage — mobile](docs/screenshots/homepage-mobile.png)
-
-</details>
+<p align="center">
+  <img src="docs/screenshots/homepage-mobile.png" alt="Arrive Aruba homepage — mobile" width="32%"/>
+  <img src="docs/screenshots/app-mobile.jpg" alt="Arrive Aruba mobile app prototype" width="32%"/>
+</p>
+<p align="center"><sub>Mobile homepage · app prototype</sub></p>
 
 ## Run locally
 
@@ -42,7 +41,7 @@ The pages use HTML/CSS, JavaScript and a bundled React/Babel runtime in `support
 
 ## Repository boundaries
 
-`main` contains the final web source and selected portfolio material. Further 3D experiments belong in [Web_Arrive-Aruba-3D](https://github.com/morfemartin/Web_Arrive-Aruba-3D), which has its own [Pages demo](https://morfemartin.github.io/Web_Arrive-Aruba-3D/).
+`main` contains the final web source and selected portfolio material. Further 3D experiments belong in [arrive-aruba-3d-journey](https://github.com/morfemartin/arrive-aruba-3d-journey), which has its own [Pages demo](https://morfemartin.github.io/arrive-aruba-3d-journey/).
 
 The original live site still publishes from `gh-pages`. That branch includes later Journey changes and is intentionally independent of this cleanup of `main`; the live preview can therefore differ from the screenshots of `main` above. Do not overwrite `gh-pages` with `main` without reviewing those differences.
 
