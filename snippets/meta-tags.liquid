@@ -12,7 +12,7 @@
   assign seo_title = page_title | strip
   assign seo_description = page_description | default: shop.description | strip
 
-  if seo_title == blank
+  if seo_title == blank or seo_title == 'My Store'
     case request.page_type
       when 'password'
         assign seo_title = 'Arrive Aruba | Resortwear inspired by the island'

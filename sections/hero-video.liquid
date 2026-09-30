@@ -33,7 +33,7 @@
       <img class="hero-mark-static" src="{{ 'arrive-a-mark.svg' | asset_url }}" alt="" width="420" height="420">
       <img class="hero-mark-animated" data-animated-mark src="{{ 'arrive-a-mark-animated.png' | asset_url }}" alt="" width="420" height="420">
     </div>
-    {% if section.settings.tagline != blank %}<h1 class="hero-tagline" data-reveal style="--reveal-delay:.42s">{{ section.settings.tagline }}</h1>{% endif %}
+    {% if section.settings.tagline != blank %}<h1 class="hero-tagline" data-reveal style="--reveal-delay:.42s">{% if section.settings.seo_heading != blank %}<span class="sr-only">{{ section.settings.seo_heading }}. </span>{% endif %}{{ section.settings.tagline }}</h1>{% endif %}
     <div class="hero-actions" data-reveal style="--reveal-delay:.62s">
       {% if section.settings.primary_label != blank %}<a class="button button--light" href="{{ section.settings.primary_link | default: routes.all_products_collection_url }}">{{ section.settings.primary_label }}</a>{% endif %}
       {% if section.settings.secondary_label != blank %}<a class="button button--ghost-light" href="{{ section.settings.secondary_link | default: routes.root_url }}">{{ section.settings.secondary_label }}</a>{% endif %}
@@ -57,6 +57,7 @@
     { "type": "range", "id": "focus", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 35, "label": "t:sections.hero.focus" },
     { "type": "text", "id": "eyebrow", "label": "t:sections.hero.eyebrow", "default": "Aruba · Resortwear" },
     { "type": "text", "id": "tagline", "label": "t:sections.hero.tagline", "default": "The island stays with you" },
+    { "type": "text", "id": "seo_heading", "label": "SEO heading", "info": "Read by search engines and screen readers before the tagline. Not shown visually.", "default": "Arrive Aruba, resortwear designed in Aruba" },
     { "type": "text", "id": "primary_label", "label": "t:sections.hero.primary_label", "default": "Shop the collection" },
     { "type": "url", "id": "primary_link", "label": "t:sections.hero.primary_link" },
     { "type": "text", "id": "secondary_label", "label": "t:sections.hero.secondary_label", "default": "Discover the island" },
