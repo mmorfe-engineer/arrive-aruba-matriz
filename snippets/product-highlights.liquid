@@ -1,0 +1,49 @@
+{% doc %}
+  Renders merchant fabric/fit badges and native available sizes in option order.
+  @param {product} product - Product supplying metafields and variants.
+  @param {variant} current_variant - Selected native variant, including sold-out deep links.
+  @param {number} [color_option_index] - Resolved zero-based color position.
+  @param {number} [size_option_index] - Resolved zero-based size position.
+{% enddoc %}
+{%- liquid
+  assign fabric_weight = product.metafields.custom.fabric_weight_gsm.value
+  assign fit_label = product.metafields.custom.fit_label.value | strip
+  assign available_size_count = 0
+  if size_option_index != nil
+    assign size_option = product.options_with_values[size_option_index]
+    assign size_values = size_option.values | map: 'name'
+  endif
+-%}
+{%- capture available_sizes -%}
+  {%- for size_value in size_values -%}
+    {%- liquid
+      assign size_available = false
+      for variant in product.variants
+        if variant.available and variant.options[size_option_index] == size_value
+          if color_option_index == nil or variant.options[color_option_index] == current_variant.options[color_option_index]
+            assign size_available = true
+            break
+          endif
+        endif
+      endfor
+    -%}
+    {%- if size_available -%}
+      {%- if available_size_count > 0 -%}, {% endif -%}
+      {{- size_value | escape -}}
+      {%- assign available_size_count = available_size_count | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if fabric_weight > 0 or fit_label != blank or size_option_index != nil -%}
+  <div class="product-highlights"{% unless fabric_weight > 0 or fit_label != blank or available_size_count > 0 %} hidden{% endunless %}>
+    {%- if fabric_weight > 0 -%}<span class="product-highlight">{{ fabric_weight }} GSM</span>{%- endif -%}
+    {%- if fit_label != blank -%}<span class="product-highlight">{{ fit_label | escape }}</span>{%- endif -%}
+    {%- if size_option_index != nil -%}
+      <span class="product-highlight product-highlight--sizes" data-available-sizes{% if available_size_count == 0 %} hidden{% endif %}><span>{{ 'products.product.available_sizes' | t }}: </span><span data-available-sizes-values>{{ available_sizes }}</span></span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+{%- if size_option_index != nil -%}
+  {%- capture json_less_than -%}\u003c{%- endcapture -%}
+  <script type="application/json" data-size-values>{{ size_values | json | replace: '<', json_less_than }}</script>
+{%- endif -%}

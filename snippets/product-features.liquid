@@ -1,0 +1,25 @@
+{% doc %}
+  Renders storefront-accessible merchant feature references in list order.
+  @param {product} product - Product supplying custom.product_features.
+{% enddoc %}
+{%- capture feature_items -%}
+  {%- for feature in product.metafields.custom.product_features.value -%}
+    {%- assign label = feature.label.value | strip -%}
+    {%- if label != blank -%}
+      <li class="product-feature-item">
+        {%- if feature.details.value != blank -%}
+          <details class="product-feature product-feature--details">
+            <summary>{% render 'product-feature-icon', icon_key: feature.icon_key.value %}<span>{{ label | escape }}</span></summary>
+            <div class="product-feature-details rte">{{ feature.details | metafield_tag }}</div>
+          </details>
+        {%- else -%}
+          <span class="product-feature">{% render 'product-feature-icon', icon_key: feature.icon_key.value %}<span>{{ label | escape }}</span></span>
+        {%- endif -%}
+      </li>
+    {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- assign feature_items = feature_items | strip -%}
+{%- if feature_items != blank -%}
+  <ul class="product-features" aria-label="{{ 'products.product.features' | t | escape }}">{{ feature_items }}</ul>
+{%- endif -%}

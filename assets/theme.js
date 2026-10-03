@@ -363,63 +363,195 @@ customElements.define('product-gallery', ProductGallery);
 
 class ProductForm extends HTMLElement {
   connectedCallback() {
+    if (this.enhanced) return;
     this.form = this.querySelector('form');
-    this.variants = JSON.parse(this.querySelector('[data-variants]')?.textContent || '[]');
-    this.idInput = this.querySelector('[name="id"]');
-    this.submits = Array.from(this.querySelectorAll('[data-product-submit]'));
+    this.idInput = this.querySelector('[data-variant-id]');
+    this.fallback = this.querySelector('[data-variant-fallback]');
+    this.fallbackContainer = this.querySelector('[data-variant-fallback-container]');
+    this.nativeSubmit = this.querySelector('[data-native-product-submit]');
+    this.submits = Array.from(this.querySelectorAll('[data-product-submit]:not([data-native-product-submit])'));
     this.submit = this.submits[0];
-    this.price = this.closest('.product-layout')?.querySelector('[data-product-price]');
-    this.compare = this.closest('.product-layout')?.querySelector('[data-product-compare]');
+    this.layout = this.closest('.product-layout');
+    this.price = this.layout?.querySelector('[data-product-price]');
+    this.compare = this.layout?.querySelector('[data-product-compare]');
     this.unavailableNote = this.querySelector('[data-unavailable-note]');
-    this.querySelectorAll('[data-option-input]').forEach((input) => input.addEventListener('change', () => this.updateVariant()));
+    this.purchaseWrappers = Array.from(this.querySelectorAll('[data-enhanced-purchase]'));
+    this.dynamicCheckout = this.querySelector('[data-dynamic-checkout]');
+    const fallbackDisabled = this.fallback?.disabled;
+    const nativeDisabled = this.nativeSubmit?.disabled;
+
+    try {
+      this.variants = JSON.parse(this.querySelector('[data-variants]')?.textContent || 'null');
+      if (!this.form || !this.idInput || !this.fallback || !this.fallbackContainer || !this.submit
+        || !Array.isArray(this.variants) || !this.variants.length
+        || this.variants.some((variant) => !variant?.id || !Array.isArray(variant.options)
+          || !variant.options.length || variant.options.some((value) => typeof value !== 'string')
+          || typeof variant.available !== 'boolean' || !Number.isFinite(variant.price))) {
+        throw new Error('Invalid product form data');
+      }
+      this.fieldsets = Array.from(this.querySelectorAll('fieldset[data-option-position]'))
+        .sort((a, b) => Number(a.dataset.optionPosition) - Number(b.dataset.optionPosition));
+      const optionCount = this.variants[0].options.length;
+      if (this.variants.some((variant) => variant.options.length !== optionCount)
+        || (this.fieldsets.length && (this.fieldsets.length !== optionCount
+          || this.fieldsets.some((fieldset, index) => fieldset.dataset.optionPosition !== String(index)
+            || !fieldset.querySelector('[data-option-input]'))))) {
+        throw new Error('Invalid product option positions');
+      }
+      this.initialVariantId = this.idInput.value;
+      if (!this.fieldsets.length && (this.variants.length !== 1
+        || !this.variants.some((variant) => String(variant.id) === this.initialVariantId))) {
+        throw new Error('Missing product options');
+      }
+      const roleIndex = (attribute) => {
+        const value = this.layout?.getAttribute(attribute);
+        if (value == null || value.trim() === '') return null;
+        const index = Number(value);
+        return Number.isInteger(index) && index >= 0 && index < this.fieldsets.length ? index : null;
+      };
+      this.colorOptionIndex = roleIndex('data-color-option-index');
+      this.sizeOptionIndex = roleIndex('data-size-option-index');
+      if (this.sizeOptionIndex === this.colorOptionIndex) this.sizeOptionIndex = null;
+      this.sizeBadge = this.layout?.querySelector('[data-available-sizes]');
+      this.sizeBadgeValues = this.sizeBadge?.querySelector('[data-available-sizes-values]');
+      this.sizeValues = this.sizeOptionIndex === null ? []
+        : JSON.parse(this.layout?.querySelector('[data-size-values]')?.textContent || 'null');
+      if (!Array.isArray(this.sizeValues) || this.sizeValues.some((value) => typeof value !== 'string')) {
+        throw new Error('Invalid product size values');
+      }
+
+      // Initialize without reconciling away the merchant's explicit sold-out tuple.
+      this.updateVariant();
+      this.purchaseWrappers.forEach((wrapper) => { wrapper.hidden = false; });
+      this.fallback.disabled = true;
+      if (this.nativeSubmit) this.nativeSubmit.disabled = true;
+      this.fallbackContainer.hidden = true;
+      this.enhanced = true;
+      this.dataset.enhanced = 'true';
+    } catch (error) {
+      // The native select remains the only successful ID when enhancement fails.
+      if (this.idInput) this.idInput.disabled = true;
+      if (this.fallback) this.fallback.disabled = fallbackDisabled;
+      if (this.nativeSubmit) this.nativeSubmit.disabled = nativeDisabled;
+      if (this.fallbackContainer) this.fallbackContainer.hidden = false;
+      this.purchaseWrappers.forEach((wrapper) => { wrapper.hidden = true; });
+      if (this.dynamicCheckout) this.dynamicCheckout.hidden = true;
+      return;
+    }
+    this.fieldsets.forEach((fieldset) => {
+      fieldset.querySelectorAll('[data-option-input]').forEach((input) => {
+        input.addEventListener('change', () => this.updateVariant(Number(fieldset.dataset.optionPosition)));
+      });
+    });
     this.form?.addEventListener('submit', (event) => this.addToCart(event));
   }
 
   selectedOptions() {
-    return Array.from(this.querySelectorAll('fieldset')).map((fieldset) => fieldset.querySelector('[data-option-input]:checked')?.value);
+    return this.fieldsets.map((fieldset) => fieldset.querySelector('[data-option-input]:checked')?.value);
   }
 
-  updateVariant() {
-    const selected = this.selectedOptions();
-    const variant = this.variants.find((item) => item.options.every((option, index) => option === selected[index]));
-    if (!variant) {
-      this.submits.forEach((submit) => { submit.disabled = true; });
-      if (this.unavailableNote) this.unavailableNote.hidden = false;
-      announce(this.unavailableNote?.textContent);
-      return;
-    }
-    if (this.unavailableNote) this.unavailableNote.hidden = true;
-    this.idInput.value = variant.id;
-    this.querySelectorAll('fieldset').forEach((fieldset) => {
-      const selected = fieldset.querySelector('[data-option-input]:checked');
-      const label = fieldset.querySelector('[data-selected-option]');
-      if (selected && label) label.textContent = selected.value;
+  optionOrder() {
+    const positions = this.fieldsets.map((fieldset) => Number(fieldset.dataset.optionPosition));
+    return this.colorOptionIndex === null ? positions
+      : [this.colorOptionIndex, ...positions.filter((position) => position !== this.colorOptionIndex)];
+  }
+
+  refreshOptionAvailability(changedPosition) {
+    const order = this.optionOrder();
+    const changedIndex = order.indexOf(changedPosition);
+    order.forEach((position, orderIndex) => {
+      const selected = this.selectedOptions();
+      const earlier = order.slice(0, orderIndex);
+      this.fieldsets[position].querySelectorAll('[data-option-input]').forEach((input) => {
+        const supported = this.variants.some((variant) => variant.available
+          && variant.options[position] === input.value
+          && earlier.every((index) => selected[index] === undefined || variant.options[index] === selected[index]));
+        input.disabled = !supported;
+        // Later dimensions never restrict an upstream choice. Reconcile in order,
+        // leaving a partial tuple for explicit selection rather than choosing for it.
+        if (!supported && input.checked && changedIndex >= 0 && orderIndex > changedIndex) {
+          input.checked = false;
+        }
+      });
     });
-    if (this.price) this.price.textContent = formatMoney(variant.price);
-    if (this.compare) {
-      this.compare.textContent = variant.compare_at_price > variant.price ? formatMoney(variant.compare_at_price) : '';
-      this.compare.hidden = !(variant.compare_at_price > variant.price);
-    }
+  }
+
+  updateAvailableSizes() {
+    if (this.sizeOptionIndex === null || !this.sizeBadge || !this.sizeBadgeValues) return;
+    const color = this.selectedOptions()[this.colorOptionIndex];
+    const sizes = [...new Set(this.sizeValues)].filter((size) => this.variants.some((variant) => variant.available
+      && variant.options[this.sizeOptionIndex] === size
+      && (this.colorOptionIndex === null || color === undefined || variant.options[this.colorOptionIndex] === color)));
+    this.sizeBadgeValues.textContent = sizes.join(', ');
+    this.sizeBadge.hidden = sizes.length === 0;
+    const highlights = this.sizeBadge.closest('.product-highlights');
+    if (highlights) highlights.hidden = !Array.from(highlights.children).some((child) => !child.hidden);
+  }
+
+  syncPurchaseState() {
+    const available = Boolean(this.currentVariant?.available);
+    const disabled = !available || Boolean(this.submitting);
     this.submits.forEach((submit) => {
-      submit.disabled = !variant.available;
-      submit.textContent = variant.available ? submit.dataset.availableLabel : submit.dataset.soldLabel;
+      submit.disabled = disabled;
+      submit.textContent = available ? submit.dataset.availableLabel : submit.dataset.soldLabel;
+      if (this.submitting) submit.setAttribute('aria-busy', 'true');
+      else submit.removeAttribute('aria-busy');
     });
+    // Guard the Shopify-owned payment subtree through its wrapper, not internals.
+    if (this.dynamicCheckout) {
+      this.dynamicCheckout.hidden = disabled;
+      this.dynamicCheckout.toggleAttribute('inert', disabled);
+      this.dynamicCheckout.setAttribute('aria-hidden', String(disabled));
+      this.dynamicCheckout.setAttribute('aria-disabled', String(disabled));
+    }
+  }
+
+  updateVariant(changedPosition) {
+    this.refreshOptionAvailability(changedPosition);
+    const selected = this.selectedOptions();
+    const variant = this.fieldsets.length
+      ? this.variants.find((item) => item.options.every((option, index) => option === selected[index]))
+      : this.variants.find((item) => String(item.id) === this.initialVariantId);
+    this.currentVariant = variant || null;
+    this.idInput.value = variant ? String(variant.id) : '';
+    this.idInput.disabled = !variant;
+    this.fieldsets.forEach((fieldset, index) => {
+      const label = fieldset.querySelector('[data-selected-option]');
+      if (label) label.textContent = selected[index] ?? '';
+    });
+    this.updateAvailableSizes();
+    if (this.unavailableNote) this.unavailableNote.hidden = Boolean(variant);
+    if (this.price) {
+      this.price.hidden = !variant;
+      this.price.textContent = variant ? formatMoney(variant.price) : '';
+    }
+    if (this.compare) {
+      const showCompare = variant && variant.compare_at_price > variant.price;
+      this.compare.textContent = showCompare ? formatMoney(variant.compare_at_price) : '';
+      this.compare.hidden = !showCompare;
+    }
+    this.syncPurchaseState();
     const nextUrl = new URL(window.location.href);
-    nextUrl.searchParams.set('variant', variant.id);
-    window.history.replaceState({}, '', nextUrl);
-    if (variant.featured_media?.id) {
+    if (variant) nextUrl.searchParams.set('variant', variant.id);
+    else nextUrl.searchParams.delete('variant');
+    window.history.replaceState(window.history.state, '', nextUrl);
+    if (variant?.featured_media?.id) {
       this.closest('.main-product')?.querySelector('product-gallery')?.showMedia(variant.featured_media.id);
     }
+    if (this.enhanced) announce(variant ? this.submit?.textContent : this.unavailableNote?.textContent);
   }
 
   async addToCart(event) {
+    if (!this.enhanced) return;
     event.preventDefault();
-    if (!this.form || this.submit?.disabled) return;
+    if (!this.form || !this.currentVariant?.available || this.idInput.disabled
+      || this.idInput.value !== String(this.currentVariant.id) || this.submitting) return;
     const data = new FormData(this.form);
     const sections = [sectionId('[data-drawer="cart"]'), sectionId('[data-header]')].filter(Boolean).join(',');
     if (sections) data.append('sections', sections);
     data.append('sections_url', window.location.pathname);
-    this.submits.forEach((submit) => submit.setAttribute('aria-busy', 'true'));
+    this.submitting = true;
+    this.syncPurchaseState();
     try {
       const response = await fetch(`${rootUrl}cart/add.js`, { method: 'POST', headers: { Accept: 'application/json' }, body: data });
       const result = await response.json();
@@ -430,7 +562,8 @@ class ProductForm extends HTMLElement {
     } catch (error) {
       announce(error.message);
     } finally {
-      this.submits.forEach((submit) => submit.removeAttribute('aria-busy'));
+      this.submitting = false;
+      this.syncPurchaseState();
     }
   }
 }

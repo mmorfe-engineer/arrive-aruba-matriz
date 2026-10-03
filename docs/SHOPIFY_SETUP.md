@@ -43,16 +43,11 @@ Los productos sin fotografía muestran el placeholder de Arrive Aruba automátic
 
 ## 4. Datos personalizados de producto
 
-En `Settings > Custom data > Products`, crea estas definiciones con namespace y key exactos:
+Sigue la [guía de datos de producto](SHOPIFY_PRODUCT_DATA.md) para crear las definiciones exactas en `Settings > Custom data`, configurar el metaobjeto `product_feature` y cargar los valores desde cada producto.
 
-| Name | Namespace and key | Type |
-| --- | --- | --- |
-| Materials | `custom.materials` | Rich text |
-| Care | `custom.care` | Rich text |
-| Fit | `custom.fit` | Rich text |
-| Size guide | `custom.size_guide` | Rich text |
+La ficha toma gramaje, etiqueta de fit, características y envío de esos datos de Admin. Las tallas disponibles, los colores, las variantes y los swatches proceden de las opciones nativas de Shopify. Un dato opcional vacío se oculta; el tema no agrega promesas de envío ni características por defecto.
 
-El producto muestra únicamente los campos que tengan contenido. Estos datos también pueden conectarse como dynamic sources desde el editor.
+Se conservan `custom.materials`, `custom.care`, `custom.fit` y `custom.size_guide` como **Rich text** en los acordeones. `custom.fit_label` es una etiqueta corta independiente; no reemplaza `custom.fit`.
 
 ## 5. Editor del tema
 

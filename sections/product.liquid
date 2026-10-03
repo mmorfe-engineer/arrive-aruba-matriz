@@ -14,11 +14,57 @@
     assign product_rating_scale = product_rating.scale_max | default: 5
     assign product_rating_percent = product_rating.rating | divided_by: product_rating_scale | times: 100
   endif
+  assign color_option_index = nil
+  assign size_option_index = nil
+  assign configured_color_name = section.settings.color_option_name | strip | downcase
+  assign configured_size_name = section.settings.size_option_name | strip | downcase
+  assign color_aliases = 'color,colour,colore,couleur,farbe' | split: ','
+  assign size_aliases = 'size,talla,tamaño,tamano,taille,taglia,größe,grosse' | split: ','
+  for option in product.options_with_values
+    assign normalized_name = option.name | strip | downcase
+    if configured_color_name != blank and normalized_name == configured_color_name
+      assign color_option_index = option.position | minus: 1
+      break
+    endif
+  endfor
+  for option in product.options_with_values
+    assign option_index = option.position | minus: 1
+    assign normalized_name = option.name | strip | downcase
+    if configured_size_name != blank and normalized_name == configured_size_name and option_index != color_option_index
+      assign size_option_index = option_index
+      break
+    endif
+  endfor
+  if color_option_index == nil
+    for option in product.options_with_values
+      assign option_index = option.position | minus: 1
+      if option_index != size_option_index
+        for option_value in option.values
+          if option_value.swatch.image != blank or option_value.swatch.color != blank
+            assign color_option_index = option_index
+            break
+          endif
+        endfor
+      endif
+      if color_option_index != nil
+        break
+      endif
+    endfor
+  endif
+  for option in product.options_with_values
+    assign option_index = option.position | minus: 1
+    assign normalized_name = option.name | strip | downcase
+    if color_option_index == nil and option_index != size_option_index and color_aliases contains normalized_name
+      assign color_option_index = option_index
+    endif
+    if size_option_index == nil and option_index != color_option_index and size_aliases contains normalized_name
+      assign size_option_index = option_index
+    endif
+  endfor
+  assign initial_media_id = current_variant.featured_media.id | default: product.featured_media.id | default: product.media.first.id
 -%}
-<section
-  class="main-product"
-  style="--product-gallery-bg:{{ section.settings.gallery_background }};--product-media-bg:{{ section.settings.media_background }}"
->
+{%- capture json_less_than -%}\u003c{%- endcapture -%}
+<section class="main-product">
   <div class="product-pdp-nav">
     <a class="product-nav-button product-back" href="{{ back_url }}" aria-label="{{ 'products.product.back_to_collection' | t }}">{% render 'icon', name: 'arrow' %}</a>
     <div class="product-pdp-actions">
@@ -27,12 +73,12 @@
     </div>
   </div>
 
-  <div class="product-layout" data-section-id="{{ section.id }}">
+  <div class="product-layout" data-section-id="{{ section.id }}"{% if color_option_index != nil %} data-color-option-index="{{ color_option_index }}"{% endif %}{% if size_option_index != nil %} data-size-option-index="{{ size_option_index }}"{% endif %}>
     <product-gallery class="product-gallery" aria-label="{{ 'products.product.media' | t: product: product.title | escape }}" style="--product-media-fit:{{ section.settings.media_fit }}">
       <div class="product-media-list">
         {% if product.media.size > 0 %}
           {% for media in product.media %}
-            <div class="product-media" data-media-id="{{ media.id }}" data-product-media{% unless forloop.first %} hidden{% endunless %}>
+            <div class="product-media" data-media-id="{{ media.id }}" data-product-media{% unless media.id == initial_media_id %} hidden{% endunless %}>
               {% render 'product-media', media: media, eager: forloop.first %}
             </div>
           {% endfor %}
@@ -43,7 +89,7 @@
       {% if product.media.size > 1 %}
         <div class="product-media-pagination" role="tablist" aria-label="{{ 'products.product.media_navigation' | t }}">
           {% for media in product.media %}
-            <button type="button" data-media-target="{{ media.id }}" aria-label="{{ 'products.product.view_media' | t: index: forloop.index }}"{% if forloop.first %} class="is-active" aria-current="true"{% endif %}></button>
+            <button type="button" data-media-target="{{ media.id }}" aria-label="{{ 'products.product.view_media' | t: index: forloop.index }}"{% if media.id == initial_media_id %} class="is-active" aria-current="true"{% endif %}></button>
           {% endfor %}
         </div>
       {% endif %}
@@ -51,8 +97,9 @@
 
     <div class="product-info">
       <div class="product-info-inner">
-        <p class="eyebrow">{% if product.type != blank %}{{ product.type }} / {% elsif section.settings.show_vendor and product.vendor != blank %}{{ product.vendor }} / {% endif %}Arrive Aruba</p>
-        <h1 class="product-title">{{ product.title }}</h1>
+        <p class="eyebrow">{% if product.type != blank %}{{ product.type | escape }} / {% elsif section.settings.show_vendor and product.vendor != blank %}{{ product.vendor | escape }} / {% endif %}Arrive Aruba</p>
+        {% render 'product-highlights', product: product, current_variant: current_variant, color_option_index: color_option_index, size_option_index: size_option_index %}
+        <h1 class="product-title">{{ product.title | escape }}</h1>
         <div class="product-price-row">
           <div class="product-price">{% render 'price', product: product, variant: current_variant %}</div>
         </div>
@@ -65,50 +112,86 @@
         {% endif %}
 
         {% if section.settings.show_description and product.description != blank %}
-          <div class="product-intro rte">{{ product.description | strip_html | truncatewords: 28 }}</div>
+          <div class="product-intro rte">{{ product.description | strip_html | truncatewords: 28 | escape }}</div>
         {% endif %}
 
-        <div class="product-quick-notes" aria-label="Product service notes">
-          {% if section.settings.delivery_note != blank %}<span>{{ section.settings.delivery_note }}</span>{% endif %}
-          {% if product.metafields.custom.fit != blank %}<span>{{ 'products.product.fit' | t }}</span>{% endif %}
-          {% if product.metafields.custom.care != blank %}<span>{{ 'products.product.care' | t }}</span>{% endif %}
-        </div>
+        {% render 'product-features', product: product %}
 
         <product-form>
           {% form 'product', product, id: product_form_id %}
-            <input type="hidden" name="id" value="{{ current_variant.id }}">
+            <div class="product-variant-fallback" data-variant-fallback-container>
+              <label for="Variant-{{ section.id }}">{{ 'products.product.choose_variant' | t }}</label>
+              <select id="Variant-{{ section.id }}" name="id" data-variant-fallback required{% unless product.available %} disabled{% endunless %}>
+                {% unless current_variant.available %}<option value="" selected disabled>{{ current_variant.title | escape }} — {{ current_variant.price | money | escape }} — {{ 'products.product.sold_out' | t }}</option>{% endunless %}
+                {% for variant in product.variants %}
+                  <option value="{{ variant.id }}"{% if variant.id == current_variant.id and variant.available %} selected{% endif %}{% unless variant.available %} disabled{% endunless %}>{{ variant.title | escape }} — {{ variant.price | money | escape }}{% unless variant.available %} — {{ 'products.product.sold_out' | t }}{% endunless %}</option>
+                {% endfor %}
+              </select>
+              <button class="button button--primary product-submit" type="submit" data-native-product-submit data-product-submit data-available-label="{{ 'products.product.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.product.sold_out' | t | escape }}" data-added-label="{{ 'products.product.added_to_cart' | t | escape }}"{% unless product.available %} disabled{% endunless %}>{% if product.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button>
+            </div>
+            <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id disabled>
             {% unless product.has_only_default_variant %}
+              <div data-variant-options>
               {% for option in product.options_with_values %}
                 {%- liquid
-                  assign option_name = option.name | downcase
+                  assign option_index = option.position | minus: 1
+                  assign selected_value = current_variant.options[option_index]
                   assign is_color_option = false
                   assign is_size_option = false
-                  if option_name contains 'color' or option_name contains 'colour'
+                  if option_index == color_option_index
                     assign is_color_option = true
                   endif
-                  if option_name contains 'size'
+                  if option_index == size_option_index
                     assign is_size_option = true
                   endif
                 -%}
-                <fieldset class="product-option{% if is_color_option %} product-option--color{% endif %}">
+                <fieldset class="product-option{% if is_color_option %} product-option--color{% endif %}" data-option-position="{{ option_index }}">
                   <legend>
-                    <span>{{ option.name }}</span>
+                    <span>{{ option.name | escape }}</span>
                     {% if is_size_option and product.metafields.custom.size_guide != blank %}
                       <a href="#ProductDetails-{{ section.id }}">{{ 'products.product.size_guide' | t }}</a>
                     {% else %}
-                      <span class="product-option-selected" data-selected-option>{{ option.selected_value }}</span>
+                      <span class="product-option-selected" data-selected-option>{{ selected_value | escape }}</span>
                     {% endif %}
                   </legend>
                   <div class="option-values">
                     {% for option_value in option.values %}
-                      <input class="option-input" id="Option-{{ section.id }}-{{ option.position }}-{{ forloop.index }}" type="radio" name="options[{{ option.name | escape }}]" value="{{ option_value | escape }}" data-option-input{% if option.selected_value == option_value %} checked{% endif %}{% unless option_value.available %} disabled{% endunless %}>
-                      <label class="option-label{% if is_color_option %} option-label--swatch swatch--{{ option_value | handle }}{% endif %}" for="Option-{{ section.id }}-{{ option.position }}-{{ forloop.index }}" title="{{ option_value | escape }}"{% if is_color_option and option_value.swatch.color %} style="--swatch-color:rgb({{ option_value.swatch.color.rgb }})"{% elsif is_color_option and option_value.swatch.image %} style="--swatch-image:url('{{ option_value.swatch.image | image_url: width: 96 }}')"{% endif %}>
-                        {% if is_color_option %}<span class="swatch-check" aria-hidden="true">{% render 'icon', name: 'check' %}</span><span class="sr-only">{{ option_value }}</span>{% else %}{{ option_value }}{% endif %}
+                      {%- liquid
+                        assign value_available = false
+                        for variant in product.variants
+                          if variant.available and variant.options[option_index] == option_value.name
+                            assign matches_prefix = true
+                            if color_option_index != nil and is_color_option == false
+                              if variant.options[color_option_index] != current_variant.options[color_option_index]
+                                assign matches_prefix = false
+                              endif
+                            endif
+                            unless is_color_option
+                              for earlier_option in product.options_with_values
+                                assign earlier_index = earlier_option.position | minus: 1
+                                if earlier_index < option_index and earlier_index != color_option_index
+                                  if variant.options[earlier_index] != current_variant.options[earlier_index]
+                                    assign matches_prefix = false
+                                  endif
+                                endif
+                              endfor
+                            endunless
+                            if matches_prefix
+                              assign value_available = true
+                              break
+                            endif
+                          endif
+                        endfor
+                      -%}
+                      <input class="option-input" id="Option-{{ section.id }}-{{ option.position }}-{{ forloop.index }}" type="radio" name="options[{{ option.name | escape }}]" value="{{ option_value.name | escape }}" data-option-input{% if selected_value == option_value.name %} checked{% endif %}{% unless value_available %} disabled{% endunless %}>
+                      <label class="option-label{% if is_color_option %} option-label--swatch{% unless option_value.swatch.image or option_value.swatch.color %} option-label--text{% endunless %}{% endif %}" for="Option-{{ section.id }}-{{ option.position }}-{{ forloop.index }}" title="{{ option_value.name | escape }}"{% if is_color_option and option_value.swatch.image %} style="--swatch-image:url('{{ option_value.swatch.image | image_url: width: 96 | escape }}')"{% elsif is_color_option and option_value.swatch.color %} style="--swatch-color:rgb({{ option_value.swatch.color.rgb | escape }})"{% endif %}>
+                        {% if is_color_option and option_value.swatch.image or is_color_option and option_value.swatch.color %}<span class="swatch-check" aria-hidden="true">{% render 'icon', name: 'check' %}</span><span class="sr-only">{{ option_value.name | escape }}</span>{% else %}{{ option_value.name | escape }}{% endif %}
                       </label>
                     {% endfor %}
                   </div>
                 </fieldset>
               {% endfor %}
+              </div>
             {% endunless %}
 
             {% if section.settings.show_quantity_selector %}
@@ -123,14 +206,16 @@
             {% endif %}
 
             <p class="product-unavailable-note" data-unavailable-note hidden>{{ 'products.product.unavailable_combination' | t }}</p>
-            <button class="button button--primary product-submit" type="submit" data-product-submit data-available-label="{{ 'products.product.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.product.sold_out' | t | escape }}" data-added-label="{{ 'products.product.added_to_cart' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button>
-            {% if section.settings.show_dynamic_checkout %}{{ form | payment_button }}{% endif %}
-            {% if section.settings.show_sticky_mobile %}<div class="product-sticky-bar"><button class="button button--primary product-submit" type="submit" data-product-submit data-available-label="{{ 'products.product.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.product.sold_out' | t | escape }}" data-added-label="{{ 'products.product.added_to_cart' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button></div>{% endif %}
+            <div data-enhanced-purchase hidden>
+              <button class="button button--primary product-submit" type="submit" data-product-submit data-available-label="{{ 'products.product.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.product.sold_out' | t | escape }}" data-added-label="{{ 'products.product.added_to_cart' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button>
+              {% if section.settings.show_sticky_mobile %}<div class="product-sticky-bar"><button class="button button--primary product-submit" type="submit" data-product-submit data-available-label="{{ 'products.product.add_to_cart' | t | escape }}" data-sold-label="{{ 'products.product.sold_out' | t | escape }}" data-added-label="{{ 'products.product.added_to_cart' | t | escape }}"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.sold_out' | t }}{% endif %}</button></div>{% endif %}
+            </div>
+            {% if section.settings.show_dynamic_checkout %}<div data-dynamic-checkout hidden>{{ form | payment_button }}</div>{% endif %}
           {% endform %}
-          <script type="application/json" data-variants>{{ product.variants | json }}</script>
+          <script type="application/json" data-variants>{{ product.variants | json | replace: '<', json_less_than }}</script>
         </product-form>
 
-        {% if section.settings.delivery_heading != blank %}<div class="product-delivery">{% render 'icon', name: 'truck' %}<div><strong>{{ section.settings.delivery_heading }}</strong>{% if section.settings.delivery_text != blank %}<p>{{ section.settings.delivery_text }}</p>{% endif %}</div></div>{% endif %}
+        {% render 'product-shipping', product: product %}
 
         <div class="product-details" id="ProductDetails-{{ section.id }}">
           {% if product.description != blank %}<details open><summary>{{ 'products.product.description' | t }}</summary><div class="product-details-content rte">{{ product.description }}</div></details>{% endif %}
@@ -160,11 +245,8 @@
     { "type": "checkbox", "id": "show_dynamic_checkout", "label": "t:sections.product.show_dynamic_checkout", "default": false },
     { "type": "checkbox", "id": "show_metafields", "label": "t:sections.product.show_metafields", "default": true },
     { "type": "checkbox", "id": "show_sticky_mobile", "label": "t:sections.product.show_sticky_mobile", "default": true },
-    { "type": "text", "id": "delivery_note", "label": "t:sections.product.delivery_note", "default": "Free delivery to Aruba" },
-    { "type": "text", "id": "delivery_heading", "label": "t:sections.product.delivery_heading", "default": "Delivered in 24 hours across Aruba" },
-    { "type": "text", "id": "delivery_text", "label": "t:sections.product.delivery_text", "default": "Free on orders over $150. Island ease guaranteed." },
-    { "type": "color", "id": "gallery_background", "label": "t:sections.product.gallery_background", "default": "#386395" },
-    { "type": "color", "id": "media_background", "label": "t:sections.product.media_background", "default": "#386395" },
+    { "type": "text", "id": "color_option_name", "label": "t:sections.product.color_option_name", "info": "t:sections.product.color_option_name_info" },
+    { "type": "text", "id": "size_option_name", "label": "t:sections.product.size_option_name", "info": "t:sections.product.size_option_name_info" },
     { "type": "select", "id": "media_fit", "label": "t:sections.product.media_fit", "default": "contain", "options": [{ "value": "cover", "label": "t:options.cover" }, { "value": "contain", "label": "t:options.contain" }] }
   ],
   "blocks": [
