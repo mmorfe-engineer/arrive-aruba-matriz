@@ -189,7 +189,7 @@
       {% if section.settings.newsletter_title != blank %}
         <p class="aa-newsletter-title">{{ section.settings.newsletter_title }}</p>
       {% endif %}
-      <form class="aa-newsletter-form" action="{{ section.settings.newsletter_action }}" method="post">
+      <form class="aa-newsletter-form" action="{{ section.settings.newsletter_action | default: '/contact#contact_form' | escape }}" method="post">
         <input 
           type="email" 
           name="email" 
@@ -343,8 +343,7 @@
     {
       "type": "url",
       "id": "newsletter_action",
-      "label": "Form action URL",
-      "default": "/contact#contact_form"
+      "label": "Form action URL"
     },
     {
       "type": "header",
@@ -375,8 +374,7 @@
     {
       "type": "url",
       "id": "shop_link_1_url",
-      "label": "Link 1 URL",
-      "default": "/collections/resort-shirts"
+      "label": "Link 1 URL"
     },
     {
       "type": "text",
@@ -387,8 +385,7 @@
     {
       "type": "url",
       "id": "shop_link_2_url",
-      "label": "Link 2 URL",
-      "default": "/collections/performance-tees"
+      "label": "Link 2 URL"
     },
     {
       "type": "text",
@@ -399,8 +396,7 @@
     {
       "type": "url",
       "id": "shop_link_3_url",
-      "label": "Link 3 URL",
-      "default": "/collections/travel-layers"
+      "label": "Link 3 URL"
     },
     {
       "type": "text",
@@ -411,8 +407,7 @@
     {
       "type": "url",
       "id": "shop_link_4_url",
-      "label": "Link 4 URL",
-      "default": "/collections/essentials"
+      "label": "Link 4 URL"
     },
     {
       "type": "header",
@@ -439,8 +434,7 @@
     {
       "type": "url",
       "id": "help_link_1_url",
-      "label": "Link 1 URL",
-      "default": "mailto:hello@arrivearuba.com?subject=Shipping%20question"
+      "label": "Link 1 URL"
     },
     {
       "type": "text",
@@ -451,8 +445,7 @@
     {
       "type": "url",
       "id": "help_link_2_url",
-      "label": "Link 2 URL",
-      "default": "mailto:hello@arrivearuba.com?subject=Returns%20question"
+      "label": "Link 2 URL"
     },
     {
       "type": "text",
@@ -463,8 +456,7 @@
     {
       "type": "url",
       "id": "help_link_3_url",
-      "label": "Link 3 URL",
-      "default": "mailto:hello@arrivearuba.com"
+      "label": "Link 3 URL"
     },
     {
       "type": "text",
@@ -475,8 +467,7 @@
     {
       "type": "url",
       "id": "help_link_4_url",
-      "label": "Link 4 URL",
-      "default": "mailto:hello@arrivearuba.com?subject=Privacy%20request"
+      "label": "Link 4 URL"
     },
     {
       "type": "header",
@@ -513,8 +504,7 @@
     {
       "type": "url",
       "id": "social_link_1_url",
-      "label": "Social 1 URL",
-      "default": "#"
+      "label": "Social 1 URL"
     },
     {
       "type": "text",
@@ -525,8 +515,7 @@
     {
       "type": "url",
       "id": "social_link_2_url",
-      "label": "Social 2 URL",
-      "default": "#"
+      "label": "Social 2 URL"
     },
     {
       "type": "text",
@@ -537,8 +526,7 @@
     {
       "type": "url",
       "id": "social_link_3_url",
-      "label": "Social 3 URL",
-      "default": "#"
+      "label": "Social 3 URL"
     },
     {
       "type": "header",
@@ -580,7 +568,7 @@
       "label": "Main content margin bottom",
       "min": 16,
       "max": 80,
-      "step": 8,
+      "step": 4,
       "unit": "px",
       "default": 44
     },
