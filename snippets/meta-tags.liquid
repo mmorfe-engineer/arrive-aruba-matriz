@@ -72,6 +72,7 @@
     assign social_image_url = 'arrive-brand-web.webp' | asset_url
   endif
   assign site_url = settings.official_domain | default: shop.url
+  assign search_target = site_url | append: '/search?q={search_term_string}' | replace: '//search?', '/search?'
   assign logo_url = 'arrive-logo-negative.webp' | asset_url
 -%}
 <title>{{ seo_title }}{% unless seo_title contains store_name %}{% unless seo_title contains brand_name %} &ndash; {{ store_name }}{% endunless %}{% endunless %}</title>
@@ -111,7 +112,7 @@
     "url": {{ site_url | json }},
     "potentialAction": {
       "@type": "SearchAction",
-      "target": {{ site_url | append: 'search?q={search_term_string}' | json }},
+      "target": {{ search_target | json }},
       "query-input": "required name=search_term_string"
     }
   }

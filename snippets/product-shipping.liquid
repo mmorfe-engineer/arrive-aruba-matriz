@@ -1,0 +1,15 @@
+{% doc %}
+  Renders optional product-specific shipping without theme-authored promises.
+  @param {product} product - Product supplying shipping heading and rich text.
+{% enddoc %}
+{%- assign shipping_heading = product.metafields.custom.shipping_heading.value | strip -%}
+{%- assign shipping_details = product.metafields.custom.shipping_details -%}
+{%- if shipping_heading != blank or shipping_details.value != blank -%}
+  <div class="product-shipping">
+    {% render 'product-feature-icon', icon_key: 'truck' %}
+    <div>
+      {% if shipping_heading != blank %}<strong>{{ shipping_heading | escape }}</strong>{% endif %}
+      {% if shipping_details.value != blank %}<div class="product-shipping-details rte">{{ shipping_details | metafield_tag }}</div>{% endif %}
+    </div>
+  </div>
+{%- endif -%}
