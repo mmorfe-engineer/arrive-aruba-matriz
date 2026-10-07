@@ -25,55 +25,6 @@
         "sound_off": "Sound off"
       }
     },
-    "categories": {
-      "type": "category-grid",
-      "blocks": {
-        "resort_shirts": {
-          "type": "category",
-          "settings": {
-            "collection": "resort",
-            "eyebrow": "Polo",
-            "heading": "Resort",
-            "caption": "",
-            "link": "",
-            "background": "#5f8bb8"
-          }
-        },
-        "travel_layers": {
-          "type": "category",
-          "settings": {
-            "collection": "travel-layers",
-            "eyebrow": "Layer",
-            "heading": "Travel Layers",
-            "caption": "",
-            "link": "",
-            "background": "#386395"
-          }
-        },
-        "new_arrivals": {
-          "type": "category",
-          "settings": {
-            "collection": "",
-            "eyebrow": "All",
-            "heading": "New Arrivals",
-            "caption": "",
-            "link": "",
-            "background": "#f5a169"
-          }
-        }
-      },
-      "block_order": [
-        "resort_shirts",
-        "travel_layers",
-        "new_arrivals"
-      ],
-      "settings": {
-        "subheading": "Browse",
-        "heading": "Shop the Island",
-        "columns": 2,
-        "stagger": true
-      }
-    },
     "ticker": {
       "type": "ticker",
       "blocks": {
@@ -113,12 +64,64 @@
         "speed": 28
       }
     },
+    "categories": {
+      "type": "category-grid",
+      "blocks": {
+        "resort_shirts": {
+          "type": "category",
+          "settings": {
+            "collection": "resort",
+            "image": "shopify://shop_images/arrive-aruba-full-zip-hoodie-blue-front.jpg",
+            "eyebrow": "Polo",
+            "heading": "Resort",
+            "caption": "",
+            "link": "",
+            "background": "#5f8bb8"
+          }
+        },
+        "travel_layers": {
+          "type": "category",
+          "settings": {
+            "collection": "travel-layers",
+            "image": "shopify://shop_images/arrive-aruba-performance-pique-polo-marsh-green-front_7c4a1c68-996c-4872-89be-7820669d881a.jpg",
+            "eyebrow": "Layer",
+            "heading": "Travel Layers",
+            "caption": "",
+            "link": "",
+            "background": "#386395"
+          }
+        },
+        "new_arrivals": {
+          "type": "category",
+          "settings": {
+            "collection": "",
+            "image": "shopify://shop_images/WhatsAppImage2026-10-01at8.02.08PM.jpg",
+            "eyebrow": "All",
+            "heading": "New Arrivals",
+            "caption": "",
+            "link": "",
+            "background": "#f5a169"
+          }
+        }
+      },
+      "block_order": [
+        "resort_shirts",
+        "travel_layers",
+        "new_arrivals"
+      ],
+      "settings": {
+        "subheading": "Browse",
+        "heading": "Shop the Island",
+        "columns": 2,
+        "stagger": true
+      }
+    },
     "featured": {
       "type": "featured-collection",
       "settings": {
         "subheading": "Essentials",
         "heading": "Aruba Basics",
-        "collection": "",
+        "collection": "new-arrivals",
         "products_to_show": 4,
         "show_vendor": false,
         "show_wishlist": true
@@ -171,7 +174,11 @@
           }
         }
       },
-      "block_order": ["island", "lived", "personal"],
+      "block_order": [
+        "island",
+        "lived",
+        "personal"
+      ],
       "settings": {
         "eyebrow": "The Arrive standard",
         "heading": "What every piece carries.",
