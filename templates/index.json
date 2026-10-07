@@ -64,6 +64,17 @@
         "speed": 28
       }
     },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "subheading": "Essentials",
+        "heading": "Aruba Basics",
+        "collection": "new-arrivals",
+        "products_to_show": 4,
+        "show_vendor": false,
+        "show_wishlist": true
+      }
+    },
     "categories": {
       "type": "category-grid",
       "blocks": {
@@ -114,17 +125,6 @@
         "heading": "Shop the Island",
         "columns": 2,
         "stagger": true
-      }
-    },
-    "featured": {
-      "type": "featured-collection",
-      "settings": {
-        "subheading": "Essentials",
-        "heading": "Aruba Basics",
-        "collection": "new-arrivals",
-        "products_to_show": 4,
-        "show_vendor": false,
-        "show_wishlist": true
       }
     },
     "story": {
@@ -197,8 +197,8 @@
   "order": [
     "hero",
     "ticker",
-    "categories",
     "featured",
+    "categories",
     "story",
     "heritage",
     "standard",
